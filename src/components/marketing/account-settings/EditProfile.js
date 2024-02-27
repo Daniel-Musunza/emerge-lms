@@ -8,8 +8,11 @@ import { Card, Form, Row, Col, Button, Image } from 'react-bootstrap';
 import { FormSelect } from 'components/elements/form-select/FormSelect';
 import { FlatPickr } from 'components/elements/flat-pickr/FlatPickr';
 
+
 // import media files
-import Avatar3 from 'assets/images/avatar/avatar-3.jpg';
+import {
+	updateUser
+} from '../../dashboard/features/auth/authSlice';
 
 // import profile layout wrapper
 import ProfileLayout from '../student/ProfileLayout';
@@ -24,12 +27,14 @@ import Spinner from '../../Spinner';
 const EditProfile = () => {
 	const pathInfo = useLocation();
 	const navigate = useNavigate();
-	let userStore = localStorage.getItem('user');
+	const { user, isLoading, isError, isSuccess, message } = useSelector(
+		(state) => state.auth
+	);
 	const account = pathInfo.pathname.substring(21, 11);
 
 	const dispatch = useDispatch();
 
-	const { isLoading2, studentData } = useSelector((state) => state.students);
+	const {studentData } = useSelector((state) => state.students);
 	const [firstName, setFirstName] = useState(studentData?.data?.firstName || '');
 	const [lastName, setLastName] = useState(studentData?.data?.lastName || '');
 	const [contactNumber, setContactNumber] = useState(studentData?.data?.contactNumber || '');
@@ -39,11 +44,13 @@ const EditProfile = () => {
 	const [birthday, setBirthday] = useState(studentData?.data?.birthday || '');
 
 	useEffect(() => {
-		if (!userStore) {
+		if (!user) {
 			navigate('/authentication/sign-in');
 		}
 		dispatch(fetchStudentData());
-	}, [dispatch, userStore, navigate]);
+	}, [dispatch, user, navigate]);
+
+
 
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
@@ -53,8 +60,26 @@ const EditProfile = () => {
 	};
 
 
-	if (isLoading2) {
-		return <Spinner />
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+
+		const formData = {
+			id: studentData?.data?.id,
+			firstName: firstName,
+			lastName: lastName,
+			contactNumber: contactNumber,
+			addressLine1: addressLine1,
+			addressLine2: addressLine2,
+			country: country,
+			birthday: birthday
+		};
+
+
+		await dispatch(updateUser(formData));
+	};
+
+	if (isLoading) {
+		return <Spinner />;
 	}
 
 	return (
@@ -100,7 +125,7 @@ const EditProfile = () => {
 						<h4 className="mb-0">Personal Details</h4>
 						<p className="mb-4">Edit your personal information and address.</p>
 						{/* Form */}
-						<Form>
+						<Form onSubmit={handleSubmit}>
 							<Row>
 								{/* First name */}
 								<Col md={6} sm={12} className="mb-3">
