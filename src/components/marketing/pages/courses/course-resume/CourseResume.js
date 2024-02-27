@@ -116,9 +116,9 @@ export const CourseResume = () => {
 	};
 
 	useEffect(() => {
-		if (isError) {
-			toast.error(message);
-		}
+		// if (isError) {
+		// 	toast.error(message);
+		// }
 		if (!user) {
 			navigate('/authentication/sign-in');
 		}

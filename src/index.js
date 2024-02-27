@@ -1,6 +1,8 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import reportWebVitals from './reportWebVitals';
 import { store } from './components/dashboard/app/store';
 import { Provider } from 'react-redux';
@@ -43,6 +45,7 @@ root.render(
 				<App />
 			</AppProvider>
 		</Provider>
+		<ToastContainer />
 	</QueryClientProvider>
 );
 // If you want to start measuring performance in your app, pass a function
