@@ -1,0 +1,74 @@
+/* Theme: EmergeLMS */
+
+// Inter Fonts
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+// Font Awesome
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css");
+
+// Material Icons
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+// Feathers CSS for Before Icon
+@import url("../fonts/feather/feather.css");
+
+// Bootstrap functions
+@import "~bootstrap/scss/functions";
+
+// User Variables
+@import "user-variables";
+
+// theme variables
+@import "theme/variables";
+
+//utilities
+@import "theme/utilities";
+
+// Bootstrap
+@import "~bootstrap/scss/bootstrap";
+
+// Root
+@import "theme/root";
+
+// Theme
+@import "theme/theme";
+
+// User
+@import "user";
+
+  
+.navbar-brand img,
+.logo-inverse{
+  width: 100px!important;
+}
+
+.loadingSpinnerContainer {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .loadingSpinner {
+    width: 64px;
+    height: 64px;
+    border: 8px solid;
+    border-color: #000 transparent #555 transparent;
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
