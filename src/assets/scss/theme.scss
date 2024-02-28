@@ -50,9 +50,20 @@
 @media (max-width: 778px) {
 .small-screen-t-pdf{
  font-size: 10px;
+ 
 }
+.view-pdf{
+  width: 100px,
+ }
 }
 @media (min-width: 992px) {
+  .small-screen-t-pdf{
+    font-size: 20px;
+    
+   }
+   .view-pdf{
+    width: 200px,
+   }
   .links2{
     display: none;
   }

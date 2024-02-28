@@ -86,7 +86,7 @@ const QuickMenu = () => {
 
 	useEffect(() => {
 		if (isError) {
-			toast.error(message);
+			//toast.error(message);
 		  }
 		
 	}, [user, isError, isSuccess, message, navigate, dispatch]);

@@ -74,7 +74,7 @@ const AddNewContent = () => {
 
 	useEffect(() => {
 		if (isError) {
-			toast.error(message);
+			//toast.error(message);
 		}
 		dispatch(fetchStudentData());
 	}, [isError, message, dispatch]);

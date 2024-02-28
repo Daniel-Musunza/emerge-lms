@@ -73,7 +73,7 @@ const AddNewCourse = () => {
 
 	useEffect(() => {
 		if (isError) {
-			toast.error(message);
+			//toast.error(message);
 		}
 		dispatch(fetchCourses());
 	}, [isError, message, dispatch]);

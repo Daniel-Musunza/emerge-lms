@@ -33,7 +33,7 @@ const SignIn = () => {
 
 	useEffect(() => {
 		if (isError) {
-			toast.error(message);
+			//toast.error(message);
 		}
 		if (user?.data) {
 		navigate('/marketing/student/dashboard/');

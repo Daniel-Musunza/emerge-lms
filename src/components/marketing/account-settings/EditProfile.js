@@ -37,11 +37,11 @@ const EditProfile = () => {
 	const {studentData } = useSelector((state) => state.students);
 	const [firstName, setFirstName] = useState(studentData?.data?.firstName || '');
 	const [lastName, setLastName] = useState(studentData?.data?.lastName || '');
-	const [contactNumber, setContactNumber] = useState(studentData?.data?.contactNumber || '');
-	const [addressLine1, setAddressLine1] = useState(studentData?.data?.addressLine1 || '');
+	const [contactNumber, setContactNumber] = useState(studentData?.data?.phone || '');
+	const [addressLine1, setAddressLine1] = useState(studentData?.data?.address || '');
 	const [addressLine2, setAddressLine2] = useState(studentData?.data?.addressLine2 || '');
 	const [country, setCountry] = useState(studentData?.data?.country || '');
-	const [birthday, setBirthday] = useState(studentData?.data?.birthday || '');
+	const [birthday, setBirthday] = useState(studentData?.data?.birthDate || '');
 
 	useEffect(() => {
 		if (!user) {
@@ -64,14 +64,15 @@ const EditProfile = () => {
 		e.preventDefault();
 
 		const formData = {
-			id: studentData?.data?.id,
+			
+			address: addressLine1,
+			birthDate: birthday,
+			country: country,
 			firstName: firstName,
 			lastName: lastName,
-			contactNumber: contactNumber,
-			address: addressLine1,
-			// addressLine2: addressLine2,
-			country: country,
-			birthday: birthday
+			phone: contactNumber,
+			profilePicture: null
+			
 		};
 
 

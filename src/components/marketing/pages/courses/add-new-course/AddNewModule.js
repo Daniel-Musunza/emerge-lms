@@ -68,7 +68,7 @@ const AddNewModule = () => {
 
 	useEffect(() => {
 		if (isError) {
-			toast.error(message);
+			//toast.error(message);
 		}
 		dispatch(fetchStudentData());
 		dispatch(fetchCourseModules(id));

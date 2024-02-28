@@ -36,9 +36,8 @@ export const updateUser = createAsyncThunk(
 	'users/update',
 	async (userData, thunkAPI) => {
 		try {
-			const { id } = userData; // Extract the id from bookingData
 			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await authService.updateUser(userData, id, token);
+			return await authService.updateUser(userData, token);
 		} catch (error) {
 			const message =
 				(error.response &&

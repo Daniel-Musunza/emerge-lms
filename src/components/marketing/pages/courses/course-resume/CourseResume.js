@@ -77,6 +77,7 @@ export const CourseResume = () => {
 	const { user } = useSelector(
 		(state) => state.auth
 	);
+	
 	const { studentData } = useSelector((state) => state.students);
 	const { courseModules, isLoading, isError, message } = useSelector(
 		(state) => state.courseModules
@@ -117,7 +118,7 @@ export const CourseResume = () => {
 
 	useEffect(() => {
 		// if (isError) {
-		// 	toast.error(message);
+		// 	//toast.error(message);
 		// }
 		if (!user) {
 			navigate('/authentication/sign-in');
@@ -170,39 +171,16 @@ export const CourseResume = () => {
 											<div>
 
 												<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer">
-													<h3 style={{color: 'blue', width: '100px', paddingLeft: '10px'}} className='small-screen-t-pdf'>View Notes</h3>
+													<h3 style={{color: 'blue',  paddingLeft: '10px'}} className='small-screen-t-pdf view-pdf'>View Notes</h3>
 												</a>
 
 											</div>
 										)}
-										<div className="d-flex justify-content-between">
-											<Dropdown className="video-info-icon me-2">
-												<Dropdown.Toggle
-													bsPrefix=" "
-													as="a"
-													href="#"
-													variant="secondary"
-													id="dropdown-basic"
-												>
-													<i className="fe fe-help-circle text-secondary"></i>
-												</Dropdown.Toggle>
-												<Dropdown.Menu
-													className="p-3"
-													style={{ width: '300px' }}
-												>
-													<span>
-														Lorem ipsum dolor sit amet consectetur adipisicing
-														elit. cupiditate consequatur rerum eius ad ut
-														officiis
-													</span>
-												</Dropdown.Menu>
-											</Dropdown>
-											<ActionMenu />
-										</div>
+									
 									</div>
 									<div
 										className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
-										style={{ height: '600px' }}
+										style={{ height: '500px' }}
 									>
 										<GKYouTube videoId={YouTubeURL} />
 									</div>
