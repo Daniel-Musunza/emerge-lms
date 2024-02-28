@@ -55,16 +55,32 @@ const ProfileCover = ({ dashboardData }) => {
 									{dashboardData.name}{' '}
 									<LevelIconWithTooltip level={dashboardData.level} />{' '}
 								</h2>
-								<p className="mb-0 d-block">{dashboardData.username}</p>
+								<p className="mb-0 d-block">student</p>
+							</div>
+							<div className="links2">
+								<Link
+									to={dashboardData.link}
+									style={{ fontSize: '12px', margin: '2px'  }}
+								>
+									{dashboardData.linkname}
+
+								</Link>
+								<Link
+									to="/marketing/student/dashboard/"
+									style={{ fontSize: '12px', margin: '2px' }}
+								>
+									Courses
+
+								</Link>
 							</div>
 						</div>
 						<div>
-							<div style={{display: 'flex'}}>
+							<div style={{ display: 'flex' }}>
 								<Link
 									to={dashboardData.link}
 									className={`btn btn${dashboardData.outlinebutton ? '-outline' : ''
 										}-primary btn-sm d-none d-md-block`}
-										style={{marginRight: '10px'}}
+									style={{ marginRight: '10px' }}
 								>
 									{dashboardData.linkname}
 
@@ -74,7 +90,7 @@ const ProfileCover = ({ dashboardData }) => {
 									className={`btn btn${dashboardData.outlinebutton ? '-outline' : ''
 										}-primary btn-sm d-none d-md-block`}
 								>
-									See Courses
+									Courses
 
 								</Link>
 							</div>

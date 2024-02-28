@@ -39,6 +39,7 @@ const CourseCard = ({
 							src={item.image}
 							alt=""
 							className="card-img-top rounded-top-md"
+							style={{height: '200px'}}
 						/>
 					) : (
 						<Image
@@ -62,7 +63,7 @@ const CourseCard = ({
 						</ListGroup.Item> */}
 							<ListGroup.Item as="li" bsPrefix="list-inline-item">
 								{/* <LevelIcon level={item.level} /> */}
-								<div style={{ display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
+								<div style={{height: '50px', display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
 
 							</ListGroup.Item>
 						</ListGroup>

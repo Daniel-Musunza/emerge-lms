@@ -41,7 +41,22 @@
 .logo-inverse{
   width: 100px!important;
 }
-
+.links2{
+  display: flex;
+  flex-direction: column;
+  width: 200px;
+  margin-right: 2px;
+}
+@media (max-width: 778px) {
+.small-screen-t-pdf{
+ font-size: 10px;
+}
+}
+@media (min-width: 992px) {
+  .links2{
+    display: none;
+  }
+}
 .loadingSpinnerContainer {
     position: fixed;
     top: 0;

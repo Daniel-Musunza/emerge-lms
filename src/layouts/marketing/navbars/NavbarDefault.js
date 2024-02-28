@@ -63,8 +63,24 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 							<h2 className="mb-0">
 								{dashboardData.name}{' '}
 							</h2>
-							<p className="mb-0 d-block">{dashboardData.username}</p>
+							<p className="mb-0 d-block">student</p>
 						</div>
+						<div className="links2">
+								<Link
+									to={dashboardData.link}
+									style={{ fontSize: '12px', margin: '2px'  }}
+								>
+									{dashboardData.linkname}
+
+								</Link>
+								<Link
+									to="/marketing/student/dashboard/"
+									style={{ fontSize: '12px', margin: '2px' }}
+								>
+									Courses
+
+								</Link>
+							</div>
 					</div>
 					<Navbar.Collapse id="basic-navbar-nav">
 

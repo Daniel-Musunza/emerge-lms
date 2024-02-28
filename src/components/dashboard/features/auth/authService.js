@@ -24,7 +24,7 @@ const register = async (userData) => {
 //update User
 
 const updateUser = async (userData, userId) => {
-	const response = await axios.put(baseUrl + userId, userData);
+	const response = await axios.put(baseUrl + 'students/' + userId, userData);
 
 	return response.data;
 };

@@ -151,9 +151,9 @@ export const CourseResume = () => {
 								{/*  Tab content  */}
 								<div className="content">
 									{/*  Video */}
-									<div className="d-flex align-items-center justify-content-between mb-4">
+									<div className="d-flex align-items-center justify-content-between mb-4 ">
 										<div>
-											<h3 className=" mb-0  text-truncate-line-2">
+											<h3 className=" mb-0  text-truncate-line-2 small-screen-t-pdf">
 												{selectedContent ? (
 													<>
 														{selectedContent.title} , {selectedContent.description}
@@ -170,7 +170,7 @@ export const CourseResume = () => {
 											<div>
 
 												<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer">
-													<h3 style={{color: 'blue'}}>View Notes</h3>
+													<h3 style={{color: 'blue', width: '100px', paddingLeft: '10px'}} className='small-screen-t-pdf'>View Notes</h3>
 												</a>
 
 											</div>

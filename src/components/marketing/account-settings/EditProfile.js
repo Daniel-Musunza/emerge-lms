@@ -68,8 +68,8 @@ const EditProfile = () => {
 			firstName: firstName,
 			lastName: lastName,
 			contactNumber: contactNumber,
-			addressLine1: addressLine1,
-			addressLine2: addressLine2,
+			address: addressLine1,
+			// addressLine2: addressLine2,
 			country: country,
 			birthday: birthday
 		};
@@ -85,7 +85,6 @@ const EditProfile = () => {
 	return (
 
 		<ProfileLayout dashboardData={dashboardData}>
-			{account === 'instructor'}
 			<Card className="border-0">
 				<Card.Header>
 					<div className="mb-3 mb-lg-0">
@@ -220,15 +219,15 @@ const EditProfile = () => {
 								<Col md={6} sm={12} className="mb-3">
 									<Form.Group className="mb-3" controlId="formState">
 										<Form.Label>Country</Form.Label>
-										<select value={country}
-											onChange={(e) => setCountry(e.target.value)}>
+										<Form.Select value={country}
+											onChange={(e) => setCountry(e.target.value)} className='form-group'>
 											<option value="" selected></option>
 											{mycountries.map((country) => (
 												<option key={country.name} value={country.name}>
 													{country.name}
 												</option>
 											))}
-										</select>
+										</Form.Select>
 									</Form.Group>
 								</Col>
 
