@@ -51,10 +51,11 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 	);
 	const [selectedItemId, setSelectedItemId] = useState(null);
 	
-	const handleModuleSelect = (id, e) => {
+	const handleModuleSelect = async(id, e) => {
 		e.preventDefault();
-		setSelectedItemId(id); // Update selectedItemId immediately
-		dispatch(fetchCourseContents(id)); // Use `id` instead of `selectedItemId`
+		// Update selectedItemId immediately
+		await dispatch(fetchCourseContents(id)); // Use `id` instead of `selectedItemId`
+		setSelectedItemId(id); 
 	};
 	
 
@@ -81,7 +82,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 								</ContextAwareToggle>
 
 							{selectedItemId === item.id &&(
-									<Accordion.Collapse className="test">
+									<Accordion className="test">
 										<ListGroup className="py-4" as="ul">
 											{courseContents
 												.map((subitem, subindex) => (
@@ -113,7 +114,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 													</ListGroup.Item>
 												))}
 										</ListGroup>
-									</Accordion.Collapse>
+									</Accordion>
 							)
 							}
 							</ListGroup.Item>
