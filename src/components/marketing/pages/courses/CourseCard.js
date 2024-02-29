@@ -30,8 +30,8 @@ const CourseCard = ({
 }) => {
 	/** Used in Course Index, Course Category, Course Filter Page, Student Dashboard etc...  */
 	const GridView = () => {
+
 		return (
-			<Link to={`/marketing/courses/course-resume/${item?.content?.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
 				<Card className={`mb-4 card-hover ${extraclass}`}>
 
 					{item.image ? (
@@ -128,7 +128,7 @@ const CourseCard = ({
 						</span>
 					</Card.Footer>
 				</Card>
-			</Link>
+			
 		);
 	};
 

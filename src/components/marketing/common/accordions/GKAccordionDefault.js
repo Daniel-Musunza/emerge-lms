@@ -53,7 +53,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 	
 	const handleModuleSelect = async(id, e) => {
 		e.preventDefault();
-		// Update selectedItemId immediately
+		
 		await dispatch(fetchCourseContents(id)); // Use `id` instead of `selectedItemId`
 		setSelectedItemId(id); 
 	};

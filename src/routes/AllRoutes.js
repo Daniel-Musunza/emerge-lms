@@ -90,6 +90,8 @@ import Documentation from 'components/dashboard/documentation/Documentation';
 import ChangeLog from 'components/dashboard/changelog/ChangeLog';
 import { Calendar } from 'react-bootstrap-icons';
 import CourseResume from 'components/marketing/pages/courses/course-resume/CourseResume';
+import CourseSingle from 'components/marketing/pages/courses/course-single/CourseSingle';
+import AllCourses from 'components/marketing/pages/courses/AllCourses';
 
 
 const AllRoutes = () => {
@@ -99,6 +101,10 @@ const AllRoutes = () => {
 			<Route
 				path="/marketing/student/dashboard/"
 				element={<StudentDashboard />}
+			/>
+			<Route
+				path="/marketing/allcourses/"
+				element={<AllCourses />}
 			/>
 			<Route
 				path="/marketing/student/student-subscriptions/"
@@ -163,6 +169,10 @@ const AllRoutes = () => {
 			<Route
 					path="/marketing/courses/course-resume/:id"
 					element={<CourseResume />}
+				/>
+				<Route
+					path="/marketing/courses/course-single/:id"
+					element={<CourseSingle />}
 				/>
 			{/* Routes with BlankLayout */}
 			<Route element={<BlankLayout />}>

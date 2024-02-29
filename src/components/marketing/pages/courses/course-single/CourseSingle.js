@@ -1,16 +1,8 @@
 // import node module libraries
-import React, { Fragment, useState } from 'react';
-import {
-	Col,
-	Row,
-	Container,
-	Nav,
-	Card,
-	Tab,
-	ListGroup,
-	Image
-} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, Fragment } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Col, Row, Container, Tab, Nav, ListGroup, Image, Card } from 'react-bootstrap';
+import { useDispatch, useSelector } from 'react-redux';
 
 // import popup youtube video
 import ModalVideo from 'react-modal-video';
@@ -34,19 +26,46 @@ import CheckedMark from 'assets/images/svg/checked-mark.svg';
 import CourseJavascript from 'assets/images/course/course-javascript.jpg';
 import Avatar1 from 'assets/images/avatar/avatar-1.jpg';
 
+import {
+	fetchCourses
+} from '../../../../dashboard/features/courses/courseSlice';
+
+import Spinner from '../../../../Spinner';
 // import data files
 import { CourseIndex } from 'data/marketing/CourseIndexData';
-import { AllCoursesData } from 'data/slider/AllCoursesData';
+import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
 
 const CourseSingle = () => {
+
+
+	const navigate = useNavigate();
+	let userStore = localStorage.getItem('user');
+	const dispatch = useDispatch();
+
+	const { courses, isLoading, isError, message } = useSelector(
+		(state) => state.courses
+	);
 	const [isOpen, setOpen] = useState(false);
 	const [YouTubeURL] = useState('JRzWRZahOVU');
+	const AllCoursesData = courses;
+
+	useEffect(() => {
+
+		dispatch(fetchCourses());
+
+	}, [dispatch, userStore, navigate]);
+
+	if (isLoading) {
+		return <Spinner />
+	}
 
 	return (
 		<Fragment>
+			<NavbarMegaMenu />
 			{/* Page header */}
 			<section className="pt-lg-8 pb-lg-16 pt-8 pb-12 bg-primary">
 				<Container>
+
 					<Row className="align-items-center">
 						<Col xl={7} lg={7} md={12} sm={12}>
 							<div>
@@ -337,13 +356,13 @@ const CourseSingle = () => {
 							</Col>
 						</Row>
 						<Row>
-							{AllCoursesData.filter(function (datasource) {
-								return datasource.category === 'javascript';
+							{AllCoursesData?.data?.courses.filter(function (datasource) {
+								return datasource;
 							})
 								.slice(0, 4)
 								.map((item, index) => (
 									<Col lg={3} md={6} sm={12} key={index}>
-										<CourseCard item={item} free />
+										<CourseCard item={item} />
 									</Col>
 								))}
 						</Row>

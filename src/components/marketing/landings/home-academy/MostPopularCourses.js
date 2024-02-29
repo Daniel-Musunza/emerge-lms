@@ -17,7 +17,7 @@ const MostPopularCourses = () => {
 	let min,
 		max = 0;
 
-		
+
 	const navigate = useNavigate();
 	let userStore = localStorage.getItem('user');
 	const dispatch = useDispatch();
@@ -26,16 +26,15 @@ const MostPopularCourses = () => {
 		(state) => state.courses
 	);
 
-	const  AllCoursesData =courses;
-	console.log(courses?.data?.courses);
+	const AllCoursesData = courses;
 
 	useEffect(() => {
-		
+
 		dispatch(fetchCourses());
-		
+
 	}, [dispatch, userStore, navigate]);
 
-	if (isLoading){
+	if (isLoading) {
 		return <Spinner />
 	}
 
@@ -44,20 +43,24 @@ const MostPopularCourses = () => {
 			<section className="pb-lg-14 pb-8 bg-white">
 				<Container>
 					<Row>
-						<Col xs={12}>
+						<Col xs={6}>
 							<div className="mb-6">
 								<h2 className="mb-1 h1">Most Popular Courses</h2>
 								<p>
-									These are the most popular courses among EmergeLMS Courses
-									learners worldwide.
+									These are the most popular courses among EmergeLMS Courses.
 								</p>
 							</div>
 						</Col>
+						<Col md={6} className="text-md-end mt-4 mt-md-0">
+								<Link to="/marketing/allcourses/" className="btn btn-primary">
+									View More
+								</Link>
+							</Col>
 					</Row>
 					<Row>
 						<Col md={12}>
 							<Tab.Container defaultActiveKey="Development">
-								
+
 								<Tab.Content>
 									{tabs.map((tab, index) => {
 										min = Math.floor(Math.random() * 16);
@@ -69,15 +72,18 @@ const MostPopularCourses = () => {
 												key={index}
 											>
 												<Row>
-												{AllCoursesData?.data?.courses.filter(function (datasource) {
-																return datasource;
-															})
-															.slice(0, 8)
-																.map((item, index) => (
-																	<Col lg={3} md={6} sm={12} key={index}>
-																		<CourseCard item={item} />
-																	</Col>
-																))}
+													{AllCoursesData?.data?.courses.filter(function (datasource) {
+														return datasource;
+													})
+														.slice(0, 8)
+														.map((item, index) => (
+															<Col lg={3} md={6} sm={12} key={index}>
+																<Link to={`/marketing/courses/course-single/${item?.content?.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+
+																	<CourseCard item={item} />
+																</Link>
+															</Col>
+														))}
 												</Row>
 											</Tab.Pane>
 										);

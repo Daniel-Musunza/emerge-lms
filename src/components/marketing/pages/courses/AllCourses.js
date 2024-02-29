@@ -1,34 +1,28 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Col, Row, Nav, Tab, Card, Container } from 'react-bootstrap';
-
-// import custom components
-import CourseCard from 'components/marketing/pages/courses/CourseCard';
-import ProfileCover from 'components/marketing/common/headers/ProfileCover';
-
-
-import { fetchStudentData } from 'store/studentSlices';
+import { Col, Row, Container, Tab, Nav } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+// import sub components
+import CourseCard from 'components/marketing/pages/courses/CourseCard';
 
 import {
 	fetchCourses
-} from '../../dashboard/features/courses/courseSlice';
+} from '../../../dashboard/features/courses/courseSlice';
 
-import Spinner from '../../Spinner';
-// import data files
-// import { AllCoursesData } from 'data/slider/AllCoursesData';
+import Spinner from '../../../Spinner';
+import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
 
-const StudentDashboard = () => {
-	const tabs = ['Development', 'Design', 'Marketing', 'Business', 'Health'];
+const AllCourses = () => {
+    const tabs = ['Development', 'Design', 'Marketing', 'Business', 'Health'];
 	let min,
 		max = 0;
+
 
 	const navigate = useNavigate();
 	let userStore = localStorage.getItem('user');
 	const dispatch = useDispatch();
 
-	const { studentData } = useSelector((state) => state.students);
 	const { courses, isLoading, isError, message } = useSelector(
 		(state) => state.courses
 	);
@@ -36,35 +30,30 @@ const StudentDashboard = () => {
 	const AllCoursesData = courses;
 
 	useEffect(() => {
-		if (!userStore) {
-			navigate('/authentication/sign-in');
-		}
-		dispatch(fetchStudentData());
-		dispatch(fetchCourses());
-	}, [dispatch, userStore, navigate]);
 
-	const dashboardData = {
-		avatar: `${studentData?.data?.profilePicture}`,
-		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
-		username: `${studentData?.data?.contactNumber}`,
-		linkname: 'Account Setting',
-		link: '/marketing/student/student-edit-profile/',
-		verified: false,
-		outlinebutton: false,
-		level: 'Beginner'
-	}
+		dispatch(fetchCourses());
+
+	}, [dispatch, userStore, navigate]);
 
 	if (isLoading) {
 		return <Spinner />
 	}
 	return (
 		<Fragment>
-			<section className="pt-5 pb-5">
+            <NavbarMegaMenu />
+			<section className="pb-lg-14 pb-8 bg-white">
 				<Container>
-					{/* User info */}
-					<ProfileCover dashboardData={dashboardData} />
-
-					{/* Content */}
+					<Row>
+						<Col xs={6}>
+							<div className="mb-6">
+								<h2 className="mb-1 h1">All Courses</h2>
+								<p>
+									These are all EmergeLMS Courses.
+								</p>
+							</div>
+						</Col>
+						
+					</Row>
 					<Row>
 						<Col md={12}>
 							<Tab.Container defaultActiveKey="Development">
@@ -85,7 +74,8 @@ const StudentDashboard = () => {
 													})
 														.map((item, index) => (
 															<Col lg={3} md={6} sm={12} key={index}>
-																<Link to={`/marketing/courses/course-resume/${item?.content?.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+																<Link to={`/marketing/courses/course-single/${item?.content?.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+
 																	<CourseCard item={item} />
 																</Link>
 															</Col>
@@ -99,8 +89,8 @@ const StudentDashboard = () => {
 						</Col>
 					</Row>
 				</Container>
-			</section >
-		</Fragment >
+			</section>
+		</Fragment>
 	);
 };
-export default StudentDashboard;
+export default AllCourses;
