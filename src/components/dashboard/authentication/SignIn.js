@@ -1,6 +1,6 @@
 // import node module libraries
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { Fragment } from 'react';
@@ -26,14 +26,15 @@ const SignIn = () => {
 	const { user, isLoading, isError, isSuccess, message } = useSelector(
 		(state) => state.auth
 	);
-	const [email, setEmail] = useState('');
+	const {email} = useParams();
+	const [newEmail, setEmail] = useState(email);
 	// const [role, setSelectedRole] = useState('');
 	const [password, setPassword] = useState('');
 	const [visiblePassword, setVisiblePassword] = useState(false);
 
 	useEffect(() => {
 		if (isError) {
-			//toast.error(message);
+			toast.error("Wrong Email or Password");
 		}
 		if (user?.data) {
 		navigate('/marketing/student/dashboard/');
@@ -44,7 +45,7 @@ const SignIn = () => {
 		e.preventDefault();
 
 		const formData = {
-			email: email,
+			email: newEmail,
 			password: password
 		};
 
@@ -100,7 +101,7 @@ const SignIn = () => {
 											id="email"
 											placeholder="Email address here"
 											required
-											value={email}
+											value={newEmail}
 											onChange={(e) => setEmail(e.target.value)}
 										/>
 									</Col>

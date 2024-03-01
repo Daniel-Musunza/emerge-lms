@@ -1,6 +1,6 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Col, Row, Container, Tab, Nav, ListGroup, Image, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -29,6 +29,7 @@ import Avatar1 from 'assets/images/avatar/avatar-1.jpg';
 import {
 	fetchCourses
 } from '../../../../dashboard/features/courses/courseSlice';
+import { fetchCourseModules } from '../../../../dashboard/features/courseModules/courseModuleSlice';
 
 import Spinner from '../../../../Spinner';
 // import data files
@@ -41,17 +42,46 @@ const CourseSingle = () => {
 	const navigate = useNavigate();
 	let userStore = localStorage.getItem('user');
 	const dispatch = useDispatch();
+	const id = useParams();
 
 	const { courses, isLoading, isError, message } = useSelector(
 		(state) => state.courses
 	);
+	const { courseModules } = useSelector(
+		(state) => state.courseModules
+	);
+	const { courseContents } = useSelector(
+		(state) => state.courseContents
+	);
+	
 	const [isOpen, setOpen] = useState(false);
 	const [YouTubeURL] = useState('JRzWRZahOVU');
 	const AllCoursesData = courses;
 
+	const thisCourse = AllCoursesData?.data?.courses.find((course) => {
+		
+		return course?.content?.id === id?.id;
+	});
+	
+	console.log(courseModules);
+	
+	const selectContent = async (content, e) => {
+		e.preventDefault();
+
+		const newURL = await extractVideoId(content.video);
+
+		setSelectedContent(content);
+
+		if (newURL) {
+			setYouTubeURL(newURL);
+		}
+
+	};
 	useEffect(() => {
 
 		dispatch(fetchCourses());
+		
+		dispatch(fetchCourseModules(id));
 
 	}, [dispatch, userStore, navigate]);
 
@@ -70,12 +100,10 @@ const CourseSingle = () => {
 						<Col xl={7} lg={7} md={12} sm={12}>
 							<div>
 								<h1 className="text-white display-4 fw-semi-bold">
-									Getting Started with JavaScript
+									Getting Started with {thisCourse.name}
 								</h1>
 								<p className="text-white mb-6 lead">
-									JavaScript is the popular programming language which powers
-									web pages and web applications. This course will get you
-									started coding in JavaScript.
+									{thisCourse.description}
 								</p>
 								<div className="d-flex align-items-center">
 									<GKTippy content="Add to Bookmarks">
@@ -168,7 +196,9 @@ const CourseSingle = () => {
 											<Tab.Pane eventKey="contents" className="pb-4 pt-3 px-4">
 												{/* Course Index Accordion */}
 												<GKAccordionDefault
-													accordionItems={CourseIndex}
+													accordionItems={courseModules}
+													courseContents={courseContents}
+													selectContent={selectContent}
 													itemClass="px-0"
 												/>
 											</Tab.Pane>
@@ -200,7 +230,7 @@ const CourseSingle = () => {
 									<div
 										className="d-flex justify-content-center position-relative rounded py-10 border-white border rounded-3 bg-cover"
 										style={{
-											background: `url(${CourseJavascript})`,
+											background: `url(${thisCourse.image})`,
 											backgroundRepeat: 'no-repeat',
 											backgroundSize: 'cover',
 											backgroundPosition: 'top center'
@@ -229,8 +259,8 @@ const CourseSingle = () => {
 								<Card.Body>
 									{/* Price single page */}
 									<div className="mb-3">
-										<span className="text-dark fw-bold h2 me-2">$600</span>
-										<del className="fs-4 text-muted">$750</del>
+										<span className="text-dark fw-bold h2 me-2">${thisCourse.price}</span>
+										<del className="fs-4 text-muted">${thisCourse.price+200}</del>
 									</div>
 									<div className="d-grid">
 										<Link to="#" className="btn btn-primary mb-2  ">
@@ -284,7 +314,7 @@ const CourseSingle = () => {
 									<div className="d-flex align-items-center">
 										<div className="position-relative">
 											<Image
-												src={Avatar1}
+												src={thisCourse.tutorImage}
 												alt=""
 												className="rounded-circle avatar-xl"
 											/>
@@ -304,8 +334,8 @@ const CourseSingle = () => {
 											</Link>
 										</div>
 										<div className="ms-4">
-											<h4 className="mb-0">Jenny Wilson</h4>
-											<p className="mb-1 fs-6">Front-end Developer, Designer</p>
+											<h4 className="mb-0">{thisCourse.tutorName}</h4>
+											<p className="mb-1 fs-6">{thisCourse.category}</p>
 											<span className="fs-6">
 												<span className="text-warning">4.5</span>
 												<span className="mdi mdi-star text-warning me-2"></span>
@@ -334,16 +364,9 @@ const CourseSingle = () => {
 										</Col>
 									</Row>
 									<p>
-										I am an Innovation designer focussing on UX/UI based in
-										Berlin. As a creative resident at Figma explored the city of
-										the future and how new technologies.
+										
 									</p>
-									<Link
-										to="/marketing/instructor/instructor-edit-profile/"
-										className="btn btn-outline-secondary btn-sm"
-									>
-										View Details
-									</Link>
+									
 								</Card.Body>
 							</Card>
 						</Col>

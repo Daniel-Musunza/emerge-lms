@@ -18,7 +18,7 @@ const register = async (userData) => {
 	
 	const response = await axios.post(baseUrl + 'auth/signup', userData);
 
-	return response;
+	return response.data;
 };
 
 //update User
@@ -49,6 +49,7 @@ const forgotpassword = async (userData) => {
 
 	return response.data;
 };
+
 // Logout user
 const logout = () => {
 	localStorage.removeItem('user');

@@ -92,6 +92,7 @@ import { Calendar } from 'react-bootstrap-icons';
 import CourseResume from 'components/marketing/pages/courses/course-resume/CourseResume';
 import CourseSingle from 'components/marketing/pages/courses/course-single/CourseSingle';
 import AllCourses from 'components/marketing/pages/courses/AllCourses';
+import VerifyEmail from 'components/dashboard/authentication/verifyEmail';
 
 
 const AllRoutes = () => {
@@ -201,11 +202,15 @@ const AllRoutes = () => {
 			
 			{/* Routes with AuthLayout */}
 			<Route element={<AuthLayout />}>
-				<Route path="/authentication/sign-in" element={<SignIn />} />
+				<Route path="/authentication/sign-in/:email?" element={<SignIn />} />
 				<Route path="/authentication/sign-up" element={<SignUp />} />
 				<Route
 					path="/authentication/forget-password"
 					element={<ForgetPassword />}
+				/>
+				<Route
+					path="/students/verify/:email"
+					element={<VerifyEmail />}
 				/>
 			</Route>
 

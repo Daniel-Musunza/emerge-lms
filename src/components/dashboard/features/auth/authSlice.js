@@ -61,7 +61,6 @@ export const login = createAsyncThunk('auth/login', async (user, thunkAPI) => {
 		return thunkAPI.rejectWithValue(message);
 	}
 });
-
 export const forgotpassword = createAsyncThunk(
 	'auth/forgotpassword',
 	async (user, thunkAPI) => {
@@ -86,7 +85,7 @@ export const fetchUsers = createAsyncThunk(
 	async (_, thunkAPI) => {
 		try {
 			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await authService.getUsers()(token);
+			return await authService.getUsers(token);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -115,7 +114,6 @@ export const fetchTutors = createAsyncThunk(
 		}
 	}
 );
-
 export const authSlice = createSlice({
 	name: 'auth',
 	initialState,
@@ -162,11 +160,13 @@ export const authSlice = createSlice({
 			.addCase(register.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
+				state.user = action.payload;
 			})
 			.addCase(register.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;
+				
 			})
 			.addCase(login.pending, (state) => {
 				state.isLoading = true;

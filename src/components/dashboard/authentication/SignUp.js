@@ -14,7 +14,6 @@ import Spinner from '../../Spinner';
 const SignUp = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const location = useLocation();
 
 	const { user, isLoading, isError, isSuccess, message } = useSelector(
 		(state) => state.auth
@@ -26,14 +25,7 @@ const SignUp = () => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
-	useEffect(() => {
-		if (isError) {
-			//toast.error(message);
-		}
-		if (user?.data) {
-			navigate('/marketing/student/dashboard/');
-		}
-	}, [user, isError, isSuccess, message, navigate, dispatch]);
+	
 
 	const handleRegister = async (e) => {
 		e.preventDefault();
@@ -44,20 +36,28 @@ const SignUp = () => {
 				email: email,
 				password: password
 			};
-
-
-			await dispatch(register(formData));
-			console.log(location.state);
-			const previousPath = location.state ? location.state.from.pathname : '/marketing/student/dashboard/';
-			console.log(previousPath);
-
-			// Redirect back to the previous page
-			window.location.href = previousPath;
-			showSuccessNotification('Success...');
-		} else{
-			toast("Passwords Don't match");
+	
+			const response = await dispatch(register(formData));
+	
+			if (response.payload && response.payload.data) {
+				const responseData = response.payload.data;
+	
+				// Check if registration was successful
+				console.log(responseData.email)
+				
+					navigate(`/students/verify/${responseData.email}`);
+				if(isError){
+					// Handle error cases
+					toast.error(responseData.message || "Registration failed");
+				}
+			} else {
+				toast.error("An error occurred while processing your request");
+			}
+		} else {
+			toast.error("Passwords Don't match");
 		}
 	};
+	
 
 	if (isLoading) {
 		return <Spinner />;
@@ -81,7 +81,7 @@ const SignUp = () => {
 
 							</div>
 							{/* Form */}
-							<Form onSubmit={handleRegister}>
+							<Form  onSubmit={(e) => handleRegister(e)}>
 								<Row>
 									<Col lg={6} md={6} className="mb-3">
 										{/* User Name */}

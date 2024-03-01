@@ -34,7 +34,9 @@ const ForgetPassword = () => {
 						<Card.Body className="p-6">
 							<div className="mb-4">
 								<Link to="/">
-									<Image src={Logo} className="mb-4" alt="" />
+									<Image src={Logo} className="mb-4" alt=""
+									style={{ width: '200px', height: 'auto' }}
+									/>
 								</Link>
 								<h1 className="mb-1 fw-bold">Forgot Password</h1>
 								<span>Fill the form to reset your password.</span>
