@@ -52,10 +52,10 @@ const forgotpassword = async (userData) => {
 	return response.data;
 };
 
-const verifyEmail = async (code) => {
+const verifyEmail = async (confirmationCode) => {
 	const response = await axios.post(
-		baseUrl + 'students/verify',
-		code
+		baseUrl + 'auth/verify-email',
+		confirmationCode
 	);
 
 	return response.data;

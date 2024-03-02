@@ -64,7 +64,6 @@ const SignUp = () => {
 		}
 	};
 
-
 	if (isLoading) {
 		return <Spinner />;
 	}

@@ -79,9 +79,9 @@ export const forgotpassword = createAsyncThunk(
 );
 export const verifyEmail = createAsyncThunk(
 	'auth/verifyEmail',
-	async (code, thunkAPI) => {
+	async (confirmationCode, thunkAPI) => {
 		try {
-			return await authService.verifyEmail(code);
+			return await authService.verifyEmail(confirmationCode);
 		} catch (error) {
 			const message =
 				(error.response &&

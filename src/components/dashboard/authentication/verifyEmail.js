@@ -1,12 +1,13 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+
 import { Col, Row, Card, Form, Button, Image} from 'react-bootstrap';
 import Logo from 'assets/images/brand/logo/logo-icon.png';
+import Spinner from '../../Spinner';
 
 import { verifyEmail } from '../features/auth/authSlice';
-
-import Spinner from '../../Spinner';
 
 const VerifyEmail = () => {
 
@@ -22,8 +23,11 @@ const VerifyEmail = () => {
     const handleVerification = async (e) => {
         e.preventDefault();
 
-        await dispatch(verifyEmail(code));
+        await dispatch(verifyEmail({confirmationCode: code}));
 
+    };
+
+    useEffect(() => {
         if (isSuccess) {
             toast("Verification Complete");
             window.close(); // Close the window upon successful verification
@@ -32,8 +36,7 @@ const VerifyEmail = () => {
             // Handle error cases
             toast.error("Verification failed");
         }
-    };
-
+	}, [isError, isSuccess]);
     if (isLoading) {
         return <Spinner />;
     }
@@ -50,16 +53,16 @@ const VerifyEmail = () => {
                                 </Link>
                                 <h1 className="mb-1 fw-bold">Verify Email</h1>
                             </div>
-                            <Form onSubmit={(e) => handleVerification(e)}>
+                            <Form >
 
                                 <Row>
                                     <Col lg={12} md={12} className="mb-3 d-grid gap-2">
-                                        <h2>Verification code: <span style={{ fontSize: '40px', fontWeight: '700px', color: 'blue' }}>{code}</span>.</h2>
+                                        <h2>Verification code: <span style={{  fontWeight: '700px', color: 'blue' }} className='v-code'>{code}</span>.</h2>
                                     </Col>
                                 </Row>
                                 <Col lg={12} md={12} className="mb-0 d-grid gap-2">
                                     {/* Button */}
-                                    <Button variant="primary"  >
+                                    <Button variant="primary"  onClick={(e) => handleVerification(e)}>
                                         Verify
                                     </Button>
 
