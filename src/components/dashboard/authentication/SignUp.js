@@ -43,9 +43,18 @@ const SignUp = () => {
 				const responseData = response.payload.data;
 	
 				// Check if registration was successful
-				console.log(responseData.email)
-				
-					navigate(`/students/verify/${responseData.email}`);
+				if(isSuccess){
+					toast('Success... We have just sent you an email. Please verify your account and proceed to login.', {
+						containerClass: 'larger-toast-container'
+					  });
+					  
+					  setTimeout(function() {
+						
+						navigate(`/authentication/sign-in/${responseData.email}`);
+
+					  }, 10000); // 10 seconds delay (10000 milliseconds)
+					  
+				}
 				if(isError){
 					// Handle error cases
 					toast.error(responseData.message || "Registration failed");

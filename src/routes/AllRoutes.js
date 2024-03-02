@@ -209,7 +209,7 @@ const AllRoutes = () => {
 					element={<ForgetPassword />}
 				/>
 				<Route
-					path="/students/verify/:email"
+					path="/students/verify/:code"
 					element={<VerifyEmail />}
 				/>
 			</Route>

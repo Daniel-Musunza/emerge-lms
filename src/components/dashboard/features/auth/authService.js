@@ -50,6 +50,14 @@ const forgotpassword = async (userData) => {
 	return response.data;
 };
 
+const verifyEmail = async (code) => {
+	const response = await axios.post(
+		baseUrl + 'students/verify',
+		code
+	);
+
+	return response.data;
+};
 // Logout user
 const logout = () => {
 	localStorage.removeItem('user');
@@ -61,6 +69,7 @@ const authService = {
 	logout,
 	login,
 	forgotpassword,
+	verifyEmail,
 	getTutors,
 	getUsers,
 	updateUser

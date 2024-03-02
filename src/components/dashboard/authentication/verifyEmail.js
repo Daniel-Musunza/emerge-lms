@@ -1,14 +1,42 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Fragment } from 'react';
-import { Col, Row, Card, Form, Button, Image } from 'react-bootstrap';
+import { Col, Row, Card, Form, Button, Imager } from 'react-bootstrap';
 import Logo from 'assets/images/brand/logo/logo-icon.png';
 
+import { verifyEmail } from '../features/auth/authSlice';
+
+import Spinner from '../../Spinner';
+
 const VerifyEmail = () => {
+    
+    const dispatch = useDispatch();
+
+    const { isLoading, isError, isSuccess, message } = useSelector(
+        (state) => state.auth
+    );
+
+    const { code } = useParams();
 
 
-    const { email } = useParams();
+    const handleVerification = async (e) => {
+        e.preventDefault();
 
+        await dispatch(verifyEmail(code));
+
+        if (isSuccess) {
+            toast("Verification Complete");
+            window.close(); // Close the window upon successful verification
+        }
+        if (isError) {
+            // Handle error cases
+            toast.error("Verification failed");
+        }
+    };
+
+    if (isLoading) {
+        return <Spinner />;
+    }
 
     return (
         <Fragment>
@@ -22,20 +50,18 @@ const VerifyEmail = () => {
                                 </Link>
                                 <h1 className="mb-1 fw-bold">Verify Email</h1>
                             </div>
-                            <Form >
+                            <Form onSubmit={(e) => handleVerification(e)}>
 
                                 <Row>
                                     <Col lg={12} md={12} className="mb-3 d-grid gap-2">
-                                        <p>Congratulations! Your action was successful. We've just sent an email to {email}. Please verify your account and proceed to login.</p>
+                                        <h2>Verification code: <span style={{ fontSize: '40px', fontWeight: '700px', color: 'blue' }}>{code}</span>.</h2>
                                     </Col>
                                 </Row>
                                 <Col lg={12} md={12} className="mb-0 d-grid gap-2">
                                     {/* Button */}
-                                    <Link to={`/authentication/sign-in/${email}`}>
-                                        <Button variant="primary" >
-                                            Proceed
-                                        </Button>
-                                    </Link>
+                                    <Button variant="primary"  >
+                                        Verify
+                                    </Button>
 
                                 </Col>
                             </Form>
