@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import React, { Fragment } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Fragment } from 'react';
-import { Col, Row, Card, Form, Button } from 'react-bootstrap';
+import { Link, useParams } from 'react-router-dom';
+import { Col, Row, Card, Form, Button, Image} from 'react-bootstrap';
 import Logo from 'assets/images/brand/logo/logo-icon.png';
 
 import { verifyEmail } from '../features/auth/authSlice';

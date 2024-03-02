@@ -1,9 +1,8 @@
 // import node module libraries
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,Fragment} from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch, useHistory } from 'react-redux';
 import { toast } from 'react-toastify';
-import { Fragment } from 'react';
 
 import { register, reset } from '../features/auth/authSlice';
 import { Col, Row, Card, Form, Button, Image } from 'react-bootstrap';
@@ -15,7 +14,7 @@ const SignUp = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const { user, isLoading, isError, isSuccess, message } = useSelector(
+	const { isLoading, isError, isSuccess, message } = useSelector(
 		(state) => state.auth
 	);
 
@@ -41,8 +40,6 @@ const SignUp = () => {
 			if (response.payload && response.payload.data) {
 				const responseData = response.payload.data;
 
-				// Check if registration was successful
-				if (isSuccess) {
 					toast('Success... We have just sent you an email. Please verify your account and proceed to login.', {
 						containerClass: 'larger-toast-container'
 					});
@@ -50,7 +47,7 @@ const SignUp = () => {
 					setTimeout(function () {
 						navigate(`/authentication/sign-in/${responseData.email}`);
 					}, 10000); // 10 seconds delay (10000 milliseconds)
-				}
+			
 			} else {
 				if (response.payload.status === 409) {
 					toast.error("Email is already registered. Please use a different email address.",
@@ -181,11 +178,6 @@ const SignUp = () => {
 			</Row>
 		</Fragment>
 	);
-};
-const showSuccessNotification = (message) => {
-	// Implement your notification method here
-	// This could be a custom notification component, a third-party library, etc.
-	console.log('Notification:', message);
 };
 
 export default SignUp;
