@@ -53,7 +53,8 @@ const forgotpassword = async (userData) => {
 };
 
 const verifyEmail = async (confirmationCode) => {
-	const response = await axios.post(
+
+	const response = await axios.patch(
 		baseUrl + 'auth/verify-email',
 		confirmationCode
 	);

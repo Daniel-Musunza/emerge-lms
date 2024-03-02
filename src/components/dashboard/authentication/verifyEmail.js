@@ -30,7 +30,9 @@ const VerifyEmail = () => {
     useEffect(() => {
         if (isSuccess) {
             toast("Verification Complete");
-            window.close(); // Close the window upon successful verification
+            setTimeout(() => {
+                window.close(); // Close the window upon successful verification
+            }, 2000);
         }
         if (isError) {
             // Handle error cases
