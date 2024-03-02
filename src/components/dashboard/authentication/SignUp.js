@@ -25,7 +25,7 @@ const SignUp = () => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
-	
+
 
 	const handleRegister = async (e) => {
 		e.preventDefault();
@@ -36,37 +36,37 @@ const SignUp = () => {
 				email: email,
 				password: password
 			};
-	
+
 			const response = await dispatch(register(formData));
-	
 			if (response.payload && response.payload.data) {
 				const responseData = response.payload.data;
-	
+
 				// Check if registration was successful
-				if(isSuccess){
+				if (isSuccess) {
 					toast('Success... We have just sent you an email. Please verify your account and proceed to login.', {
 						containerClass: 'larger-toast-container'
-					  });
-					  
-					  setTimeout(function() {
-						
-						navigate(`/authentication/sign-in/${responseData.email}`);
+					});
 
-					  }, 10000); // 10 seconds delay (10000 milliseconds)
-					  
-				}
-				if(isError){
-					// Handle error cases
-					toast.error(responseData.message || "Registration failed");
+					setTimeout(function () {
+						navigate(`/authentication/sign-in/${responseData.email}`);
+					}, 10000); // 10 seconds delay (10000 milliseconds)
 				}
 			} else {
-				toast.error("An error occurred while processing your request");
+				if (response.payload.status === 409) {
+					toast.error("Email is already registered. Please use a different email address.",
+					{
+						containerClass: 'larger-toast-container'
+					});
+				} else {
+					toast.error(responseData.message || "Registration failed");
+				}
 			}
+
 		} else {
 			toast.error("Passwords Don't match");
 		}
 	};
-	
+
 
 	if (isLoading) {
 		return <Spinner />;
@@ -90,7 +90,7 @@ const SignUp = () => {
 
 							</div>
 							{/* Form */}
-							<Form  onSubmit={(e) => handleRegister(e)}>
+							<Form onSubmit={(e) => handleRegister(e)}>
 								<Row>
 									<Col lg={6} md={6} className="mb-3">
 										{/* User Name */}

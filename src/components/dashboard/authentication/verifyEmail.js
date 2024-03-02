@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { Fragment } from 'react';
-import { Col, Row, Card, Form, Button, Imager } from 'react-bootstrap';
+import { Col, Row, Card, Form, Button } from 'react-bootstrap';
 import Logo from 'assets/images/brand/logo/logo-icon.png';
 
 import { verifyEmail } from '../features/auth/authSlice';
@@ -9,7 +10,7 @@ import { verifyEmail } from '../features/auth/authSlice';
 import Spinner from '../../Spinner';
 
 const VerifyEmail = () => {
-    
+
     const dispatch = useDispatch();
 
     const { isLoading, isError, isSuccess, message } = useSelector(

@@ -18,6 +18,8 @@ const register = async (userData) => {
 	
 	const response = await axios.post(baseUrl + 'auth/signup', userData);
 
+	console.log(response.data);
+	
 	return response.data;
 };
 
