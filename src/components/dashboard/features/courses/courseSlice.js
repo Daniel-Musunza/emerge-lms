@@ -27,29 +27,12 @@ export const fetchCourses = createAsyncThunk(
 	}
 );
 
-export const fetchTutorCourses = createAsyncThunk(
-	'courses/getTutorCourses',
-	async (_, thunkAPI) => {
-		try {
-			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await courseService.getTutorCourses( token);
-		} catch (error) {
-			const message =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-			return thunkAPI.rejectWithValue(message);
-		}
-	}
-);
-export const createCourse = createAsyncThunk(
+export const bookmarkCourse = createAsyncThunk(
 	'courses/create',
-	async (courseData, thunkAPI) => {
+	async (Data, thunkAPI) => {
 		try {
 			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await courseService.createCourse(courseData, token);
+			return await courseService.bookmarkCourse(Data, token);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -88,28 +71,14 @@ export const courseSlice = createSlice({
 				state.isError = true;
 				state.message = action.payload;
 			})
-			.addCase(fetchTutorCourses.pending, (state) => {
+			.addCase(bookmarkCourse.pending, (state) => {
 				state.isLoading = true;
 			})
-			.addCase(fetchTutorCourses.fulfilled, (state, action) => {
+			.addCase(bookmarkCourse.fulfilled, (state, action) => {
 				state.isLoading = false;
 				state.isSuccess = true;
-				state.courses = action.payload;
 			})
-			.addCase(fetchTutorCourses.rejected, (state, action) => {
-				state.isLoading = false;
-				state.isError = true;
-				state.message = action.payload;
-			})
-			.addCase(createCourse.pending, (state) => {
-				state.isLoading = true;
-			})
-			.addCase(createCourse.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
-				state.courses.push(action.payload);
-			})
-			.addCase(createCourse.rejected, (state, action) => {
+			.addCase(bookmarkCourse.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

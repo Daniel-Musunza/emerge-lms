@@ -35,6 +35,7 @@ const StudentDashboard = () => {
 
 	const AllCoursesData = courses;
 
+
 	useEffect(() => {
 		if (!userStore) {
 			navigate('/authentication/sign-in');
@@ -85,9 +86,7 @@ const StudentDashboard = () => {
 													})
 														.map((item, index) => (
 															<Col lg={3} md={6} sm={12} key={index}>
-																<Link to={`/marketing/courses/course-resume/${item?.content?.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
 																	<CourseCard item={item} />
-																</Link>
 															</Col>
 														))}
 												</Row>

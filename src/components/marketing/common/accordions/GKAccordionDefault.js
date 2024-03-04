@@ -1,5 +1,5 @@
 // import node module libraries
-import React, {useContext, Fragment, useState} from 'react';
+import React, { useContext, Fragment, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -12,9 +12,12 @@ import {
 import Icon from '@mdi/react';
 import { mdiPlay } from '@mdi/js';
 
+
+
 import { fetchCourseContents } from '../../../dashboard/features/courseContents/courseContentSlice';
 
-const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
+
+const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
 	const ContextAwareToggle = ({ children, eventKey, callback }) => {
 		const { activeEventKey } = useContext(AccordionContext);
 
@@ -26,7 +29,9 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 		const isCurrentEventKey = activeEventKey === eventKey;
 
 		return (
+
 			<Fragment>
+
 				<Link
 					to="#"
 					onClick={decoratedOnClick}
@@ -50,23 +55,28 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 		(state) => state.courseContents
 	);
 	const [selectedItemId, setSelectedItemId] = useState(null);
-	
-	const handleModuleSelect = async(id, e) => {
+
+	const handleModuleSelect = async (id, e) => {
 		e.preventDefault();
-		
+
 		await dispatch(fetchCourseContents(id)); // Use `id` instead of `selectedItemId`
-		setSelectedItemId(id); 
+		setSelectedItemId(id);
 	};
-	
 
 	
-	
-	
+
+
+
+
+
 
 	return (
 		<Fragment >
-			<Accordion >
+			
+			<Accordion defaultActiveKey={accordionItems?.data?.sections[0].id}>
+				
 				<ListGroup as="ul" variant="flush">
+					
 					{accordionItems?.data?.sections
 						.map((item, index) => (
 
@@ -75,14 +85,14 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 								as="li"
 								className={`${itemClass ? itemClass : ''}`}
 								onClick={(e) => handleModuleSelect(item.id, e)}
-								
+
 							>
-								<ContextAwareToggle >
+								<ContextAwareToggle eventKey={item.id}>
 									{item}
 								</ContextAwareToggle>
 
-							{selectedItemId === item.id &&(
-									<Accordion className="test">
+								{selectedItemId === item.id && (
+									<Accordion  className="test" eventKey={item.id}>
 										<ListGroup className="py-4" as="ul">
 											{courseContents
 												.map((subitem, subindex) => (
@@ -90,8 +100,8 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 														key={subindex}
 														as="li"
 														disabled={subitem.locked}
-														className="px-0 py-1 border-0"	
-														style={{cursor: 'pointer'}}
+														className="px-0 py-1 border-0"
+														style={{ cursor: 'pointer' }}
 													>
 														<div
 															className={`d-flex justify-content-between align-items-center text-inherit text-decoration-none`}
@@ -115,8 +125,8 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent}) => {
 												))}
 										</ListGroup>
 									</Accordion>
-							)
-							}
+								)
+								}
 							</ListGroup.Item>
 
 

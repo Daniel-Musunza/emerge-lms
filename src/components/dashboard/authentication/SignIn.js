@@ -36,9 +36,11 @@ const SignIn = () => {
 		if (isError) {
 			toast.error("Wrong Email or Password");
 		}
-		if (user?.data) {
-		navigate('/marketing/student/dashboard/');
+
+		if (user) {
+			navigate('/marketing/student/dashboard/');
 		}
+
 	}, [user, isError, isSuccess, message, navigate, dispatch]);
 
 	const handleLogin = async (e) => {

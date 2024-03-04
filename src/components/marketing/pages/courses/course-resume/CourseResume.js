@@ -4,69 +4,29 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
 import { Col, Row, Container, Card, Dropdown } from 'react-bootstrap';
-import { MoreVertical } from 'react-feather';
 import SimpleBar from 'simplebar-react';
 import 'simplebar/dist/simplebar.min.css';
 
-// import MDI icons
-import Icon from '@mdi/react';
-import { mdiFacebook, mdiTwitter, mdiLinkedin, mdiContentCopy } from '@mdi/js';
-
 // import custom components
+import GKTippy from 'components/elements/tooltips/GKTippy';
 import GKYouTube from 'components/marketing/common/video/GKYouTube';
 import GKAccordionDefault from 'components/marketing/common/accordions/GKAccordionDefault';
 import NavbarDefault from 'layouts/marketing/navbars/NavbarDefault';
 import { fetchCourseModules } from '../../../../dashboard/features/courseModules/courseModuleSlice';
 
-
+import {
+	bookmarkCourse
+} from '../../../../dashboard/features/courses/courseSlice';
+import { fetchStudentData } from 'store/studentSlices';
 
 import Spinner from '../../../../Spinner';
+
 // import data
 // import { CourseIndex } from 'data/marketing/CourseIndexData';
 
 // The forwardRef is important!!
-// Dropdown needs access to the DOM node in order to position the Menu
-const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
-	<Link
-		to="#"
-		ref={ref}
-		onClick={(e) => {
-			e.preventDefault();
-			onClick(e);
-		}}
-	>
-		{children}
-	</Link>
-));
 
-const ActionMenu = () => {
-	return (
-		<Dropdown>
-			<Dropdown.Toggle as={CustomToggle}>
-				<MoreVertical size="15px" className="text-secondary" />
-			</Dropdown.Toggle>
-			<Dropdown.Menu align="end">
-				<Dropdown.Header>SHARE</Dropdown.Header>
-				<Dropdown.Item eventKey="1">
-					<Icon path={mdiFacebook} size={0.8} className="text-secondary" />{' '}
-					Facebook
-				</Dropdown.Item>
-				<Dropdown.Item eventKey="2">
-					<Icon path={mdiTwitter} size={0.8} className="text-secondary" />{' '}
-					Twitter
-				</Dropdown.Item>
-				<Dropdown.Item eventKey="3">
-					<Icon path={mdiLinkedin} size={0.8} className="text-secondary" />{' '}
-					Linked In
-				</Dropdown.Item>
-				<Dropdown.Item eventKey="4">
-					<Icon path={mdiContentCopy} size={0.8} className="text-secondary" />
-					Copy Link
-				</Dropdown.Item>
-			</Dropdown.Menu>
-		</Dropdown>
-	);
-};
+
 
 
 
@@ -77,7 +37,7 @@ export const CourseResume = () => {
 	const { user } = useSelector(
 		(state) => state.auth
 	);
-	
+
 	const { studentData } = useSelector((state) => state.students);
 	const { courseModules, isLoading, isError, message } = useSelector(
 		(state) => state.courseModules
@@ -116,10 +76,19 @@ export const CourseResume = () => {
 
 	};
 
+	const AddToBookmark = async (e) => {
+		e.preventDefault();
+		const bookmarkData = {
+			courseId: id,
+			studentId: studentData?.data?.id
+		}
+
+		await dispatch(bookmarkCourse(bookmarkData));
+		toast("Course Added to Bookmark");
+	};
+
 	useEffect(() => {
-		// if (isError) {
-		// 	//toast.error(message);
-		// }
+		dispatch(fetchStudentData());
 		if (!user) {
 			navigate('/authentication/sign-in');
 		}
@@ -140,6 +109,7 @@ export const CourseResume = () => {
 	if (isLoading) {
 		return <Spinner />;
 	}
+
 	return (
 
 		<Fragment>
@@ -171,12 +141,12 @@ export const CourseResume = () => {
 											<div>
 
 												<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer">
-													<h3 style={{color: 'blue',  paddingLeft: '10px'}} className='small-screen-t-pdf view-pdf'>View Notes</h3>
+													<h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
 												</a>
 
 											</div>
 										)}
-									
+
 									</div>
 									<div
 										className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
@@ -194,6 +164,29 @@ export const CourseResume = () => {
 					<SimpleBar style={{ maxHeight: '93vh' }}>
 						<Card>
 							<Card.Header>
+								
+								<section className="bg-primary" style={{padding: '10px', margin:'10px', width: 'fit-content', borderRadius: '5px'}}>
+									<Container>
+
+										<Row className="align-items-center">
+											<Col xl={7} lg={7} md={12} sm={12}>
+												<div>
+													<div className="d-flex align-items-center">
+														<GKTippy content="Add to Bookmarks" >
+															<div
+																className="bookmark text-white text-decoration-none"
+																onClick={AddToBookmark}
+															>
+																<i className="fe fe-bookmark text-white-50 me-2"></i>
+																Bookmark
+															</div>
+														</GKTippy>
+													</div>
+												</div>
+											</Col>
+										</Row>
+									</Container>
+								</section>
 								<h4 className="mb-0">Table of Content</h4>
 							</Card.Header>
 							{/* Course Index Accordion */}
@@ -205,6 +198,7 @@ export const CourseResume = () => {
 						</Card>
 					</SimpleBar>
 				</section>
+
 			</main>
 		</Fragment>
 

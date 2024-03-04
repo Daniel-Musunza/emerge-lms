@@ -78,10 +78,7 @@ const MostPopularCourses = () => {
 														.slice(0, 8)
 														.map((item, index) => (
 															<Col lg={3} md={6} sm={12} key={index}>
-																<Link to={`/marketing/courses/course-single/${item?.content?.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-
 																	<CourseCard item={item} />
-																</Link>
 															</Col>
 														))}
 												</Row>

@@ -1,8 +1,10 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
+import { toast } from 'react-toastify';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Col, Row, Container, Tab, Nav, ListGroup, Image, Card } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+
 
 // import popup youtube video
 import ModalVideo from 'react-modal-video';
@@ -27,9 +29,11 @@ import CourseJavascript from 'assets/images/course/course-javascript.jpg';
 import Avatar1 from 'assets/images/avatar/avatar-1.jpg';
 
 import {
-	fetchCourses
+	fetchCourses,
+	bookmarkCourse
 } from '../../../../dashboard/features/courses/courseSlice';
 import { fetchCourseModules } from '../../../../dashboard/features/courseModules/courseModuleSlice';
+import { fetchStudentData } from 'store/studentSlices';
 
 import Spinner from '../../../../Spinner';
 // import data files
@@ -41,8 +45,9 @@ const CourseSingle = () => {
 
 	const navigate = useNavigate();
 	let userStore = localStorage.getItem('user');
+
 	const dispatch = useDispatch();
-	const id = useParams();
+	let id = useParams();
 
 	const { courses, isLoading, isError, message } = useSelector(
 		(state) => state.courses
@@ -53,18 +58,20 @@ const CourseSingle = () => {
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
 	);
-	
+
+	const { studentData } = useSelector((state) => state.students);
+
 	const [isOpen, setOpen] = useState(false);
 	const [YouTubeURL] = useState('JRzWRZahOVU');
 	const AllCoursesData = courses;
 
 	const thisCourse = AllCoursesData?.data?.courses.find((course) => {
-		
+
 		return course?.content?.id === id?.id;
 	});
-	
+
 	console.log(courseModules);
-	
+
 	const selectContent = async (content, e) => {
 		e.preventDefault();
 
@@ -80,10 +87,20 @@ const CourseSingle = () => {
 	useEffect(() => {
 
 		dispatch(fetchCourses());
-		
+		dispatch(fetchStudentData());
 		dispatch(fetchCourseModules(id));
 
 	}, [dispatch, userStore, navigate]);
+
+	const AddToBookmark = async (e) => {
+		e.preventDefault();
+		const bookmarkData = {
+			courseId: id?.id,
+			studentId: studentData?.data?.id
+		}
+		await dispatch(bookmarkCourse(bookmarkData));
+		toast("Course Added to Bookmark");
+	};
 
 	if (isLoading) {
 		return <Spinner />
@@ -106,14 +123,14 @@ const CourseSingle = () => {
 									{thisCourse.description}
 								</p>
 								<div className="d-flex align-items-center">
-									<GKTippy content="Add to Bookmarks">
-										<Link
-											to="#"
+									<GKTippy content="Add to Bookmarks" >
+										<div
 											className="bookmark text-white text-decoration-none"
+											onClick={AddToBookmark}
 										>
 											<i className="fe fe-bookmark text-white-50 me-2"></i>
 											Bookmark
-										</Link>
+										</div>
 									</GKTippy>
 									<span className="text-white ms-3">
 										<i className="fe fe-user text-white-50"></i> 1200 Enrolled{' '}
@@ -175,10 +192,7 @@ const CourseSingle = () => {
 									<Nav className="nav-lb-tab">
 										{[
 											'Contents',
-											'Description',
-											'Reviews',
-											'Transcript',
-											'FAQ'
+
 										].map((item, index) => (
 											<Nav.Item key={index}>
 												<Nav.Link
@@ -202,22 +216,7 @@ const CourseSingle = () => {
 													itemClass="px-0"
 												/>
 											</Tab.Pane>
-											<Tab.Pane eventKey="description" className="pb-4 p-4">
-												{/* Description */}
-												<DescriptionTab />
-											</Tab.Pane>
-											<Tab.Pane eventKey="reviews" className="pb-4 p-4">
-												{/* Reviews */}
-												<ReviewsTab />
-											</Tab.Pane>
-											<Tab.Pane eventKey="transcript" className="pb-4 p-4">
-												{/* Transcript */}
-												<TranscriptTab />
-											</Tab.Pane>
-											<Tab.Pane eventKey="faq" className="pb-4 p-4">
-												{/* FAQ */}
-												<FAQTab />
-											</Tab.Pane>
+
 										</Tab.Content>
 									</Card.Body>
 								</Card>
@@ -260,7 +259,7 @@ const CourseSingle = () => {
 									{/* Price single page */}
 									<div className="mb-3">
 										<span className="text-dark fw-bold h2 me-2">${thisCourse.price}</span>
-										<del className="fs-4 text-muted">${thisCourse.price+200}</del>
+										<del className="fs-4 text-muted">${thisCourse.price + 200}</del>
 									</div>
 									<div className="d-grid">
 										<Link to="#" className="btn btn-primary mb-2  ">
@@ -364,9 +363,9 @@ const CourseSingle = () => {
 										</Col>
 									</Row>
 									<p>
-										
+
 									</p>
-									
+
 								</Card.Body>
 							</Card>
 						</Col>
@@ -384,9 +383,13 @@ const CourseSingle = () => {
 							})
 								.slice(0, 4)
 								.map((item, index) => (
+
 									<Col lg={3} md={6} sm={12} key={index}>
-										<CourseCard item={item} />
+										<Link to={`/marketing/courses/course-single/${item?.content?.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+											<CourseCard item={item} />
+										</Link>
 									</Col>
+
 								))}
 						</Row>
 					</div>
