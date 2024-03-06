@@ -37,7 +37,7 @@ export const updateUser = createAsyncThunk(
 	async (userData, thunkAPI) => {
 		try {
 			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await authService.updateUser(userData, token);
+			return await authService.updateUser(token, userData);
 		} catch (error) {
 			const message =
 				(error.response &&
@@ -96,40 +96,7 @@ export const verifyEmail = createAsyncThunk(
 export const logout = createAsyncThunk('auth/logout', async () => {
 	await authService.logout();
 });
-export const fetchUsers = createAsyncThunk(
-	'users/getAll',
-	async (_, thunkAPI) => {
-		try {
-			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await authService.getUsers(token);
-		} catch (error) {
-			const message =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-			return thunkAPI.rejectWithValue(message);
-		}
-	}
-);
-export const fetchTutors = createAsyncThunk(
-	'students/getAll',
-	async (_, thunkAPI) => {
-		try {
-			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await authService.getTutors(token);
-		} catch (error) {
-			const message =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-			return thunkAPI.rejectWithValue(message);
-		}
-	}
-);
+
 export const authSlice = createSlice({
 	name: 'auth',
 	initialState,
@@ -143,33 +110,6 @@ export const authSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(fetchUsers.pending, (state) => {
-				state.isLoading = true;
-			})
-			.addCase(fetchUsers.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
-				state.users = action.payload;
-			})
-			.addCase(fetchUsers.rejected, (state, action) => {
-				state.isLoading = false;
-				state.isError = true;
-				state.message = action.payload;
-			})
-			.addCase(fetchTutors.pending, (state) => {
-				state.isLoading = true;
-			})
-			.addCase(fetchTutors.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
-				state.students = action.payload;
-			})
-			.addCase(fetchTutors.rejected, (state, action) => {
-				state.isLoading = false;
-				state.isError = true;
-				state.message = action.payload;
-			})
-
 			.addCase(register.pending, (state) => {
 				state.isLoading = true;
 			})

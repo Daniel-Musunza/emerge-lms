@@ -32,7 +32,7 @@ export const bookmarkCourse = createAsyncThunk(
 	async (Data, thunkAPI) => {
 		try {
 			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await courseService.bookmarkCourse(Data, token);
+			return await courseService.bookmarkCourse(token, Data);
 		} catch (error) {
 			const message =
 				(error.response &&

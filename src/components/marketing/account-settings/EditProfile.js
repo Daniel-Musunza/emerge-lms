@@ -34,14 +34,14 @@ const EditProfile = () => {
 
 	const dispatch = useDispatch();
 
-	const {studentData } = useSelector((state) => state.students);
+	const { studentData } = useSelector((state) => state.students);
 	const [firstName, setFirstName] = useState(studentData?.data?.firstName || '');
 	const [lastName, setLastName] = useState(studentData?.data?.lastName || '');
 	const [contactNumber, setContactNumber] = useState(studentData?.data?.phone || '');
 	const [addressLine1, setAddressLine1] = useState(studentData?.data?.address || '');
 	const [addressLine2, setAddressLine2] = useState(studentData?.data?.addressLine2 || '');
 	const [country, setCountry] = useState(studentData?.data?.country || '');
-	const [birthday, setBirthday] = useState(studentData?.data?.birthDate || '');
+	const [birthday, setBirthday] = useState(studentData?.data?.birthDate || null);
 
 	useEffect(() => {
 		if (!user) {
@@ -59,22 +59,22 @@ const EditProfile = () => {
 		link: '/marketing/student/student-edit-profile/'
 	};
 
+	const birthDateTimestamp = new Date(birthday).getTime();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		const formData = {
-			
 			address: addressLine1,
-			birthDate: birthday,
+			birthDate: birthDateTimestamp, // Use the timestamp instead of the string
 			country: country,
 			firstName: firstName,
 			lastName: lastName,
 			phone: contactNumber,
-			profilePicture: null
-			
+			profilePicture: ''
 		};
 
+		console.log(formData)
 
 		await dispatch(updateUser(formData));
 	};
@@ -171,7 +171,7 @@ const EditProfile = () => {
 									<Form.Group className="mb-3" controlId="formBirthday">
 										<Form.Label>Birthday</Form.Label>
 										<Form.Control
-											as={FlatPickr}
+											type="date"
 											placeholder="Date of Birth"
 											value={birthday}
 											onChange={(e) => setBirthday(e.target.value)}

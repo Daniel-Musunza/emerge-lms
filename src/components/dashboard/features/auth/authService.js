@@ -3,16 +3,6 @@ import setAuthToken from 'helper/set-auth-token';
 import jwtDecode from 'jwt-decode';
 import { baseUrl } from '../../../../api/base';
 
-const getUsers = async () => {
-	const response = await axios.get(baseUrl + 'users/');
-
-	return response.data;
-};
-const getTutors = async () => {
-	const response = await axios.get(baseUrl + 'student/');
-
-	return response.data;
-};
 // Register user
 const register = async (userData) => {
 	
@@ -25,8 +15,15 @@ const register = async (userData) => {
 
 //update User
 
-const updateUser = async (userData) => {
-	const response = await axios.patch(baseUrl + 'students/update', userData);
+const updateUser = async (token, userData ) => {
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+
+	const response = await axios.patch(baseUrl + 'students/update', userData, config);
 
 	return response.data;
 };
@@ -73,8 +70,6 @@ const authService = {
 	login,
 	forgotpassword,
 	verifyEmail,
-	getTutors,
-	getUsers,
 	updateUser
 };
 

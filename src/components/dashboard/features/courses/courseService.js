@@ -7,7 +7,7 @@ const getCourses = async () => {
 
 	return response.data;
 };
-const bookmarkCourse = async (Data, token) => {
+const bookmarkCourse = async ( token, Data) => {
 	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`

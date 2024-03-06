@@ -13,18 +13,9 @@ const getcourseModules = async (id, token) => {
 
 	return response.data;
 };
-const createCourseModule = async (courseModuleData, token) => {
-	const config = {
-		headers: {
-			Authorization: `Bearer ${token}`
-		}
-	};
-	const response = await axios.post(API_URL, courseModuleData, config);
-	return response.data;
-};
+
 const courseModuleService = {
-	getcourseModules,
-	createCourseModule
+	getcourseModules
 };
 
 export default courseModuleService;

@@ -73,7 +73,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
 	return (
 		<Fragment >
 			
-			<Accordion defaultActiveKey={accordionItems?.data?.sections[0].id}>
+			<Accordion defaultActiveKey={accordionItems?.data?.sections[0]?.id}>
 				
 				<ListGroup as="ul" variant="flush">
 					
@@ -91,7 +91,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
 									{item}
 								</ContextAwareToggle>
 
-								{selectedItemId === item.id && (
+								{selectedItemId === item?.id && (
 									<Accordion  className="test" eventKey={item.id}>
 										<ListGroup className="py-4" as="ul">
 											{courseContents
@@ -125,8 +125,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
 												))}
 										</ListGroup>
 									</Accordion>
-								)
-								}
+								)}
 							</ListGroup.Item>
 
 

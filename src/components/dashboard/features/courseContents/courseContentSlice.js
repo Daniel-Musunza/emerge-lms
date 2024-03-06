@@ -29,26 +29,6 @@ export const fetchCourseContents = createAsyncThunk(
 		}
 	}
 );
-export const createCourseContent = createAsyncThunk(
-	'courseContents/create',
-	async (courseContentData, thunkAPI) => {
-		try {
-			const token = thunkAPI.getState().auth.user.data.accessToken;
-			return await courseContentService.createCourseContent(
-				courseContentData,
-				token
-			);
-		} catch (error) {
-			const message =
-				(error.response &&
-					error.response.data &&
-					error.response.data.message) ||
-				error.message ||
-				error.toString();
-			return thunkAPI.rejectWithValue(message);
-		}
-	}
-);
 
 export const courseContentSlice = createSlice({
 	name: 'courseContent',
@@ -76,19 +56,6 @@ export const courseContentSlice = createSlice({
 				state.isError = true;
 				state.message = action.payload;
 			})
-			.addCase(createCourseContent.pending, (state) => {
-				state.isLoading = true;
-			})
-			.addCase(createCourseContent.fulfilled, (state, action) => {
-				state.isLoading = false;
-				state.isSuccess = true;
-				state.courseContents.push(action.payload);
-			})
-			.addCase(createCourseContent.rejected, (state, action) => {
-				state.isLoading = false;
-				state.isError = true;
-				state.message = action.payload;
-			});
 	}
 });
 
