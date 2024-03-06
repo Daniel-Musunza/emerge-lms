@@ -33,14 +33,17 @@ import Spinner from '../../../../Spinner';
 export const CourseResume = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const { id } = useParams();
+	const { id, courseId } = useParams();
 	const { user } = useSelector(
 		(state) => state.auth
 	);
 
 	const { studentData } = useSelector((state) => state.students);
-	const { courseModules, isLoading, isError, message } = useSelector(
+	const { courseModules, isLoading, message } = useSelector(
 		(state) => state.courseModules
+	);
+	const { isSuccess, isError } = useSelector(
+		(state) => state.courses
 	);
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
@@ -78,13 +81,17 @@ export const CourseResume = () => {
 
 	const AddToBookmark = async (e) => {
 		e.preventDefault();
-		const bookmarkData = {
-			courseId: id,
-			studentId: studentData?.data?.id
+		try {
+			const bookmarkData = {
+				courseId: courseId,
+				studentId: studentData?.data?.id
+			}
+			console.log(bookmarkData)
+			await dispatch(bookmarkCourse(bookmarkData));
+			toast("Course Added to Bookmark");
+		} catch (err) {
+			toast("Failed to Bookmark");
 		}
-
-		await dispatch(bookmarkCourse(bookmarkData));
-		toast("Course Added to Bookmark");
 	};
 
 	useEffect(() => {
@@ -92,6 +99,7 @@ export const CourseResume = () => {
 		if (!user) {
 			navigate('/authentication/sign-in');
 		}
+
 
 
 		dispatch(fetchCourseModules(id));
@@ -164,8 +172,8 @@ export const CourseResume = () => {
 					<SimpleBar style={{ maxHeight: '93vh' }}>
 						<Card>
 							<Card.Header>
-								
-								<section className="bg-primary" style={{padding: '10px', margin:'10px', width: 'fit-content', borderRadius: '5px'}}>
+
+								<section className="bg-primary" style={{ padding: '10px', margin: '10px', width: 'fit-content', borderRadius: '5px' }}>
 									<Container>
 
 										<Row className="align-items-center">

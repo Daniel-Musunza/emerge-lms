@@ -47,7 +47,7 @@ const CourseSingle = () => {
 	let userStore = localStorage.getItem('user');
 
 	const dispatch = useDispatch();
-	let id = useParams();
+	let {id, courseId} = useParams();
 
 	const { courses, isLoading, isError, message } = useSelector(
 		(state) => state.courses
@@ -67,7 +67,7 @@ const CourseSingle = () => {
 
 	const thisCourse = AllCoursesData?.data?.courses.find((course) => {
 
-		return course?.content?.id === id?.id;
+		return course?.id === courseId;
 	});
 
 	console.log(courseModules);
@@ -95,7 +95,7 @@ const CourseSingle = () => {
 	const AddToBookmark = async (e) => {
 		e.preventDefault();
 		const bookmarkData = {
-			courseId: id?.id,
+			courseId: courseId,
 			studentId: studentData?.data?.id
 		}
 		await dispatch(bookmarkCourse(bookmarkData));
@@ -117,10 +117,10 @@ const CourseSingle = () => {
 						<Col xl={7} lg={7} md={12} sm={12}>
 							<div>
 								<h1 className="text-white display-4 fw-semi-bold">
-									Getting Started with {thisCourse.name}
+									Getting Started with {thisCourse?.name}
 								</h1>
 								<p className="text-white mb-6 lead">
-									{thisCourse.description}
+									{thisCourse?.description}
 								</p>
 								<div className="d-flex align-items-center">
 									<GKTippy content="Add to Bookmarks" >
@@ -229,7 +229,7 @@ const CourseSingle = () => {
 									<div
 										className="d-flex justify-content-center position-relative rounded py-10 border-white border rounded-3 bg-cover"
 										style={{
-											background: `url(${thisCourse.image})`,
+											background: `url(${thisCourse?.image})`,
 											backgroundRepeat: 'no-repeat',
 											backgroundSize: 'cover',
 											backgroundPosition: 'top center'
@@ -258,8 +258,8 @@ const CourseSingle = () => {
 								<Card.Body>
 									{/* Price single page */}
 									<div className="mb-3">
-										<span className="text-dark fw-bold h2 me-2">${thisCourse.price}</span>
-										<del className="fs-4 text-muted">${thisCourse.price + 200}</del>
+										<span className="text-dark fw-bold h2 me-2">${thisCourse?.price}</span>
+										<del className="fs-4 text-muted">${thisCourse?.price + 200}</del>
 									</div>
 									<div className="d-grid">
 										<Link to="#" className="btn btn-primary mb-2  ">
@@ -313,7 +313,7 @@ const CourseSingle = () => {
 									<div className="d-flex align-items-center">
 										<div className="position-relative">
 											<Image
-												src={thisCourse.tutorImage}
+												src={thisCourse?.tutorImage}
 												alt=""
 												className="rounded-circle avatar-xl"
 											/>
@@ -333,8 +333,8 @@ const CourseSingle = () => {
 											</Link>
 										</div>
 										<div className="ms-4">
-											<h4 className="mb-0">{thisCourse.tutorName}</h4>
-											<p className="mb-1 fs-6">{thisCourse.category}</p>
+											<h4 className="mb-0">{thisCourse?.tutorName}</h4>
+											<p className="mb-1 fs-6">{thisCourse?.category}</p>
 											<span className="fs-6">
 												<span className="text-warning">4.5</span>
 												<span className="mdi mdi-star text-warning me-2"></span>

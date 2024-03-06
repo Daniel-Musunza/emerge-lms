@@ -40,15 +40,13 @@ const CourseCard = ({
 		const AddToBookmark = async (e) => {
 			e.preventDefault();
 			const bookmarkData = {
-				courseId: id?.id,
+				courseId: item?.id,
 				studentId: studentData?.data?.id
 			}
 			await dispatch(bookmarkCourse(bookmarkData));
 			toast("Course Added to Bookmark");
 		};
-		const courseURL = studentData
-			? `/marketing/courses/course-resume/${item?.content?.id}`
-			: `/marketing/courses/course-single/${item?.content?.id}`;
+		const courseURL = `/marketing/courses/course-resume/${item?.content?.id}/${item?.id}`;
 
 		useEffect(() => {
 			dispatch(fetchStudentData());
@@ -135,6 +133,7 @@ const CourseCard = ({
 						<Col className="col ms-2">
 							<span>{item.tutorName}</span>
 						</Col>
+					
 						<Col xs="auto">
 							<GKTippy content="Add to Bookmarks" onClick={AddToBookmark}>
 								<div>
@@ -153,16 +152,28 @@ const CourseCard = ({
 						/>
 					</span>
 				</Card.Footer>
+				<Card.Footer>
+					<Row className="align-items-center g-0">
+						<Col xs="auto">
+							<Link content="View Single Course" to={`/marketing/courses/course-single/${item?.content?.id}/${item?.id}`}>
+								<div>
+									View Single Course
+								</div>
+							</Link>
+						</Col>
+					</Row>
+			
+				</Card.Footer>
 			</Card>
 
 		);
 	};
 
 
-	
+
 	return (
 		<Fragment>
-				<GridView />
+			<GridView />
 		</Fragment>
 	);
 };

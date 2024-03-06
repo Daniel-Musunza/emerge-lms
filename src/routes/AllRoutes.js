@@ -168,11 +168,11 @@ const AllRoutes = () => {
 			{/* </Route> */}
 
 			<Route
-					path="/marketing/courses/course-resume/:id"
+					path="/marketing/courses/course-resume/:id/:courseId"
 					element={<CourseResume />}
 				/>
 				<Route
-					path="/marketing/courses/course-single/:id"
+					path="/marketing/courses/course-single/:id/:courseId"
 					element={<CourseSingle />}
 				/>
 			{/* Routes with BlankLayout */}
