@@ -36,7 +36,9 @@ const CourseCard = ({
 		const dispatch = useDispatch();
 
 		const { studentData } = useSelector((state) => state.students);
-
+		const { user } = useSelector(
+			(state) => state.auth
+		);
 		const AddToBookmark = async (e) => {
 			e.preventDefault();
 			const bookmarkData = {
@@ -54,7 +56,7 @@ const CourseCard = ({
 		}, [dispatch]);
 		return (
 			<Card className={`mb-4 card-hover ${extraclass}`}>
-				<Link to={courseURL} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+				<Link to={user ? {courseURL}: '#' }style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
 					<>
 						{item.image ? (
 							<Image
