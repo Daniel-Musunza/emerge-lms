@@ -56,7 +56,7 @@ const CourseCard = ({
 		}, [dispatch]);
 		return (
 			<Card className={`mb-4 card-hover ${extraclass}`}>
-				<Link to={user ? {courseURL}: '#' }style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+				<Link to={user ? courseURL : '#'}  style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
 					<>
 						{item.image ? (
 							<Image
