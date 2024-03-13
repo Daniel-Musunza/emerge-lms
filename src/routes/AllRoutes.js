@@ -57,7 +57,7 @@ import HelpCenter from 'components/marketing/pages/help-center/help-center/HelpC
 import TermsAndConditions from 'components/marketing/pages/specialty/TermsAndConditions';
 
 // Landing menu item pages
-import HomeAcademy from 'components/marketing/landings/home-academy/HomeAcademy'; 
+import HomeAcademy from 'components/marketing/landings/home-academy/HomeAcademy';
 
 // Student Dashboard Pages
 import StudentDashboard from 'components/marketing/student/Dashboard';
@@ -94,90 +94,97 @@ import CourseSingle from 'components/marketing/pages/courses/course-single/Cours
 import AllCourses from 'components/marketing/pages/courses/AllCourses';
 import VerifyEmail from 'components/dashboard/authentication/verifyEmail';
 
+import CheckLoggedIn from './CheckLoggedIn';
+
+// Inside the route or navigation logic
+
 
 const AllRoutes = () => {
 	return (
+
 		<Routes>
-		
-			<Route
-				path="/marketing/student/dashboard/"
-				element={<StudentDashboard />}
-			/>
+			<Route element={<CheckLoggedIn />}>
+				<Route path="/marketing/student/dashboard" element={<StudentDashboard />} />
+
+				<Route
+					path="/marketing/student/student-subscriptions/"
+					element={<Subscriptions />}
+				/>
+				<Route
+					path="/marketing/student/student-billing-info/"
+					element={<BillingInfo />}
+				/>
+				<Route
+					path="/marketing/student/student-payment/"
+					element={<StudentPayment />}
+				/>
+				<Route path="/marketing/student/student-invoice/" element={<Invoice />} />
+				<Route
+					path="/marketing/student/student-invoice-details/"
+					element={<InvoiceDetails />}
+				/>
+				<Route
+					path="/marketing/student/student-edit-profile/"
+					element={<EditProfile />}
+				/>
+				<Route
+					path="/marketing/student/student-security/"
+					element={<Security />}
+				/>
+				<Route
+					path="/marketing/student/student-social-profiles/"
+					element={<SocialProfiles />}
+				/>
+				<Route
+					path="/marketing/student/student-notifications/"
+					element={<AccountNotifications />}
+				/>
+				<Route
+					path="/marketing/student/student-profile-privacy/"
+					element={<ProfilePrivacy />}
+				/>
+				<Route
+					path="/marketing/student/student-delete-profile/"
+					element={<DeleteProfile />}
+				/>
+				<Route
+					path="/marketing/student/student-linked-accounts/"
+					element={<LinkedAccounts />}
+				/>
+				<Route path="/marketing/student/quiz/" element={<StudentQuiz />} />
+				<Route
+					path="/marketing/student/quiz/attempt/"
+					element={<StudentQuizAttempt />}
+				/>
+				<Route
+					path="/marketing/student/quiz/start/"
+					element={<StudentQuizStart />}
+				/>
+				<Route
+					path="/marketing/student/quiz/result/"
+					element={<StudentQuizResult />}
+				/>
+				{/* </Route> */}
+
+				<Route
+					path="/marketing/courses/course-resume/:id/:courseId"
+					element={<CourseResume />}
+				/>
+			</Route>
+
+
+
 			<Route
 				path="/marketing/allcourses/"
 				element={<AllCourses />}
 			/>
 			<Route
-				path="/marketing/student/student-subscriptions/"
-				element={<Subscriptions />}
+				path="/marketing/courses/course-single/:id/:courseId"
+				element={<CourseSingle />}
 			/>
-			<Route
-				path="/marketing/student/student-billing-info/"
-				element={<BillingInfo />}
-			/>
-			<Route
-				path="/marketing/student/student-payment/"
-				element={<StudentPayment />}
-			/>
-			<Route path="/marketing/student/student-invoice/" element={<Invoice />} />
-			<Route
-				path="/marketing/student/student-invoice-details/"
-				element={<InvoiceDetails />}
-			/>
-			<Route
-				path="/marketing/student/student-edit-profile/"
-				element={<EditProfile />}
-			/>
-			<Route
-				path="/marketing/student/student-security/"
-				element={<Security />}
-			/>
-			<Route
-				path="/marketing/student/student-social-profiles/"
-				element={<SocialProfiles />}
-			/>
-			<Route
-				path="/marketing/student/student-notifications/"
-				element={<AccountNotifications />}
-			/>
-			<Route
-				path="/marketing/student/student-profile-privacy/"
-				element={<ProfilePrivacy />}
-			/>
-			<Route
-				path="/marketing/student/student-delete-profile/"
-				element={<DeleteProfile />}
-			/>
-			<Route
-				path="/marketing/student/student-linked-accounts/"
-				element={<LinkedAccounts />}
-			/>
-			<Route path="/marketing/student/quiz/" element={<StudentQuiz/>} />
-			<Route
-				path="/marketing/student/quiz/attempt/"
-				element={<StudentQuizAttempt />}
-			/>
-			<Route
-				path="/marketing/student/quiz/start/"
-				element={<StudentQuizStart />}
-			/>
-			<Route
-				path="/marketing/student/quiz/result/"
-				element={<StudentQuizResult />}
-			/>
-			{/* </Route> */}
-
-			<Route
-					path="/marketing/courses/course-resume/:id/:courseId"
-					element={<CourseResume />}
-				/>
-				<Route
-					path="/marketing/courses/course-single/:id/:courseId"
-					element={<CourseSingle />}
-				/>
 			{/* Routes with BlankLayout */}
 			<Route element={<BlankLayout />}>
-				
+
 				<Route
 					path="/marketing/specialty/terms-and-conditions/"
 					element={<TermsAndConditions />}
@@ -185,7 +192,7 @@ const AllRoutes = () => {
 			</Route>
 
 
-			
+
 			{/* Routes with AcademyLayout */}
 			<Route element={<AcademyLayout />}>
 				<Route
@@ -199,7 +206,7 @@ const AllRoutes = () => {
 				<Route path="/marketing/help-center/" element={<HelpCenter />} />
 			</Route>
 
-			
+
 			{/* Routes with AuthLayout */}
 			<Route element={<AuthLayout />}>
 				<Route path="/authentication/sign-in/:email?" element={<SignIn />} />
@@ -216,7 +223,7 @@ const AllRoutes = () => {
 
 			{/* Routes (DASHBOARD ROUTERS) with DashboardIndex */}
 			<Route element={<DashboardIndex />}>
-				
+
 
 				{/* REACT-BOOTSTRAP FORMS COMPOENTS ROUTERS */}
 				<Route
@@ -268,7 +275,7 @@ const AllRoutes = () => {
 				<Route path="/dashboard/changelog" element={<ChangeLog />} />
 				<Route path="/dashboard/calendar" element={<Calendar />} />
 
-			
+
 			</Route>
 
 			{/*Redirect*/}

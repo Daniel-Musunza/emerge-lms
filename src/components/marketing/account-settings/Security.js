@@ -31,7 +31,7 @@ const Security = () => {
 
 	const dispatch = useDispatch();
 
-	const { isLoading2, studentData } = useSelector((state) => state.students);
+	const { studentData } = useSelector((state) => state.students);
 
 	useEffect(() => {
 		if (!userStore) {
