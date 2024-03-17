@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams , useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 import { Col, Row, Card, Form, Button, Image} from 'react-bootstrap';
@@ -12,7 +12,7 @@ import { verifyEmail } from '../features/auth/authSlice';
 const VerifyEmail = () => {
 
     const dispatch = useDispatch();
-
+ const navigate = useNavigate();
     const { isLoading, isError, isSuccess, message } = useSelector(
         (state) => state.auth
     );
