@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment,useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
@@ -42,10 +42,13 @@ export const CourseResume = () => {
 	const { studentData } = useSelector((state) => state.students);
 
 	const token = user.data.accessToken;
-	const { data: courseModules, isLoading } = useQuery(
-		['courseModules', id, token], // Include id and token in the query key
-		() => courseModuleService.getcourseModules(id, token) // Pass a function that returns the data
-	  );
+	const queryKey = useMemo(() => ['courseModules', id, token], [id, token]);
+
+    // Use useQuery hook
+    const { data: courseModules, isLoading } = useQuery(
+        queryKey,
+        () => courseModuleService.getcourseModules(id, token)
+    );
 	
 
 	const { courseContents } = useSelector(
@@ -110,12 +113,13 @@ export const CourseResume = () => {
 	}, [dispatch]);
 
 
-	const dashboardData = {
-		avatar: `${studentData?.data?.profilePicture}`,
+	// Memoize props for ProfileCover component
+	const dashboardData = useMemo(() => ({
+	  avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
 		linkname: 'Account Settings',
 		link: '/marketing/student/student-edit-profile/'
-	};
+	}), [studentData]);
 
 	if (isLoading) {
 		return <Spinner />;
@@ -216,4 +220,4 @@ export const CourseResume = () => {
 	);
 };
 
-export default CourseResume;
+export default React.memo(CourseResume);

@@ -35,7 +35,6 @@ const StudentDashboard = () => {
 		courseService.getCourses // Fetch function
 	  );
 
-	const AllCoursesData = courses;
 
 	useEffect(() => {
 		if (!userStore) {
@@ -44,16 +43,19 @@ const StudentDashboard = () => {
 		dispatch(fetchStudentData());
 	}, [dispatch, userStore, navigate]);
 
-	const dashboardData = {
-		avatar: `${studentData?.data?.profilePicture}`,
-		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
-		username: `${studentData?.data?.contactNumber}`,
-		linkname: 'Account Setting',
-		link: '/marketing/student/student-edit-profile/',
-		verified: false,
-		outlinebutton: false,
-		level: 'Beginner'
-	}
+	const AllCoursesData = useMemo(() => courses, [courses]);
+
+	// Memoize props for ProfileCover component
+	const dashboardData = useMemo(() => ({
+	  avatar: `${studentData?.data?.profilePicture}`,
+	  name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
+	  username: `${studentData?.data?.contactNumber}`,
+	  linkname: 'Account Setting',
+	  link: '/marketing/student/student-edit-profile/',
+	  verified: false,
+	  outlinebutton: false,
+	  level: 'Beginner'
+	}), [studentData]);
 
 	if (isLoading) {
 		return <Spinner />

@@ -19,29 +19,33 @@ const VerifyEmail = () => {
 
     const { code } = useParams();
 
-
-    const handleVerification = async (e) => {
-        e.preventDefault();
-
-        await dispatch(verifyEmail({confirmationCode: code}));
-
+    const handleVerification = async () => {
+        try {
+            await dispatch(verifyEmail({ confirmationCode: code }));
+        } catch (error) {
+            // Handle error cases
+            toast.error("Verification failed");
+        }
     };
 
-    
     useEffect(() => {
-        handleVerification(e);
+        // Call handleVerification function when component mounts
+        handleVerification();
+
+        // Perform actions based on success or failure
         if (isSuccess) {
             toast("Verification Complete");
             setTimeout(() => {
                 navigate(`/authentication/sign-in`);
             }, 2000);
         }
-        
+
         if (isError) {
             // Handle error cases
             toast.error("Verification failed");
         }
-	}, [isError, isSuccess]);
+    }, [code, dispatch, isError, isSuccess, navigate]); // Include dependencies in useEffect dependencies array
+
     if (isLoading) {
         return <Spinner />;
     }
