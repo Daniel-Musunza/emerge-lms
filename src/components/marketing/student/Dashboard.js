@@ -1,6 +1,7 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { Col, Row, Nav, Tab, Card, Container } from 'react-bootstrap';
 
 // import custom components
@@ -11,9 +12,7 @@ import ProfileCover from 'components/marketing/common/headers/ProfileCover';
 import { fetchStudentData } from 'store/studentSlices';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-	fetchCourses
-} from '../../dashboard/features/courses/courseSlice';
+import courseService from '../../dashboard/features/courses/courseService';
 
 import Spinner from '../../Spinner';
 // import data files
@@ -29,19 +28,22 @@ const StudentDashboard = () => {
 	const dispatch = useDispatch();
 
 	const { studentData } = useSelector((state) => state.students);
-	const { courses, isLoading, isError, message } = useSelector(
-		(state) => state.courses
-	);
+
+	// Use useQuery hook
+	const { data: courses, isLoading} = useQuery(
+		'courses', // The query key
+		courseService.getCourses // Fetch function
+	  );
 
 	const AllCoursesData = courses;
 
+	console.log(AllCoursesData);
 
 	useEffect(() => {
 		if (!userStore) {
 			navigate('/authentication/sign-in');
 		}
 		dispatch(fetchStudentData());
-		dispatch(fetchCourses());
 	}, [dispatch, userStore, navigate]);
 
 	const dashboardData = {
@@ -58,6 +60,7 @@ const StudentDashboard = () => {
 	if (isLoading) {
 		return <Spinner />
 	}
+	
 	return (
 		<Fragment>
 			<section className="pt-5 pb-5">
@@ -86,7 +89,7 @@ const StudentDashboard = () => {
 													})
 														.map((item, index) => (
 															<Col lg={3} md={6} sm={12} key={index}>
-																	<CourseCard item={item} />
+																<CourseCard item={item} />
 															</Col>
 														))}
 												</Row>
@@ -102,4 +105,5 @@ const StudentDashboard = () => {
 		</Fragment >
 	);
 };
+
 export default StudentDashboard;

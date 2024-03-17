@@ -12,7 +12,6 @@ const getStudentData = async (token) => {
 	// students/profile
 	const response = await axios.get(baseUrl + 'students/profile', config);
 
-	console.log(response.data)
 	return response.data;
 };
 const studentAction = {

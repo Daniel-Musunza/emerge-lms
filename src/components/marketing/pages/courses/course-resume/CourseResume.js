@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
 import { Col, Row, Container, Card, Dropdown } from 'react-bootstrap';
@@ -12,7 +13,7 @@ import GKTippy from 'components/elements/tooltips/GKTippy';
 import GKYouTube from 'components/marketing/common/video/GKYouTube';
 import GKAccordionDefault from 'components/marketing/common/accordions/GKAccordionDefault';
 import NavbarDefault from 'layouts/marketing/navbars/NavbarDefault';
-import { fetchCourseModules } from '../../../../dashboard/features/courseModules/courseModuleSlice';
+import courseModuleService from '../../../../dashboard/features/courseModules/courseModuleService';
 
 import {
 	bookmarkCourse
@@ -39,12 +40,14 @@ export const CourseResume = () => {
 	);
 
 	const { studentData } = useSelector((state) => state.students);
-	const { courseModules, isLoading, message } = useSelector(
-		(state) => state.courseModules
-	);
-	const { isSuccess, isError } = useSelector(
-		(state) => state.courses
-	);
+
+	const token = user.data.accessToken;
+	const { data: courseModules, isLoading } = useQuery(
+		['courseModules', id, token], // Include id and token in the query key
+		() => courseModuleService.getcourseModules(id, token) // Pass a function that returns the data
+	  );
+	
+
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
 	);
@@ -102,9 +105,9 @@ export const CourseResume = () => {
 
 
 
-		dispatch(fetchCourseModules(id));
+	// 	dispatch(fetchCourseModules(id));
 
-	}, [isError, message, dispatch]);
+	}, [dispatch]);
 
 
 	const dashboardData = {
