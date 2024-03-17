@@ -9,8 +9,6 @@ import LevelIconWithTooltip from 'components/marketing/common/miscellaneous/Leve
 // import media files
 import CheckedMark from 'assets/images/svg/checked-mark.svg';
 import ProfileBackground from 'assets/images/background/profile-bg.jpg';
-import { fetchStudentData } from '../../../../store/studentSlices';
-import Spinner from '../../../Spinner';
 const ProfileCover = ({ dashboardData }) => {
 
 	return (

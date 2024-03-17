@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Col, Row, Nav, Tab, Card, Container } from 'react-bootstrap';
@@ -36,8 +36,6 @@ const StudentDashboard = () => {
 	  );
 
 	const AllCoursesData = courses;
-
-	console.log(AllCoursesData);
 
 	useEffect(() => {
 		if (!userStore) {
@@ -106,4 +104,4 @@ const StudentDashboard = () => {
 	);
 };
 
-export default StudentDashboard;
+export default React.memo(StudentDashboard);

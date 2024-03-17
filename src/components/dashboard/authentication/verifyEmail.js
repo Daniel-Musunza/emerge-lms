@@ -27,13 +27,16 @@ const VerifyEmail = () => {
 
     };
 
+    
     useEffect(() => {
+        handleVerification(e);
         if (isSuccess) {
             toast("Verification Complete");
             setTimeout(() => {
-                window.close(); // Close the window upon successful verification
+                navigate(`/authentication/sign-in`);
             }, 2000);
         }
+        
         if (isError) {
             // Handle error cases
             toast.error("Verification failed");
@@ -53,7 +56,7 @@ const VerifyEmail = () => {
                                 <Link to="/">
                                     <Image src={Logo} className="mb-4" alt="" style={{ width: '200px', height: 'auto' }} />
                                 </Link>
-                                <h1 className="mb-1 fw-bold">Verify Email</h1>
+                                <h1 className="mb-1 fw-bold">Email Verification</h1>
                             </div>
                             <Form >
 
@@ -64,11 +67,11 @@ const VerifyEmail = () => {
                                 </Row>
                                 <Col lg={12} md={12} className="mb-0 d-grid gap-2">
                                     {/* Button */}
-                                    <Button variant="primary"  onClick={(e) => handleVerification(e)}>
+                                    {/* <Button variant="primary"  onClick={(e) => handleVerification(e)}>
                                         Verify
-                                    </Button>
+                                    </Button> */}
 
-                                </Col>
+                                </Col> 
                             </Form>
                         </Card.Body>
                     </Card>

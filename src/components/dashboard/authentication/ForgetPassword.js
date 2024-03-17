@@ -24,7 +24,7 @@ const ForgetPassword = () => {
 		};
 
 		dispatch(forgotpassword(formData));
-		navigate('/');
+		navigate(`/authentication/sign-in/${email}`);
 	};
 	return (
 		<Fragment>

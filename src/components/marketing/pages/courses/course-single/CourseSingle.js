@@ -1,5 +1,6 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
+import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Col, Row, Container, Tab, Nav, ListGroup, Image, Card } from 'react-bootstrap';
@@ -29,11 +30,12 @@ import CourseJavascript from 'assets/images/course/course-javascript.jpg';
 import Avatar1 from 'assets/images/avatar/avatar-1.jpg';
 
 import {
-	fetchCourses,
 	bookmarkCourse
 } from '../../../../dashboard/features/courses/courseSlice';
-import { fetchCourseModules } from '../../../../dashboard/features/courseModules/courseModuleSlice';
-import { fetchStudentData } from 'store/studentSlices';
+
+import courseService from '../../../../dashboard/features/courses/courseService';
+import courseModuleService from '../../../../dashboard/features/courseModules/courseModuleService';
+import studentAction from 'store/studentAction';
 
 import Spinner from '../../../../Spinner';
 // import data files
@@ -41,25 +43,31 @@ import { CourseIndex } from 'data/marketing/CourseIndexData';
 import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
 
 const CourseSingle = () => {
-
-
-	const navigate = useNavigate();
-	let userStore = localStorage.getItem('user');
-
 	const dispatch = useDispatch();
-	let {id, courseId} = useParams();
+	const navigate = useNavigate();
 
-	const { courses, isLoading, isError, message } = useSelector(
-		(state) => state.courses
-	);
-	const { courseModules } = useSelector(
-		(state) => state.courseModules
-	);
+	let userStore = localStorage.getItem('user');
+	let {id, courseId} = useParams();
+	const token = userStore?.data?.accessToken;
+
+	const { data: courseModules} = useQuery(
+		['courseModules', id, token], // Include id and token in the query key
+		() => courseModuleService.getcourseModules(id, token) // Pass a function that returns the data
+	  );
+
+	  const { data: studentData, isLoading } = useQuery(
+		['studentData',token], // Include id and token in the query key
+		() => studentAction.getStudentData(token) // Pass a function that returns the data
+	  );
+
+	const { data: courses} = useQuery(
+		'courses', // The query key
+		courseService.getCourses // Fetch function
+	  );
+	
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
 	);
-
-	const { studentData } = useSelector((state) => state.students);
 
 	const [isOpen, setOpen] = useState(false);
 	const [YouTubeURL] = useState('JRzWRZahOVU');
@@ -84,13 +92,6 @@ const CourseSingle = () => {
 		}
 
 	};
-	useEffect(() => {
-
-		dispatch(fetchCourses());
-		dispatch(fetchStudentData());
-		dispatch(fetchCourseModules(id));
-
-	}, [dispatch, userStore, navigate]);
 
 	const AddToBookmark = async (e) => {
 		e.preventDefault();

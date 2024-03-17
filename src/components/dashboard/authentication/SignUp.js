@@ -38,15 +38,13 @@ const SignUp = () => {
 
 			const response = await dispatch(register(formData));
 			if (response.payload && response.payload.data) {
-				const responseData = response.payload.data;
-
 					toast('Success... We have just sent you an email. Please verify your account and proceed to login.', {
 						containerClass: 'larger-toast-container'
 					});
 
 					setTimeout(function () {
-						navigate(`/authentication/sign-in/${responseData.email}`);
-					}, 10000); // 10 seconds delay (10000 milliseconds)
+						window.close(); // Close the window upon successful verification
+					}, 2000); // 10 seconds delay (10000 milliseconds)
 			
 			} else {
 				if (response.payload.status === 409) {
