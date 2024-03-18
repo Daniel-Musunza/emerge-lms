@@ -22,6 +22,12 @@ const VerifyEmail = () => {
     const handleVerification = async () => {
         try {
             await dispatch(verifyEmail({ confirmationCode: code }));
+            if (isSuccess) {
+                toast("Verification Complete");
+                setTimeout(() => {
+                    navigate(`/authentication/sign-in`);
+                }, 2000);
+            }
         } catch (error) {
             // Handle error cases
             toast.error("Verification failed");
@@ -33,18 +39,8 @@ const VerifyEmail = () => {
         handleVerification();
 
         // Perform actions based on success or failure
-        if (isSuccess) {
-            toast("Verification Complete");
-            setTimeout(() => {
-                navigate(`/authentication/sign-in`);
-            }, 2000);
-        }
-
-        if (isError) {
-            // Handle error cases
-            toast.error("Verification failed");
-        }
-    }, [code, dispatch, isError, isSuccess, navigate]); // Include dependencies in useEffect dependencies array
+        
+    }, [handleVerification]); // Include dependencies in useEffect dependencies array
 
     if (isLoading) {
         return <Spinner />;
@@ -56,7 +52,7 @@ const VerifyEmail = () => {
                 <Col lg={5} md={5} className="py-8 py-xl-0">
                     <Card>
                         <Card.Body className="p-6">
-                            <div className="mb-4">
+                            <div className="mb-4 top-form">
                                 <Link to="/">
                                     <Image src={Logo} className="mb-4" alt="" style={{ width: '200px', height: 'auto' }} />
                                 </Link>

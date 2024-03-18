@@ -43,7 +43,7 @@ const MostPopularCourses = () => {
 			<section className="pb-lg-14 pb-8 bg-white">
 				<Container>
 					<Row>
-						<Col xs={6}>
+						<Col xs={12} md={6}>
 							<div className="mb-6">
 								<h2 className="mb-1 h1">Most Popular Courses</h2>
 								<p>
@@ -51,7 +51,7 @@ const MostPopularCourses = () => {
 								</p>
 							</div>
 						</Col>
-						<Col md={6} className="text-md-end mt-4 mt-md-0">
+						<Col md={6} xs={12} className="text-md-end mt-4 mt-md-0">
 								<Link to="/marketing/allcourses/" className="btn btn-primary">
 									View More
 								</Link>

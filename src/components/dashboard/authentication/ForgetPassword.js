@@ -26,16 +26,16 @@ const ForgetPassword = () => {
 		dispatch(forgotpassword(formData));
 		navigate(`/authentication/sign-in/${email}`);
 	};
+
 	return (
 		<Fragment>
 			<Row className="align-items-center justify-content-center g-0 min-vh-100">
 				<Col lg={5} md={5} className="py-8 py-xl-0">
 					<Card>
 						<Card.Body className="p-6">
-							<div className="mb-4">
+							<div className="mb-4 top-form">
 								<Link to="/">
-									<Image src={Logo} className="mb-4" alt=""
-									style={{ width: '200px', height: 'auto' }}
+									<Image src={Logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="mb-4" alt=""
 									/>
 								</Link>
 								<h1 className="mb-1 fw-bold">Forgot Password</h1>

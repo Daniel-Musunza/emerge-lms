@@ -30,8 +30,8 @@ const NavbarMegaMenu = () => {
 			>
 				<Container fluid className="px-0 ps-2">
 					<div className="d-flex">
-						<Navbar.Brand as={Link} to="/">
-							<Image src={Logo} alt="" />
+						<Navbar.Brand as={Link} to="/"  style={{ overflow: 'hidden' }}>
+							<Image src={Logo} alt="" style={{ width: '300px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}/>
 						</Navbar.Brand>
 						<CategoriesDropDown />
 					</div>

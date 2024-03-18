@@ -26,22 +26,20 @@ const SignIn = () => {
 	const { user, isLoading, isError, isSuccess, message } = useSelector(
 		(state) => state.auth
 	);
-	const {email} = useParams();
+	const { email } = useParams();
 	const [newEmail, setEmail] = useState(email);
 	// const [role, setSelectedRole] = useState('');
 	const [password, setPassword] = useState('');
 	const [visiblePassword, setVisiblePassword] = useState(false);
 
 	useEffect(() => {
-		if (isError) {
-			toast.error("Wrong Email or Password");
-		}
+
 
 		if (user) {
 			navigate('/marketing/student/dashboard/');
 		}
 
-	}, [user, isError, isSuccess, message, navigate, dispatch]);
+	}, [user, navigate]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -50,20 +48,28 @@ const SignIn = () => {
 			email: newEmail,
 			password: password
 		};
+		try {
+			await dispatch(login(formData));
 
-		dispatch(login(formData));
+			if (isSuccess) {
+				toast.success("Success...");
+			}
+		} catch (error) {
+			toast.error("Failed!! confirm your email or password");
+		}
 	};
 
 	if (isLoading) {
 		return <Spinner />;
 	}
+	
 	return (
 		<Fragment>
 			<Row className="align-items-center justify-content-center g-0 min-vh-100">
 				<Col lg={5} md={5} className="py-8 py-xl-0">
 					<Card>
 						<Card.Body className="p-6">
-							<div className="mb-4">
+							<div className="mb-4 top-form">
 								<Link to="/">
 									<Image
 										src={Logo}

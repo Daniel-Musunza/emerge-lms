@@ -37,7 +37,12 @@
 @import "user";
 
 
-  
+  .top-form{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
 .navbar-brand img,
 .logo-inverse{
   width: 100px!important;
@@ -55,12 +60,26 @@
 }
 .view-pdf{
   width: 100px,
- }
- .v-code{
+}
+.v-code{
   font-size: 20px;
- }
+}
+.patners-bgs{
+  display: none;
+}
+.patners-sms{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+}
+@media (min-width: 778px) {
+  .patners-sms{
+    display: none;
+  }
+}
 @media (min-width: 992px) {
   .small-screen-t-pdf{
     font-size: 20px;

@@ -71,7 +71,7 @@ const SignUp = () => {
 				<Col lg={5} md={5} className="py-8 py-xl-0">
 					<Card>
 						<Card.Body className="p-6">
-							<div className="mb-4">
+							<div className="mb-4 top-form"  >
 								<Link to="/">
 									<Image
 										src={Logo}

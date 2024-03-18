@@ -55,12 +55,12 @@ const CourseSingle = () => {
 		() => courseModuleService.getcourseModules(id, token) // Pass a function that returns the data
 	  );
 
-	  const { data: studentData, isLoading } = useQuery(
+	  const { data: studentData} = useQuery(
 		['studentData',token], // Include id and token in the query key
 		() => studentAction.getStudentData(token) // Pass a function that returns the data
 	  );
 
-	const { data: courses} = useQuery(
+	const { data: courses,  isLoading} = useQuery(
 		'courses', // The query key
 		courseService.getCourses // Fetch function
 	  );

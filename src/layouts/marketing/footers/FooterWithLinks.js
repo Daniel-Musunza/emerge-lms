@@ -9,6 +9,10 @@ import { mdiFacebook, mdiTwitter, mdiInstagram } from '@mdi/js';
 
 // import media files
 import FooterLogo from 'assets/images/brand/logo/logo.png';
+import PatnersBGS from 'assets/images/brand/patners-bgs.png';
+import PatnersSMS1 from 'assets/images/brand/patners1-sms.png';
+import PatnersSMS2 from 'assets/images/brand/patners2-sms.png';
+
 import AppStore from 'assets/images/svg/appstore.svg';
 import PlayStore from 'assets/images/svg/playstore.svg';
 
@@ -141,6 +145,19 @@ const FooterWithLinks = () => {
 								</div>
 							</div>
 						</Col>
+					</Row>
+					<Row>
+					<div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+								{/* list */}
+								<h3 className="fw-bold mb-3">Our Patners</h3>
+					</div>
+						<div  className="patners-bgs">
+							<Image src={PatnersBGS} alt="" />
+						</div>
+						<div  className="patners-sms">
+							<Image src={PatnersSMS1} alt="" style={{width: '330px'}}/>
+							<Image src={PatnersSMS2} alt="" style={{width: '200px'}}/>
+						</div>
 					</Row>
 					<Row className="align-items-center g-0 border-top py-2 mt-6">
 						{/* Desc  */}
