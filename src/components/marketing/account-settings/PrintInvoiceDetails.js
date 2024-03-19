@@ -13,7 +13,7 @@ const PrintInvoiceDetails = React.forwardRef((props, ref) => {
 				<div className="d-flex justify-content-between mb-6">
 					<div>
 						{/* Images */}
-						<Image src={Logo} alt="" className="mb-4 avatar-lg" />
+						<Image src={Logo} alt="" className="mb-4 avatar-lg" style={{ width: '50px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}/>
 						<h4 className="mb-0">EmergeLMS Courses</h4>
 						<small>INVOICE ID: #1001</small>
 					</div>

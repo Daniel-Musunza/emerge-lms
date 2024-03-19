@@ -82,16 +82,7 @@ const HeroAcademy = () => {
 								alt=""
 								className="position-absolute bottom-0 mb-10 ms-n10 ms-lg-n1 "
 							/>
-							<img
-								src={Sound}
-								alt=""
-								className="position-absolute top-0  start-0 mt-18 ms-lg-n19 ms-n8"
-							/>
-							<img
-								src={Trophy}
-								alt=""
-								className="position-absolute top-0  start-0 ms-lg-n14 ms-n5"
-							/>
+						
 						</div>
 					</Col>
 				</Row>

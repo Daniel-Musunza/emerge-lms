@@ -35,7 +35,7 @@ const ForgetPassword = () => {
 						<Card.Body className="p-6">
 							<div className="mb-4 top-form">
 								<Link to="/">
-									<Image src={Logo} style={{ width: '100%', height: '100%', objectFit: 'cover' }} className="mb-4" alt=""
+									<Image src={Logo} style={{ width: '100px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }} className="mb-4" alt=""
 									/>
 								</Link>
 								<h1 className="mb-1 fw-bold">Forgot Password</h1>

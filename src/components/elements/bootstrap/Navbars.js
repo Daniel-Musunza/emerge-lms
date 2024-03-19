@@ -70,7 +70,7 @@ const Navbars = () => {
 									<Tab.Pane eventKey="all" className="pb-4 p-4">
 										<Navbar expand="lg">
 											<Navbar.Brand href="#home">
-												<Image src={Logo} alt="" loading="lazy" />
+												<Image src={Logo} alt="" loading="lazy" style={{ width: '200px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}/>
 											</Navbar.Brand>
 											<Navbar.Toggle aria-controls="basic-navbar-nav" />
 											<Navbar.Collapse id="basic-navbar-nav">
@@ -146,6 +146,7 @@ const Navbars = () => {
 													height="30"
 													alt=""
 													loading="lazy"
+													style={{ width: '50px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}
 												/>
 											</Navbar.Brand>
 										</Navbar>

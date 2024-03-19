@@ -54,7 +54,7 @@ const VerifyEmail = () => {
                         <Card.Body className="p-6">
                             <div className="mb-4 top-form">
                                 <Link to="/">
-                                    <Image src={Logo} className="mb-4" alt="" style={{ width: '200px', height: 'auto' }} />
+                                    <Image src={Logo} className="mb-4" alt="" style={{ width: '100px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }} />
                                 </Link>
                                 <h1 className="mb-1 fw-bold">Email Verification</h1>
                             </div>

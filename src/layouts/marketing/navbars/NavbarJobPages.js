@@ -26,7 +26,7 @@ const NavbarJobPages = () => {
 			>
 				<Container className="px-0">
 					<Navbar.Brand as={Link} to="/">
-						<Image src={Logo} alt="" />
+						<Image src={Logo} alt="" style={{ width: '50px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}/>
 					</Navbar.Brand>
 					<Navbar.Toggle aria-controls="navbar-default">
 						<span className="icon-bar top-bar mt-0"></span>

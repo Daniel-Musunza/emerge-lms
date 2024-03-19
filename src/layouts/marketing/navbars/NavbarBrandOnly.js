@@ -15,7 +15,7 @@ const NavbarBrandOnly = () => {
 							src={Logo}
 							alt=""
 							className="logo-inverse"
-							style={{ width: '100px', height: 'auto' }}
+							style={{ width: '50px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}
 						/>
 					</Link>
 				</div>

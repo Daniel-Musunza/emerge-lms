@@ -25,7 +25,7 @@ const FooterWithLinks = () => {
 						<Col lg={4} md={6} sm={12}>
 							{/* about company  */}
 							<div className="mb-4">
-								<Image src={FooterLogo} alt="" className="logo-inverse" />
+								<Image src={FooterLogo} alt="" className="logo-inverse" style={{ width: '50px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }} />
 								<div className="mt-4">
 									<p>
 										emerge is feature-rich components and beautifully Bootstrap

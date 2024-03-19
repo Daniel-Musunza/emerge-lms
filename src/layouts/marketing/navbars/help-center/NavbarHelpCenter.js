@@ -51,7 +51,7 @@ const NavbarHelpCenter = ({ className }) => {
 				<Container className="px-0 ">
 					<div className="d-flex align-items-center">
 						<Navbar.Brand as={Link} to="/">
-							<Image src={Logo} alt="" />
+							<Image src={Logo} alt="" style={{ width: '50px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}/>
 						</Navbar.Brand>
 
 						<div className={`justify-content-between d-flex`}>

@@ -13,9 +13,10 @@ import DarkLightMode from 'layouts/DarkLightMode';
 
 // import media files
 import Logo from 'assets/images/brand/logo/logo.png';
-
+import Logo2 from 'assets/images/brand/logo/emerge-logo.png';
 // import data files
 import NavbarDefaultRoutes from 'routes/marketing/NavbarDefault';
+import LogoList2 from 'data/marketing/clientlogos/LogoList2';
 
 const NavbarMegaMenu = () => {
 	const [expandedMenu, setExpandedMenu] = useState(false);
@@ -30,12 +31,14 @@ const NavbarMegaMenu = () => {
 			>
 				<Container fluid className="px-0 ps-2">
 					<div className="d-flex">
-						<Navbar.Brand as={Link} to="/"  style={{ overflow: 'hidden' }}>
-							<Image src={Logo} alt="" style={{ width: '300px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}/>
+						<Navbar.Brand as={Link} to="/" >
+							<div style={{ display: 'flex', alignItems: 'center' }}>
+								<Image src={Logo2} alt="Logo2" style={{ width: '100px', height: 'auto' }} />
+								<Image src={Logo} alt="Logo" style={{ width: '60px', height: '80px', marginLeft: '10px' }} />
+							</div>
 						</Navbar.Brand>
 						<CategoriesDropDown />
 					</div>
-
 					<Navbar.Toggle aria-controls="basic-navbar-nav">
 						<span className="icon-bar top-bar mt-0"></span>
 						<span className="icon-bar middle-bar"></span>

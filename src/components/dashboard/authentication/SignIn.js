@@ -75,7 +75,7 @@ const SignIn = () => {
 										src={Logo}
 										className="mb-4 align-items-center"
 										alt=""
-										style={{ width: '200px', height: 'auto' }}
+										style={{ width: '100px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}
 									/>
 								</Link>
 								<h1 className="mb-1 fw-bold">Sign in</h1>
