@@ -12,6 +12,7 @@ import FooterLogo from 'assets/images/brand/logo/logo.png';
 import PatnersBGS from 'assets/images/brand/patners-bgs.png';
 import PatnersSMS1 from 'assets/images/brand/patners1-sms.png';
 import PatnersSMS2 from 'assets/images/brand/patners2-sms.png';
+import Logo from 'assets/images/brand/logo/emerge-logo.png';
 
 import AppStore from 'assets/images/svg/appstore.svg';
 import PlayStore from 'assets/images/svg/playstore.svg';
@@ -25,7 +26,8 @@ const FooterWithLinks = () => {
 						<Col lg={4} md={6} sm={12}>
 							{/* about company  */}
 							<div className="mb-4">
-								<Image src={FooterLogo} alt="" className="logo-inverse" style={{ width: '50px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }} />
+							<Image src={Logo} alt="" className="logo-inverse" style={{ width: '50px', height: 'auto', }} />
+								<Image src={FooterLogo} alt="" className="logo-inverse" style={{ width: '40px', height: 'auto' }} />
 								<div className="mt-4">
 									<p>
 										emerge is feature-rich components and beautifully Bootstrap

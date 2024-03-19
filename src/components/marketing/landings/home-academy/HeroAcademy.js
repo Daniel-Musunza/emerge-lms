@@ -66,6 +66,7 @@ const HeroAcademy = () => {
 								src={GirlImage}
 								alt=""
 								className="position-absolute end-0 bottom-0"
+								width="400px"
 							/>
 							<img
 								src={Frame1}
