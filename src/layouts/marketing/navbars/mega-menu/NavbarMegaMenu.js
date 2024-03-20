@@ -1,9 +1,9 @@
 // import node module libraries
 import { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Image, Navbar, Nav, Container } from 'react-bootstrap';
-
+import { Image, Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 // import sub components
 import DocumentMenu from '../DocumentMenu';
 import NavMegaDropdown from './NavMegaDropdown';
@@ -18,9 +18,17 @@ import Logo2 from 'assets/images/brand/logo/emerge-logo.png';
 import NavbarDefaultRoutes from 'routes/marketing/NavbarDefault';
 import LogoList2 from 'data/marketing/clientlogos/LogoList2';
 
+import { logout } from '../../../../components/dashboard/features/auth/authSlice';
+
 const NavbarMegaMenu = () => {
 	const [expandedMenu, setExpandedMenu] = useState(false);
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	let user = localStorage.getItem('user');
 
+	const SignOut = async () => {
+		await dispatch(logout());
+	};
 	return (
 		<Fragment>
 			<Navbar
@@ -71,12 +79,28 @@ const NavbarMegaMenu = () => {
 						<div className="ms-auto mt-3 mt-lg-0">
 							<div className="d-flex align-items-center">
 								<DarkLightMode />
-								<Link to="/authentication/sign-in" className="btn btn-outline-dark ms-3">
-									Sign in
-								</Link>
-								<Link to="/authentication/sign-up" className="btn btn-dark ms-1">
-									Sign up
-								</Link>
+								{user ? (
+									<Button
+										as="li"
+										onClick={SignOut}
+										style={{ cursor: 'pointer' }}
+									>
+										<div className="nav-link" >
+											<i className={`fe fe-power nav-icon`} style={{marginRight: '10px'}}></i>
+											Log Out
+										</div>
+									</Button>
+								) : (
+									<>
+										<Link to="/authentication/sign-in" className="btn btn-outline-dark ms-3">
+											Sign in
+										</Link>
+										<Link to="/authentication/sign-up" className="btn btn-dark ms-1">
+											Sign up
+										</Link>
+									</>
+								)}
+
 							</div>
 						</div>
 						{/* end of right side quick / shortcut menu  */}

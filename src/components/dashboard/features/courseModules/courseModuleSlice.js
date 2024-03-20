@@ -14,7 +14,8 @@ export const fetchCourseModules = createAsyncThunk(
 	'courseModules/getAll',
 	async (id, thunkAPI) => {
 		try {
-			return await courseModuleService.getcourseModules( id);
+			const token = thunkAPI.getState().auth.user.data.accessToken;
+			return await courseModuleService.getcourseModules( id, token);
 		} catch (error) {
 			const message =
 				(error.response &&

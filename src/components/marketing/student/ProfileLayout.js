@@ -99,6 +99,7 @@ const ProfileLayout = (props) => {
 										<Nav.Item
 												as="li"
 												onClick={SignOut}
+												style={{cursor: 'pointer'}}
 											>
 												<div className="nav-link" >
 													<i className={`fe fe-power nav-icon`}></i>

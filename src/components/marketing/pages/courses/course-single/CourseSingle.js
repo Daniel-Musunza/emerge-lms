@@ -51,8 +51,8 @@ const CourseSingle = () => {
 	const token = userStore?.data?.accessToken;
 
 	const { data: courseModules} = useQuery(
-		['courseModules', id, token], // Include id and token in the query key
-		() => courseModuleService.getcourseModules(id, token) // Pass a function that returns the data
+		['courseModules', id], // Include id and token in the query key
+		() => courseModuleService.getcourseModules(id) // Pass a function that returns the data
 	  );
 
 	  const { data: studentData} = useQuery(
@@ -78,7 +78,6 @@ const CourseSingle = () => {
 		return course?.id === courseId;
 	});
 
-	console.log(courseModules);
 
 	const selectContent = async (content, e) => {
 		e.preventDefault();
