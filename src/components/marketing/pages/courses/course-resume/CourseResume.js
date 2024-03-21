@@ -42,12 +42,12 @@ export const CourseResume = () => {
 	const { studentData } = useSelector((state) => state.students);
 
 	const token = user.data.accessToken;
-	const queryKey = useMemo(() => ['courseModules', id, token], [id, token]);
+	const queryKey = useMemo(() => ['courseModules', id], [id]);
 
     // Use useQuery hook
     const { data: courseModules, isLoading } = useQuery(
         queryKey,
-        () => courseModuleService.getcourseModules(id, token)
+        () => courseModuleService.getcourseModules(id)
     );
 	
 

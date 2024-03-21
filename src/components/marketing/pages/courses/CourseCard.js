@@ -155,16 +155,17 @@ const CourseCard = ({
 					</span>
 				</Card.Footer>
 				<Card.Footer>
+				<Link content="View Single Course" to={`/marketing/courses/course-single/${item?.content?.id}/${item?.id}`}>
 					<Row className="align-items-center g-0">
 						<Col xs="auto">
-							<Link content="View Single Course" to={`/marketing/courses/course-single/${item?.content?.id}/${item?.id}`}>
+							
 								<div>
 									View Single Course
 								</div>
-							</Link>
+							
 						</Col>
 					</Row>
-			
+					</Link>
 				</Card.Footer>
 			</Card>
 
