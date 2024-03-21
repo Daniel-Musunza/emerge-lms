@@ -27,7 +27,7 @@ const StudentDashboard = () => {
 	let userStore = localStorage.getItem('user');
 	const dispatch = useDispatch();
 
-	const { studentData } = useSelector((state) => state.students);
+	const { studentData, isLoading2 } = useSelector((state) => state.students);
 
 	// Use useQuery hook
 	const { data: courses, isLoading} = useQuery(
@@ -57,7 +57,7 @@ const StudentDashboard = () => {
 	  level: 'Beginner'
 	}), [studentData]);
 
-	if (isLoading) {
+	if (isLoading2) {
 		return <Spinner />
 	}
 	

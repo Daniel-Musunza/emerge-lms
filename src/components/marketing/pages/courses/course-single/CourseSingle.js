@@ -47,24 +47,24 @@ const CourseSingle = () => {
 	const navigate = useNavigate();
 
 	let userStore = localStorage.getItem('user');
-	let {id, courseId} = useParams();
+	let { id, courseId } = useParams();
 	const token = userStore?.data?.accessToken;
 
-	const { data: courseModules} = useQuery(
+	const { data: courseModules } = useQuery(
 		['courseModules', id], // Include id and token in the query key
 		() => courseModuleService.getcourseModules(id) // Pass a function that returns the data
-	  );
+	);
 
-	  const { data: studentData} = useQuery(
-		['studentData',token], // Include id and token in the query key
+	const { data: studentData } = useQuery(
+		['studentData', token], // Include id and token in the query key
 		() => studentAction.getStudentData(token) // Pass a function that returns the data
-	  );
+	);
 
-	const { data: courses,  isLoading} = useQuery(
+	const { data: courses, isLoading } = useQuery(
 		'courses', // The query key
 		courseService.getCourses // Fetch function
-	  );
-	
+	);
+
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
 	);
@@ -81,15 +81,7 @@ const CourseSingle = () => {
 
 	const selectContent = async (content, e) => {
 		e.preventDefault();
-
-		const newURL = await extractVideoId(content.video);
-
-		setSelectedContent(content);
-
-		if (newURL) {
-			setYouTubeURL(newURL);
-		}
-
+		return
 	};
 
 	const AddToBookmark = async (e) => {

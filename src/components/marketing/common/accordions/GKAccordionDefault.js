@@ -63,17 +63,11 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
 		setSelectedItemId(id);
 	};
 
-	
-
-
-
-
-
 
 	return (
 		<Fragment >
 			
-			<Accordion defaultActiveKey={accordionItems?.data?.sections[0]?.id}>
+			<Accordion>
 				
 				<ListGroup as="ul" variant="flush">
 					
