@@ -27,14 +27,12 @@ const StudentDashboard = () => {
 	let userStore = localStorage.getItem('user');
 	const dispatch = useDispatch();
 
-	const { studentData, isLoading2 } = useSelector((state) => state.students);
-
-	// Use useQuery hook
-	const { data: courses, isLoading} = useQuery(
-		'courses', // The query key
-		courseService.getCourses // Fetch function
-	  );
-
+	const { studentData, isLoading2} = useSelector((state) => state.students);
+	const { data: courses } = useQuery(
+		'courses',
+		courseService.getCourses,
+		{ enabled: !isLoading2 } // Enable query only when isLoadingCourses is false
+	);
 
 	useEffect(() => {
 		if (!userStore) {
@@ -47,20 +45,20 @@ const StudentDashboard = () => {
 
 	// Memoize props for ProfileCover component
 	const dashboardData = useMemo(() => ({
-	  avatar: `${studentData?.data?.profilePicture}`,
-	  name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
-	  username: `${studentData?.data?.contactNumber}`,
-	  linkname: 'Account Setting',
-	  link: '/marketing/student/student-edit-profile/',
-	  verified: false,
-	  outlinebutton: false,
-	  level: 'Beginner'
+		avatar: `${studentData?.data?.profilePicture}`,
+		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
+		username: `${studentData?.data?.contactNumber}`,
+		linkname: 'Account Setting',
+		link: '/marketing/student/student-edit-profile/',
+		verified: false,
+		outlinebutton: false,
+		level: 'Beginner'
 	}), [studentData]);
 
 	if (isLoading2) {
 		return <Spinner />
 	}
-	
+
 	return (
 		<Fragment>
 			<section className="pt-5 pb-5">

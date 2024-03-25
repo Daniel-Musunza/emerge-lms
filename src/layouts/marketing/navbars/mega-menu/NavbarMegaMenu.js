@@ -28,6 +28,7 @@ const NavbarMegaMenu = () => {
 
 	const SignOut = async () => {
 		await dispatch(logout());
+		navigate('/');
 	};
 	return (
 		<Fragment>

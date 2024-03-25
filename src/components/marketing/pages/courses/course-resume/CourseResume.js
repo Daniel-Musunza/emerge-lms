@@ -57,7 +57,7 @@ export const CourseResume = () => {
 
 	const [selectedContent, setSelectedContent] = useState(null);
 
-	const [YouTubeURL, setYouTubeURL] = useState('');
+	const [YouTubeURL, setYouTubeURL] = useState('XwuaIzdR46I');
 
 
 	const extractVideoId = (url) => {
@@ -100,13 +100,20 @@ export const CourseResume = () => {
 		}
 	};
 
+	const [read, setRead] = useState(false); // Initialize read as false initially
+
+	// Function to handle the click event and set read to true
+	const handleLinkClick = () => {
+	  setRead(true);
+	};
+
 	useEffect(() => {
 		dispatch(fetchStudentData());
 		if (!user) {
 			navigate('/authentication/sign-in');
 		}
 
-
+console.log("Pdf Read: " + read);
 
 	// 	dispatch(fetchCourseModules(id));
 
@@ -155,7 +162,7 @@ export const CourseResume = () => {
 										{selectedContent?.resources[0] && (
 											<div>
 
-												<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer">
+												<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer" onClick={handleLinkClick}>
 													<h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
 												</a>
 
