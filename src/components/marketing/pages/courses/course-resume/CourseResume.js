@@ -57,7 +57,7 @@ export const CourseResume = () => {
 
 	const [selectedContent, setSelectedContent] = useState(null);
 
-	const [YouTubeURL, setYouTubeURL] = useState('XwuaIzdR46I');
+	const [YouTubeURL, setYouTubeURL] = useState('M7lc1UVf-VE');
 
 
 	const extractVideoId = (url) => {
@@ -75,6 +75,7 @@ export const CourseResume = () => {
 	const selectContent = async (content, e) => {
 		e.preventDefault();
 
+		
 		const newURL = await extractVideoId(content.video);
 
 		setSelectedContent(content);
@@ -99,21 +100,24 @@ export const CourseResume = () => {
 			toast("Failed to Bookmark");
 		}
 	};
-
-	const [read, setRead] = useState(false); // Initialize read as false initially
+	const [read, setRead] = useState(localStorage.getItem(selectedContent?.id)); // Initialize read as false initially
 
 	// Function to handle the click event and set read to true
-	const handleLinkClick = () => {
-	  setRead(true);
-	};
+	const handleLinkClick = (event) => {
+		event.preventDefault(); // Prevents the default behavior of the anchor element
+		setRead(true);
+		localStorage.setItem(selectedContent?.id, 'true'); // Set the 'read' flag to true in localStorage
+		window.open(selectedContent?.resources[0], '_blank'); // Open the link in a new tab
+	  };
 
 	useEffect(() => {
+		console.log("Pdf Read: " + read);
 		dispatch(fetchStudentData());
 		if (!user) {
 			navigate('/authentication/sign-in');
 		}
 
-console.log("Pdf Read: " + read);
+		
 
 	// 	dispatch(fetchCourseModules(id));
 
@@ -127,6 +131,14 @@ console.log("Pdf Read: " + read);
 		linkname: 'Account Settings',
 		link: '/marketing/student/student-edit-profile/'
 	}), [studentData]);
+
+	const progressData = useMemo(() => ({
+		courseId: courseId,
+		courseSectionId: id,
+		courseSubSectionId: selectedContent?.id,
+		pdfread: read,
+		studentId: studentData?.data?.id
+	  }), [courseId, id, selectedContent?.id, read, studentData?.data?.id]);
 
 	if (isLoading) {
 		return <Spinner />;
@@ -160,13 +172,12 @@ console.log("Pdf Read: " + read);
 											</h3>
 										</div>
 										{selectedContent?.resources[0] && (
-											<div>
-
-												<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer" onClick={handleLinkClick}>
-													<h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
-												</a>
-
-											</div>
+											<div onClick={handleLinkClick}>
+											<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer">
+											  <h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
+											</a>
+										  </div>
+										  
 										)}
 
 									</div>
@@ -174,7 +185,7 @@ console.log("Pdf Read: " + read);
 										className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
 										style={{ height: '500px' }}
 									>
-										<GKYouTube videoId={YouTubeURL} />
+										<GKYouTube videoId={YouTubeURL} progressData={progressData}/>
 									</div>
 								</div>
 							</Col>
