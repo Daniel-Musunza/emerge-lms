@@ -41,7 +41,12 @@ const EditProfile = () => {
 	const [addressLine1, setAddressLine1] = useState(studentData?.data?.address || '');
 	const [addressLine2, setAddressLine2] = useState(studentData?.data?.addressLine2 || '');
 	const [country, setCountry] = useState(studentData?.data?.country || '');
-	const [birthday, setBirthday] = useState(studentData?.data?.birthDate || null);
+	const [birthday, setBirthday] = useState(studentData?.data?.birthDate ? new Date(studentData?.data?.birthDate).toISOString() : '');
+
+	const [photo, setPhoto] = useState({
+		image: null,
+		new: false
+	});
 
 	useEffect(() => {
 		if (!user) {
@@ -59,23 +64,20 @@ const EditProfile = () => {
 		link: '/marketing/student/student-edit-profile/'
 	};
 
-	const birthDateTimestamp = new Date(birthday).getTime();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
 		const formData = {
 			address: addressLine1,
-			birthDate: birthDateTimestamp, // Use the timestamp instead of the string
+			birthDate: birthday, // Use the timestamp instead of the string
 			country: country,
 			firstName: firstName,
 			lastName: lastName,
 			phone: contactNumber,
-			profilePicture: ''
+			file: photo
 		};
-
 		console.log(formData)
-
 		await dispatch(updateUser(formData));
 	};
 
@@ -99,27 +101,36 @@ const EditProfile = () => {
 					<div className="d-lg-flex align-items-center justify-content-between">
 						<div className="d-flex align-items-center mb-4 mb-lg-0">
 							<Image
-								src={dashboardData.Avatar3}
+								src={
+									photo.new
+										? URL.createObjectURL(photo.image)
+										: studentData?.data?.profilePicture
+								}
 								id="img-uploaded"
 								className="avatar-xl rounded-circle"
-								alt=""
+								alt="no image"
+								onClick={() => document.getElementById('upload').click()}
+							/>
+							<input
+								id="upload"
+								name="photo"
+								type="file"
+								style={{ display: 'none' }}
+								onChange={(e) => {
+									setPhoto({
+										...photo,
+										image: e.target.files[0],
+										new: true
+									});
+								}}
 							/>
 							<div className="ms-3">
-								<h4 className="mb-0">{dashboardData.name}</h4>
-								<p className="mb-0">
-									PNG or JPG no bigger than 800px wide and tall.
-								</p>
+								<h4 className="mb-0">Your profile picture</h4>
+								<p className="mb-0">Click on the picture to change.</p>
 							</div>
 						</div>
-						<div>
-							<Button variant="outline-secondary" size="sm">
-								Update
-							</Button>{' '}
-							<Button variant="outline-danger" size="sm">
-								Delete
-							</Button>
-						</div>
 					</div>
+
 					<hr className="my-5" />
 					<div>
 						<h4 className="mb-0">Personal Details</h4>
@@ -171,11 +182,12 @@ const EditProfile = () => {
 									<Form.Group className="mb-3" controlId="formBirthday">
 										<Form.Label>Birthday</Form.Label>
 										<Form.Control
-											type="date"
-											placeholder="Date of Birth"
-											value={birthday}
-											onChange={(e) => setBirthday(e.target.value)}
-										/>
+                                            type="date"
+                                            placeholder="Date of Birth"
+                                            value={birthday ? birthday.slice(0, 10) : ''}
+                                            onChange={(e) => setBirthday(e.target.value)}
+                                        />
+
 									</Form.Group>
 								</Col>
 
