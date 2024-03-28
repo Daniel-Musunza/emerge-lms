@@ -22,11 +22,11 @@ const VerifyEmail = () => {
     const handleVerification = async () => {
         try {
             await dispatch(verifyEmail({ confirmationCode: code }));
-            toast.success("Verification Complete", {
-                onClose: () => {
-                    navigate(`/authentication/sign-in`);
-                }
-            });
+            // toast.success("Verification Complete", {
+            //     onClose: () => {
+            //         navigate(`/authentication/sign-in`);
+            //     }
+            // });
         } catch (error) {
             // Handle error cases
             toast.error("Verification failed");

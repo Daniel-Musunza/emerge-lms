@@ -36,8 +36,8 @@ const SignUp = () => {
 				password: password
 			};
 			try {
-			await dispatch(register(formData));
-				if (isSuccess) {
+			const response = await dispatch(register(formData));
+				if (response.status === 200) {
 					toast.success('Success... We have just sent you an email. Please verify your account and proceed to login.', {
 						containerClass: 'larger-toast-container'
 					});
