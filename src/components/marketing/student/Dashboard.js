@@ -39,7 +39,7 @@ const StudentDashboard = () => {
 	const { data: courses, isLoading: isLoadingCourses } = useQuery(
 		['courses', isLoadingStudentData],
 		courseService.getCourses,
-		{ enabled: !!studentData } // Enable query only when studentData is available
+		{ enabled: !!studentData && !isLoadingStudentData } // Enable query only when studentData is available and not loading
 	);
 
 	const AllCoursesData = useMemo(() => courses, [courses]);
