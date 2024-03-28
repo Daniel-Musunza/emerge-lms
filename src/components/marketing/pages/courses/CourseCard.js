@@ -135,13 +135,15 @@ const CourseCard = ({
 						<Col className="col ms-2">
 							<span>{item.tutorName}</span>
 						</Col>
-					
+					{console.log(item)}
 						<Col xs="auto">
+						{item?.status !== "bookmarked" && (
 							<GKTippy content="Add to Bookmarks" onClick={AddToBookmark}>
 								<div>
 									<i className="fe fe-bookmark"></i>
 								</div>
 							</GKTippy>
+						)}
 						</Col>
 					</Row>
 					<span className={`${showprogressbar ? '' : 'd-none'}`}>

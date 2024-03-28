@@ -115,15 +115,17 @@ const CourseSingle = () => {
 									{thisCourse?.description}
 								</p>
 								<div className="d-flex align-items-center">
-									<GKTippy content="Add to Bookmarks" >
-										<div
-											className="bookmark text-white text-decoration-none"
-											onClick={AddToBookmark}
-										>
-											<i className="fe fe-bookmark text-white-50 me-2"></i>
-											Bookmark
-										</div>
-									</GKTippy>
+									{thisCourse?.status !== "bookmarked" && (
+										<GKTippy content="Add to Bookmarks" >
+											<div
+												className="bookmark text-white text-decoration-none"
+												onClick={AddToBookmark}
+											>
+												<i className="fe fe-bookmark text-white-50 me-2"></i>
+												Bookmark
+											</div>
+										</GKTippy>
+									)}
 									<span className="text-white ms-3">
 										<i className="fe fe-user text-white-50"></i> 1200 Enrolled{' '}
 									</span>

@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect,Fragment} from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch, useHistory } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -35,32 +35,34 @@ const SignUp = () => {
 				email: email,
 				password: password
 			};
-
-			const response = await dispatch(register(formData));
-			if (response.payload && response.payload.data) {
-					toast('Success... We have just sent you an email. Please verify your account and proceed to login.', {
+			try {
+			await dispatch(register(formData));
+				if (isSuccess) {
+					toast.success('Success... We have just sent you an email. Please verify your account and proceed to login.', {
 						containerClass: 'larger-toast-container'
 					});
-
+	
 					setTimeout(function () {
 						window.close(); // Close the window upon successful verification
-					}, 2000); // 10 seconds delay (10000 milliseconds)
-			
-			} else {
-				if (response.payload.status === 409) {
-					toast.error("Email is already registered. Please use a different email address.",
-					{
+					}, 10000); // 10 seconds delay (10000 milliseconds)
+				} else {
+					toast.error("Registration failed");
+				}
+			} catch (error) {
+				if (error.response && error.response.status === 409) {
+					toast.error("Email is already registered. Please use a different email address.", {
 						containerClass: 'larger-toast-container'
 					});
 				} else {
-					toast.error(responseData.message || "Registration failed");
+					toast.error(error.response ? error.response.data.message || "Registration failed" : "Registration failed");
 				}
 			}
-
 		} else {
 			toast.error("Passwords Don't match");
 		}
 	};
+	
+	
 
 	if (isLoading) {
 		return <Spinner />;
@@ -77,7 +79,7 @@ const SignUp = () => {
 										src={Logo}
 										className="mb-4"
 										alt=""
-										style={{ width: '100px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }}
+										style={{ width: '100px', height: 'auto', objectFit: 'cover', borderRadius: '50%' }}
 									/>
 								</Link>
 								<h1 className="mb-1 fw-bold">Register </h1>

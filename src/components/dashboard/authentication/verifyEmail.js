@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link, useParams , useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-import { Col, Row, Card, Form, Button, Image} from 'react-bootstrap';
+import { Col, Row, Card, Form, Button, Image } from 'react-bootstrap';
 import Logo from 'assets/images/brand/logo/logo-icon.png';
 import Spinner from '../../Spinner';
 
@@ -12,7 +12,7 @@ import { verifyEmail } from '../features/auth/authSlice';
 const VerifyEmail = () => {
 
     const dispatch = useDispatch();
- const navigate = useNavigate();
+    const navigate = useNavigate();
     const { isLoading, isError, isSuccess, message } = useSelector(
         (state) => state.auth
     );
@@ -22,25 +22,17 @@ const VerifyEmail = () => {
     const handleVerification = async () => {
         try {
             await dispatch(verifyEmail({ confirmationCode: code }));
-            if (isSuccess) {
-                toast("Verification Complete");
-                setTimeout(() => {
-                    navigate(`/authentication/sign-in`);
-                }, 2000);
-            }
+            toast("Verification Complete");
+            setTimeout(() => {
+                navigate(`/authentication/sign-in`);
+            }, 2000);
         } catch (error) {
             // Handle error cases
             toast.error("Verification failed");
         }
     };
 
-    useEffect(() => {
-        // Call handleVerification function when component mounts
-        handleVerification();
-
-        // Perform actions based on success or failure
-        
-    }, [handleVerification]); // Include dependencies in useEffect dependencies array
+    handleVerification();
 
     if (isLoading) {
         return <Spinner />;
@@ -54,7 +46,7 @@ const VerifyEmail = () => {
                         <Card.Body className="p-6">
                             <div className="mb-4 top-form">
                                 <Link to="/">
-                                    <Image src={Logo} className="mb-4" alt="" style={{ width: '100px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }} />
+                                    <Image src={Logo} className="mb-4" alt="" style={{ width: '100px', height: 'auto', objectFit: 'cover', borderRadius: '50%' }} />
                                 </Link>
                                 <h1 className="mb-1 fw-bold">Email Verification</h1>
                             </div>
@@ -62,7 +54,7 @@ const VerifyEmail = () => {
 
                                 <Row>
                                     <Col lg={12} md={12} className="mb-3 d-grid gap-2">
-                                        <h2>Verification code: <span style={{  fontWeight: '700px', color: 'blue' }} className='v-code'>{code}</span>.</h2>
+                                        <h2>Verification code: <span style={{ fontWeight: '700px', color: 'blue' }} className='v-code'>{code}</span>.</h2>
                                     </Col>
                                 </Row>
                                 <Col lg={12} md={12} className="mb-0 d-grid gap-2">
@@ -71,7 +63,7 @@ const VerifyEmail = () => {
                                         Verify
                                     </Button> */}
 
-                                </Col> 
+                                </Col>
                             </Form>
                         </Card.Body>
                     </Card>

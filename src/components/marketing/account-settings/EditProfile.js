@@ -64,7 +64,6 @@ const EditProfile = () => {
 		link: '/marketing/student/student-edit-profile/'
 	};
 
-
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
