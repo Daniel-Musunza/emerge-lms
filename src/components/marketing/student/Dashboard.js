@@ -27,12 +27,7 @@ const StudentDashboard = () => {
 	let userStore = localStorage.getItem('user');
 	const dispatch = useDispatch();
 
-	const { studentData, isLoading2} = useSelector((state) => state.students);
-	const { data: courses } = useQuery(
-		'courses',
-		courseService.getCourses,
-		{ enabled: !isLoading2 } // Enable query only when isLoadingCourses is false
-	);
+	const { studentData, isLoading2: isLoadingStudentData } = useSelector((state) => state.students);
 
 	useEffect(() => {
 		if (!userStore) {
@@ -40,6 +35,12 @@ const StudentDashboard = () => {
 		}
 		dispatch(fetchStudentData());
 	}, [dispatch, userStore, navigate]);
+
+	const { data: courses, isLoading: isLoadingCourses } = useQuery(
+		['courses', isLoadingStudentData],
+		courseService.getCourses,
+		{ enabled: !!studentData } // Enable query only when studentData is available
+	);
 
 	const AllCoursesData = useMemo(() => courses, [courses]);
 
@@ -55,8 +56,8 @@ const StudentDashboard = () => {
 		level: 'Beginner'
 	}), [studentData]);
 
-	if (isLoading2) {
-		return <Spinner />
+	if (isLoadingStudentData || isLoadingCourses) {
+		return <Spinner />;
 	}
 
 	return (
