@@ -7,6 +7,16 @@ const getCourses = async () => {
 
 	return response.data;
 };
+const getBookmarkedCourses = async (token, studentId) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+	const response = await axios.get(API_URL + 'course-manager/bookmarked', studentId, config);
+
+	return response.data;
+};
 const bookmarkCourse = async ( token, Data) => {
 	const config = {
 		headers: {
@@ -18,7 +28,8 @@ const bookmarkCourse = async ( token, Data) => {
 };
 const courseService = {
 	getCourses,
-	bookmarkCourse
+	bookmarkCourse,
+	getBookmarkedCourses
 };
 
 export default courseService;

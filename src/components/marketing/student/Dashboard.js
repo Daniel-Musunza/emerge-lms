@@ -29,11 +29,11 @@ const StudentDashboard = () => {
 
 	const { studentData, isLoading2: isLoadingStudentData } = useSelector((state) => state.students);
 
-	useEffect(() => {
+	useEffect(async () => {
 		if (!userStore) {
 			navigate('/authentication/sign-in');
 		}
-		dispatch(fetchStudentData());
+		await dispatch(fetchStudentData());
 	}, [dispatch, userStore, navigate]);
 
 	const { data: courses, isLoading: isLoadingCourses } = useQuery(

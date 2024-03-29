@@ -1,5 +1,6 @@
 // import node module libraries
 import { Fragment, useEffect } from 'react';
+import { useQuery } from 'react-query';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -18,7 +19,7 @@ import LevelIcon from 'components/marketing/common/miscellaneous/LevelIcon';
 import GKTippy from 'components/elements/tooltips/GKTippy';
 import { bookmarkCourse } from '../../../dashboard/features/courses/courseSlice';
 import { fetchStudentData } from 'store/studentSlices';
-
+import courseService from '../../../dashboard/features/courses/courseService';
 // import utility file
 import { numberWithCommas } from 'helper/utils';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,9 +37,22 @@ const CourseCard = ({
 		const dispatch = useDispatch();
 
 		const { studentData } = useSelector((state) => state.students);
-		const { user } = useSelector(
-			(state) => state.auth
-		);
+		const { user } = useSelector((state) => state.auth);
+		const token = user?.data?.accessToken;
+		const studentId = studentData?.data?.id;
+
+		let bookmarkedCourses = [];
+
+		if (token && studentId) {
+			const { data } = useQuery(
+				'bookmarkedCourses', // The query key
+				() => courseService.getBookmarkedCourses(token, studentId), // Fetch function
+			);
+
+			bookmarkedCourses = data ?? [];
+		}
+
+		console.log(bookmarkedCourses);
 		const AddToBookmark = async (e) => {
 			e.preventDefault();
 			const bookmarkData = {
@@ -48,6 +62,7 @@ const CourseCard = ({
 			await dispatch(bookmarkCourse(bookmarkData));
 			toast("Course Added to Bookmark");
 		};
+
 		const courseURL = `/marketing/courses/course-resume/${item?.content?.id}/${item?.id}`;
 
 		useEffect(() => {
@@ -56,7 +71,7 @@ const CourseCard = ({
 		}, [dispatch]);
 		return (
 			<Card className={`mb-4 card-hover ${extraclass}`}>
-				<Link to={user ? courseURL : '#'}  style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+				<Link to={user ? courseURL : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
 					<>
 						{item.image ? (
 							<Image
@@ -135,15 +150,14 @@ const CourseCard = ({
 						<Col className="col ms-2">
 							<span>{item.tutorName}</span>
 						</Col>
-					{console.log(item)}
 						<Col xs="auto">
-						{item?.status !== "bookmarked" && (
-							<GKTippy content="Add to Bookmarks" onClick={AddToBookmark}>
-								<div>
-									<i className="fe fe-bookmark"></i>
-								</div>
-							</GKTippy>
-						)}
+							{item?.status !== "bookmarked" && (
+								<GKTippy content="Add to Bookmarks" onClick={AddToBookmark}>
+									<div>
+										<i className="fe fe-bookmark"></i>
+									</div>
+								</GKTippy>
+							)}
 						</Col>
 					</Row>
 					<span className={`${showprogressbar ? '' : 'd-none'}`}>
@@ -157,16 +171,16 @@ const CourseCard = ({
 					</span>
 				</Card.Footer>
 				<Card.Footer>
-				<Link content="View Single Course" to={`/marketing/courses/course-single/${item?.content?.id}/${item?.id}`}>
-					<Row className="align-items-center g-0">
-						<Col xs="auto">
-							
+					<Link content="View Single Course" to={`/marketing/courses/course-single/${item?.content?.id}/${item?.id}`}>
+						<Row className="align-items-center g-0">
+							<Col xs="auto">
+
 								<div>
 									View Single Course
 								</div>
-							
-						</Col>
-					</Row>
+
+							</Col>
+						</Row>
 					</Link>
 				</Card.Footer>
 			</Card>

@@ -1,7 +1,6 @@
 // import node module libraries
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
-
 import { Card, Form, Row, Col, Button, Image } from 'react-bootstrap';
 
 // import custom components
