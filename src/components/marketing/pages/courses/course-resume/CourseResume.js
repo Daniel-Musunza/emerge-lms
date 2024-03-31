@@ -20,7 +20,7 @@ import {
 } from '../../../../dashboard/features/courses/courseSlice';
 
 import courseService from '../../../../dashboard/features/courses/courseService';
-import { fetchStudentData } from 'store/studentSlices';
+import studentAction from 'store/studentAction';
 
 import Spinner from '../../../../Spinner';
 
@@ -41,12 +41,16 @@ export const CourseResume = () => {
 		(state) => state.auth
 	);
 
-	const { studentData } = useSelector((state) => state.students);
-
 	const token = user?.data?.accessToken;
 
-	const studentId = studentData?.data?.id;
-
+	const studentId = user?.data?.id;
+	
+	const { data: studentData, isLoading: isLoading2 } = useQuery(
+		['studentData', token], // Query key
+		() => studentAction.getStudentData(token) // Fetch function
+	  );
+  
+	
 	let bookmarkedCourses = [];
 	if (token && studentId) {
 		const { data } = useQuery(
@@ -129,15 +133,6 @@ export const CourseResume = () => {
 		window.open(selectedContent?.resources[0], '_blank'); // Open the link in a new tab
 	};
 
-	useEffect(() => {
-		console.log("Pdf Read: " + read);
-		dispatch(fetchStudentData());
-		if (!user) {
-			navigate('/authentication/sign-in');
-		}
-		// 	dispatch(fetchCourseModules(id));
-
-	}, [dispatch]);
 
 	// Memoize props for ProfileCover component
 	const dashboardData = useMemo(() => ({

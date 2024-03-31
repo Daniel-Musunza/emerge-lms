@@ -49,7 +49,7 @@ const ProfileCover = ({ dashboardData, isLoading2 }) => {
 								)}
 							</div>
 							<div className="lh-1">
-								{isLoading2 || dashboardData.name == undefined ? (
+								{isLoading2 || dashboardData.name == "undefined" ? (
 									<h2 className="mb-0">
 										{'Loading... '}
 										<LevelIconWithTooltip level={dashboardData.level} />{' '}

@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment, useMemo } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { Col, Row, Nav, Tab, Card, Container } from 'react-bootstrap';
@@ -9,8 +9,8 @@ import CourseCard from 'components/marketing/pages/courses/CourseCard';
 import ProfileCover from 'components/marketing/common/headers/ProfileCover';
 
 
-import { fetchStudentData } from 'store/studentSlices';
-import { useDispatch, useSelector } from 'react-redux';
+import studentAction from 'store/studentAction';
+import { useSelector } from 'react-redux';
 
 import courseService from '../../dashboard/features/courses/courseService';
 
@@ -19,31 +19,20 @@ import Spinner from '../../Spinner';
 // import { AllCoursesData } from 'data/slider/AllCoursesData';
 
 const StudentDashboard = () => {
-	const tabs = ['Development', 'Design', 'Marketing', 'Business', 'Health'];
-	let min,
-		max = 0;
+	
+	const { user } = useSelector((state) => state.auth);
+	const token = user?.data?.accessToken;
 
-	const navigate = useNavigate();
-	let userStore = localStorage.getItem('user');
-	const dispatch = useDispatch();
-
-	const { studentData, isLoading2 } = useSelector((state) => state.students);
-
-	useEffect(async() => {
-		if (!userStore) {
-			navigate('/authentication/sign-in');
-		}
-		await dispatch(fetchStudentData());
-	}, [dispatch, userStore, navigate]);
+	const { data: studentData, isLoading: isLoading2 } = useQuery(
+		['studentData', token],
+		() => studentAction.getStudentData(token)
+	);
 
 	const { data: courses, isLoading } = useQuery(
 		['courses'],
-		courseService.getCourses,
+		courseService.getCourses
 	);
 
-	const AllCoursesData = useMemo(() => courses, [courses]);
-
-	// Memoize props for ProfileCover component
 	const dashboardData = useMemo(() => ({
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
@@ -56,46 +45,30 @@ const StudentDashboard = () => {
 	}), [studentData]);
 
 	if (isLoading) {
-		return <Spinner />;
+		return <Spinner />; // Render spinner while loading data
 	}
+
 
 	return (
 		<Fragment>
 			<section className="pt-5 pb-5">
 				<Container>
 					{/* User info */}
-					<ProfileCover dashboardData={dashboardData}  isLoading2={isLoading2}/>
+					<ProfileCover dashboardData={dashboardData} isLoading2={isLoading2} />
 
 					{/* Content */}
 					<Row>
 						<Col md={12}>
-							<Tab.Container defaultActiveKey="Development">
-
-								<Tab.Content>
-									{tabs.map((tab, index) => {
-										min = Math.floor(Math.random() * 16);
-										max = min + 8;
-										return (
-											<Tab.Pane
-												eventKey={tab}
-												className="pb-4 p-4 ps-0 pe-0"
-												key={index}
-											>
-												<Row>
-													{AllCoursesData?.data?.courses.filter(function (datasource) {
-														return datasource;
-													})
-														.map((item, index) => (
-															<Col lg={3} md={6} sm={12} key={index}>
-																<CourseCard item={item} />
-															</Col>
-														))}
-												</Row>
-											</Tab.Pane>
-										);
-									})}
-								</Tab.Content>
-							</Tab.Container>
+							<Row>
+								{courses?.data?.courses.filter(function (datasource) {
+									return datasource;
+								})
+									.map((item, index) => (
+										<Col lg={3} md={6} sm={12} key={index}>
+											<CourseCard item={item} />
+										</Col>
+									))}
+							</Row>
 						</Col>
 					</Row>
 				</Container>
