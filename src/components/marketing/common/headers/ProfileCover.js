@@ -9,7 +9,7 @@ import LevelIconWithTooltip from 'components/marketing/common/miscellaneous/Leve
 // import media files
 import CheckedMark from 'assets/images/svg/checked-mark.svg';
 import ProfileBackground from 'assets/images/background/profile-bg.jpg';
-const ProfileCover = ({ dashboardData }) => {
+const ProfileCover = ({ dashboardData, isLoading2 }) => {
 
 	return (
 		<Row className="align-items-center">
@@ -49,16 +49,24 @@ const ProfileCover = ({ dashboardData }) => {
 								)}
 							</div>
 							<div className="lh-1">
-								<h2 className="mb-0">
-									{dashboardData.name}{' '}
-									<LevelIconWithTooltip level={dashboardData.level} />{' '}
-								</h2>
+								{isLoading2 || dashboardData.name == undefined ? (
+									<h2 className="mb-0">
+										{'Loading... '}
+										<LevelIconWithTooltip level={dashboardData.level} />{' '}
+									</h2>
+								) : (
+									<h2 className="mb-0">
+										{dashboardData.name}{' '}
+										<LevelIconWithTooltip level={dashboardData.level} />{' '}
+									</h2>
+								)}
+
 								<p className="mb-0 d-block">student</p>
 							</div>
 							<div className="links2">
 								<Link
 									to={dashboardData.link}
-									style={{ fontSize: '12px', margin: '2px'  }}
+									style={{ fontSize: '12px', margin: '2px' }}
 								>
 									{dashboardData.linkname}
 

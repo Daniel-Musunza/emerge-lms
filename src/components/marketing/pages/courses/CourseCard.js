@@ -1,6 +1,7 @@
 // import node module libraries
-import { Fragment, useEffect } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
@@ -42,33 +43,38 @@ const CourseCard = ({
 		const studentId = studentData?.data?.id;
 
 		let bookmarkedCourses = [];
-
 		if (token && studentId) {
 			const { data } = useQuery(
 				'bookmarkedCourses', // The query key
 				() => courseService.getBookmarkedCourses(token, studentId), // Fetch function
 			);
 
-			bookmarkedCourses = data ?? [];
+			bookmarkedCourses = data?.data ?? [];
+		}
+		
+		let bookmarkedIDs = [];
+		if (bookmarkedCourses.length > 0) { // Removed parentheses from length
+			bookmarkedIDs = bookmarkedCourses.map(course => course.course.id); // Accessing 'id' from 'course'
 		}
 
-		console.log(bookmarkedCourses);
-		const AddToBookmark = async (e) => {
-			e.preventDefault();
+		const AddToBookmark = async (courseId) => {
 			const bookmarkData = {
-				courseId: item?.id,
-				studentId: studentData?.data?.id
-			}
+				courseId: courseId,
+				studentId: studentId // Assuming studentId is defined somewhere
+			};
+			console.log(bookmarkData);
+
 			await dispatch(bookmarkCourse(bookmarkData));
-			toast("Course Added to Bookmark");
+			toast.success("Course Added to Bookmarked");
 		};
 
 		const courseURL = `/marketing/courses/course-resume/${item?.content?.id}/${item?.id}`;
 
 		useEffect(() => {
 			dispatch(fetchStudentData());
-
 		}, [dispatch]);
+
+
 		return (
 			<Card className={`mb-4 card-hover ${extraclass}`}>
 				<Link to={user ? courseURL : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
@@ -150,15 +156,21 @@ const CourseCard = ({
 						<Col className="col ms-2">
 							<span>{item.tutorName}</span>
 						</Col>
-						<Col xs="auto">
-							{item?.status !== "bookmarked" && (
-								<GKTippy content="Add to Bookmarks" onClick={AddToBookmark}>
-									<div>
+
+						{bookmarkedIDs.includes(item?.id) ? (
+							<div>
+
+							</div>
+						) : ( 
+							<Col xs="auto" style={{ cursor: 'pointer' }}>
+								<GKTippy content="Add to Bookmarks">
+									<div onClick={() => AddToBookmark(item?.id)}>
 										<i className="fe fe-bookmark"></i>
 									</div>
 								</GKTippy>
-							)}
-						</Col>
+							</Col>
+						)}
+
 					</Row>
 					<span className={`${showprogressbar ? '' : 'd-none'}`}>
 						{' '}

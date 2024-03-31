@@ -27,19 +27,18 @@ const StudentDashboard = () => {
 	let userStore = localStorage.getItem('user');
 	const dispatch = useDispatch();
 
-	const { studentData, isLoading2: isLoadingStudentData } = useSelector((state) => state.students);
+	const { studentData, isLoading2 } = useSelector((state) => state.students);
 
-	useEffect(async () => {
+	useEffect(async() => {
 		if (!userStore) {
 			navigate('/authentication/sign-in');
 		}
 		await dispatch(fetchStudentData());
 	}, [dispatch, userStore, navigate]);
 
-	const { data: courses, isLoading: isLoadingCourses } = useQuery(
-		['courses', isLoadingStudentData],
+	const { data: courses, isLoading } = useQuery(
+		['courses'],
 		courseService.getCourses,
-		{ enabled: !!studentData && !isLoadingStudentData } // Enable query only when studentData is available and not loading
 	);
 
 	const AllCoursesData = useMemo(() => courses, [courses]);
@@ -56,7 +55,7 @@ const StudentDashboard = () => {
 		level: 'Beginner'
 	}), [studentData]);
 
-	if (isLoadingStudentData || isLoadingCourses) {
+	if (isLoading) {
 		return <Spinner />;
 	}
 
@@ -65,7 +64,7 @@ const StudentDashboard = () => {
 			<section className="pt-5 pb-5">
 				<Container>
 					{/* User info */}
-					<ProfileCover dashboardData={dashboardData} />
+					<ProfileCover dashboardData={dashboardData}  isLoading2={isLoading2}/>
 
 					{/* Content */}
 					<Row>

@@ -13,8 +13,7 @@ const getBookmarkedCourses = async (token, studentId) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
-	const response = await axios.get(API_URL + 'course-manager/bookmarked', studentId, config);
-
+	const response = await axios.get(API_URL + 'course-manager/bookmarked/' + studentId, config);
 	return response.data;
 };
 const bookmarkCourse = async ( token, Data) => {

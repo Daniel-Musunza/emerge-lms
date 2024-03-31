@@ -46,19 +46,43 @@ const CourseSingle = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	
+
 	let userStore = localStorage.getItem('user');
 	let { id, courseId } = useParams();
 	const token = userStore?.data?.accessToken;
+
+	const { data: studentData } = useQuery(
+		['studentData', token], // Include id and token in the query key
+		() => studentAction.getStudentData(token) // Pass a function that returns the data
+	);
+	
+	const studentId = studentData?.data?.id;
+	let bookmarkedCourses = [];
+
+	if (token && studentId) {
+		const { data } = useQuery(
+			'bookmarkedCourses', // The query key
+			() => courseService.getBookmarkedCourses(token, studentId), // Fetch function
+		);
+
+		bookmarkedCourses = data ?? [];
+	}
+
+	console.log(bookmarkedCourses);
+
+	if (bookmarkedCourses.length > 0) {
+		const bookmarkedIDs = bookmarkedCourses?.map(course => course?.data?.id) ?? [];
+
+		console.log(bookmarkedIDs);
+	}
+
 
 	const { data: courseModules } = useQuery(
 		['courseModules', id], // Include id and token in the query key
 		() => courseModuleService.getcourseModules(id) // Pass a function that returns the data
 	);
 
-	const { data: studentData } = useQuery(
-		['studentData', token], // Include id and token in the query key
-		() => studentAction.getStudentData(token) // Pass a function that returns the data
-	);
 
 	const { data: courses, isLoading } = useQuery(
 		'courses', // The query key
@@ -91,7 +115,7 @@ const CourseSingle = () => {
 			studentId: studentData?.data?.id
 		}
 		await dispatch(bookmarkCourse(bookmarkData));
-		toast("Course Added to Bookmark");
+		toast.success("Course Added to Bookmarks");
 	};
 
 	if (isLoading) {

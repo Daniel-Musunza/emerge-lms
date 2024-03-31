@@ -1,42 +1,27 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { Col, Row, Container, Tab, Nav } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 // import sub components
 import CourseCard from 'components/marketing/pages/courses/CourseCard';
 
-import {
-	fetchCourses
-} from '../../../dashboard/features/courses/courseSlice';
-
+import courseService from '../../../dashboard/features/courses/courseService';
 import Spinner from '../../../Spinner';
 
 const MostPopularCourses = () => {
 	const tabs = ['Development', 'Design', 'Marketing', 'Business', 'Health'];
-	let min,
-		max = 0;
 
+	let min, max = 0;
+    const { data: courses, isLoading } = useQuery('courses', courseService.getCourses);
 
-	const navigate = useNavigate();
-	let userStore = localStorage.getItem('user');
-	const dispatch = useDispatch();
+    if (isLoading) {
+        return <Spinner />;
+    }
 
-	const { courses, isLoading, isError, message } = useSelector(
-		(state) => state.courses
-	);
+    const AllCoursesData = courses || []; // Setting a default value if courses is undefined
 
-	const AllCoursesData = courses;
-
-	useEffect(() => {
-
-		dispatch(fetchCourses());
-
-	}, [dispatch, userStore, navigate]);
-
-	if (isLoading) {
-		return <Spinner />
-	}
 
 	return (
 		<Fragment>

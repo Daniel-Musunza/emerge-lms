@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect, Fragment,useMemo } from 'react';
+import React, { useState, useEffect, Fragment, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
@@ -18,6 +18,8 @@ import courseModuleService from '../../../../dashboard/features/courseModules/co
 import {
 	bookmarkCourse
 } from '../../../../dashboard/features/courses/courseSlice';
+
+import courseService from '../../../../dashboard/features/courses/courseService';
 import { fetchStudentData } from 'store/studentSlices';
 
 import Spinner from '../../../../Spinner';
@@ -41,15 +43,33 @@ export const CourseResume = () => {
 
 	const { studentData } = useSelector((state) => state.students);
 
-	const token = user.data.accessToken;
+	const token = user?.data?.accessToken;
+
+	const studentId = studentData?.data?.id;
+
+	let bookmarkedCourses = [];
+	if (token && studentId) {
+		const { data } = useQuery(
+			'bookmarkedCourses', // The query key
+			() => courseService.getBookmarkedCourses(token, studentId), // Fetch function
+		);
+
+		bookmarkedCourses = data?.data ?? [];
+	}
+
+	let bookmarkedIDs = [];
+	if (bookmarkedCourses.length > 0) { // Removed parentheses from length
+		bookmarkedIDs = bookmarkedCourses.map(course => course.course.id); // Accessing 'id' from 'course'
+	}
+
 	const queryKey = useMemo(() => ['courseModules', id], [id]);
 
-    // Use useQuery hook
-    const { data: courseModules, isLoading } = useQuery(
-        queryKey,
-        () => courseModuleService.getcourseModules(id)
-    );
-	
+	// Use useQuery hook
+	const { data: courseModules, isLoading } = useQuery(
+		queryKey,
+		() => courseModuleService.getcourseModules(id)
+	);
+
 
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
@@ -58,7 +78,6 @@ export const CourseResume = () => {
 	const [selectedContent, setSelectedContent] = useState(null);
 
 	const [YouTubeURL, setYouTubeURL] = useState('M7lc1UVf-VE');
-
 
 	const extractVideoId = (url) => {
 		// Regular expression to match the YouTube video ID
@@ -75,7 +94,7 @@ export const CourseResume = () => {
 	const selectContent = async (content, e) => {
 		e.preventDefault();
 
-		
+
 		const newURL = await extractVideoId(content.video);
 
 		setSelectedContent(content);
@@ -95,7 +114,7 @@ export const CourseResume = () => {
 			}
 			console.log(bookmarkData)
 			await dispatch(bookmarkCourse(bookmarkData));
-			toast("Course Added to Bookmark");
+			toast.success("Course Added to Bookmarks");
 		} catch (err) {
 			toast("Failed to Bookmark");
 		}
@@ -108,7 +127,7 @@ export const CourseResume = () => {
 		setRead(true);
 		localStorage.setItem(selectedContent?.id, 'true'); // Set the 'read' flag to true in localStorage
 		window.open(selectedContent?.resources[0], '_blank'); // Open the link in a new tab
-	  };
+	};
 
 	useEffect(() => {
 		console.log("Pdf Read: " + read);
@@ -116,17 +135,13 @@ export const CourseResume = () => {
 		if (!user) {
 			navigate('/authentication/sign-in');
 		}
-
-		
-
-	// 	dispatch(fetchCourseModules(id));
+		// 	dispatch(fetchCourseModules(id));
 
 	}, [dispatch]);
 
-
 	// Memoize props for ProfileCover component
 	const dashboardData = useMemo(() => ({
-	  avatar: `${studentData?.data?.profilePicture}`,
+		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
 		linkname: 'Account Settings',
 		link: '/marketing/student/student-edit-profile/'
@@ -138,14 +153,13 @@ export const CourseResume = () => {
 		courseSubSectionId: selectedContent?.id,
 		pdfread: read,
 		studentId: studentData?.data?.id
-	  }), [courseId, id, selectedContent?.id, read, studentData?.data?.id]);
+	}), [courseId, id, selectedContent?.id, read, studentData?.data?.id]);
 
 	if (isLoading) {
 		return <Spinner />;
 	}
 
 	return (
-
 		<Fragment>
 			<NavbarDefault dashboardData={dashboardData} />
 			<main>
@@ -173,11 +187,11 @@ export const CourseResume = () => {
 										</div>
 										{selectedContent?.resources[0] && (
 											<div onClick={handleLinkClick}>
-											<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer">
-											  <h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
-											</a>
-										  </div>
-										  
+												<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer">
+													<h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
+												</a>
+											</div>
+
 										)}
 
 									</div>
@@ -185,7 +199,7 @@ export const CourseResume = () => {
 										className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
 										style={{ height: '500px' }}
 									>
-										<GKYouTube videoId={YouTubeURL} progressData={progressData}/>
+										<GKYouTube videoId={YouTubeURL} progressData={progressData} />
 									</div>
 								</div>
 							</Col>
@@ -205,15 +219,22 @@ export const CourseResume = () => {
 											<Col xl={7} lg={7} md={12} sm={12}>
 												<div>
 													<div className="d-flex align-items-center">
-														<GKTippy content="Add to Bookmarks" >
-															<div
-																className="bookmark text-white text-decoration-none"
-																onClick={AddToBookmark}
-															>
-																<i className="fe fe-bookmark text-white-50 me-2"></i>
-																Bookmark
+														{bookmarkedIDs.includes(courseId) ? (
+															<div className="bookmark text-white text-decoration-none">
+																Bookmarked
 															</div>
-														</GKTippy>
+														) : (
+															<GKTippy content="Add to Bookmarks" >
+																<div
+																	className="bookmark text-white text-decoration-none"
+																	onClick={AddToBookmark}
+																>
+																	<i className="fe fe-bookmark text-white-50 me-2"></i>
+																	Bookmark
+																</div>
+															</GKTippy>
+														)}
+
 													</div>
 												</div>
 											</Col>
@@ -234,7 +255,6 @@ export const CourseResume = () => {
 
 			</main>
 		</Fragment>
-
 	);
 };
 
