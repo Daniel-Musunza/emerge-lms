@@ -19,7 +19,7 @@ import Ratings from 'components/marketing/common/ratings/Ratings';
 import LevelIcon from 'components/marketing/common/miscellaneous/LevelIcon';
 import GKTippy from 'components/elements/tooltips/GKTippy';
 import { bookmarkCourse } from '../../../dashboard/features/courses/courseSlice';
-import { fetchStudentData } from 'store/studentSlices';
+import studentAction from 'store/studentAction';
 import courseService from '../../../dashboard/features/courses/courseService';
 // import utility file
 import { numberWithCommas } from 'helper/utils';
@@ -36,24 +36,24 @@ const CourseCard = ({
 	/** Used in Course Index, Course Category, Course Filter Page, Student Dashboard etc...  */
 	const GridView = () => {
 		const dispatch = useDispatch();
+		const user = JSON.parse(localStorage.getItem('user'));
 
-		const { studentData } = useSelector((state) => state.students);
-		const { user } = useSelector((state) => state.auth);
-		const token = user?.data?.accessToken;
+		const token = user?.data.accessToken;
+
+		const { data: studentData } = useQuery(
+			['studentData', token],
+			() => studentAction.getStudentData(token)
+		);
+
 		const studentId = studentData?.data?.id;
 
-		let bookmarkedCourses = [];
-		if (token && studentId) {
-			const { data } = useQuery(
-				'bookmarkedCourses', // The query key
-				() => courseService.getBookmarkedCourses(token, studentId), // Fetch function
-			);
+		const { data: bookmarkedCourses } = useQuery(
+			['bookmarkedCourses', token, studentId],
+			() => courseService.getBookmarkedCourses(token, studentId)
+		);
 
-			bookmarkedCourses = data?.data ?? [];
-		}
-		
 		let bookmarkedIDs = [];
-		if (bookmarkedCourses.length > 0) { // Removed parentheses from length
+		if (bookmarkedCourses?.length > 0) { // Removed parentheses from length
 			bookmarkedIDs = bookmarkedCourses.map(course => course.course.id); // Accessing 'id' from 'course'
 		}
 
@@ -68,12 +68,7 @@ const CourseCard = ({
 			toast.success("Course Added to Bookmarked");
 		};
 
-		const courseURL = `/marketing/courses/course-resume/${item?.content?.id}/${item?.id}`;
-
-		useEffect(() => {
-			dispatch(fetchStudentData());
-		}, [dispatch]);
-
+		const courseURL = `/marketing/courses/course-resume/${item.content.id}/${item.id}`;
 
 		return (
 			<Card className={`mb-4 card-hover ${extraclass}`}>
@@ -161,7 +156,7 @@ const CourseCard = ({
 							<div>
 
 							</div>
-						) : ( 
+						) : (
 							<Col xs="auto" style={{ cursor: 'pointer' }}>
 								<GKTippy content="Add to Bookmarks">
 									<div onClick={() => AddToBookmark(item?.id)}>
