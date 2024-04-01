@@ -28,6 +28,24 @@ export const fetchCourseModules = createAsyncThunk(
 	}
 );
 
+export const postProgress = createAsyncThunk(
+	'courseModules/create',
+	async (Data, thunkAPI) => {
+		try {
+			const token = thunkAPI.getState().auth.user.data.accessToken;
+			return await courseModuleService.postProgress(token, Data);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
 export const courseModuleSlice = createSlice({
 	name: 'courseModule',
 	initialState,
@@ -54,6 +72,18 @@ export const courseModuleSlice = createSlice({
 				state.isError = true;
 				state.message = action.payload;
 			})
+			.addCase(postProgress.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(postProgress.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+			})
+			.addCase(postProgress.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			});
 	}
 });
 

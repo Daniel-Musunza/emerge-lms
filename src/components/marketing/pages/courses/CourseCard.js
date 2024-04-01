@@ -191,7 +191,6 @@ const CourseCard = ({
 					</Link>
 				</Card.Footer>
 			</Card>
-
 		);
 	};
 

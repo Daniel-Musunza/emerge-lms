@@ -1,120 +1,113 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import YouTube from 'react-youtube';
 import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { postProgress } from 'components/dashboard/features/courseModules/courseModuleSlice';
+
 const GKYouTube = (props) => {
 
+  const dispatch = useDispatch();
   const [length, setLength] = useState('');
-  const [watchedlength, setWatchedlength] = useState('');
+  const [totalWatchedTime, setTotalWatchedTime] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [prevVideoId, setPrevVideoId] = useState('');
+  const [isPaused, setIsPaused] = useState(false);
 
-  let newVideoId = props.videoId;
+  const newVideoId = props.videoId;
 
   useEffect(() => {
-    // Load the YouTube IFrame Player API asynchronously
-    const tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    // Function called when the YouTube API script is loaded
-    window.onYouTubeIframeAPIReady = () => {
-      // Initialize the player
-
-      // Destroy previous player and create a new one
-      var player = new window.YT.Player('player', {
-        height: '390',
-        width: '640',
-        videoId: newVideoId,
-        playerVars: {
-          'playsinline': 1
-        },
-        events: {
-          'onReady': onPlayerReady,
-          'onStateChange': onPlayerStateChange
-        }
-      });
-
-      // Function called when the player is ready
-      function onPlayerReady(event) {
-        event.target.playVideo();
-        updateVideoInfo();
-      }
-
-      // Function called when the player's state changes
-      function onPlayerStateChange(event, done) {
-        if (event.data == window.YT.PlayerState.PLAYING && !done) {
-          done = true;
-        }
-        updateVideoInfo();
-      }
-
-      // Function to update video progress and length
-      function updateVideoInfo() {
-        const videoLengthElem = document.getElementById("videoLength");
-        const videoProgressElem = document.getElementById("videoProgress");
-        if (player && videoProgressElem && videoLengthElem) {
-          const videoLength = player.getDuration();
-          const videoProgress = player.getCurrentTime();
-          videoLengthElem.innerHTML = "Video Length: " + formatTime(videoLength);
-          setLength(videoLength); // Update length state
-          videoProgressElem.innerHTML = "Video Progress: " + formatTime(videoProgress);
-          setWatchedlength(videoProgress); // Update watchedlength state
-        }
-      }
-
-      // Function to format time in seconds to 'HH:MM:SS' format
-      function formatTime(timeInSeconds) {
-        const hours = Math.floor(timeInSeconds / 3600);
-        const minutes = Math.floor((timeInSeconds % 3600) / 60);
-        const seconds = Math.floor(timeInSeconds % 60);
-        return hours.toString().padStart(2, '0') + ":" + minutes.toString().padStart(2, '0') + ":" + seconds.toString().padStart(2, '0');
-      }
-
-      
-
+    const resetWatchedTime = () => {
+      setTotalWatchedTime(0);
     };
-    console.log(props)
+
+    if (newVideoId !== prevVideoId) {
+      resetWatchedTime();
+      setPrevVideoId(newVideoId);
+    }
+  }, [newVideoId, prevVideoId]);
+
+  useEffect(() => {
+    const dispatchProgress = async () => {
+      if (!props.progressData.courseSectionId || !props.progressData.courseSubSectionId) {
+        // If required data is missing, exit early to prevent dispatching
+        return;
+      }
+  
+      const requestBody = {
+        completedPdf: props.progressData.pdfread,
+        courseId: props.progressData.courseId,
+        courseSectionId: props.progressData.courseSectionId,
+        courseSubSectionId: props.progressData.courseSubSectionId,
+        studentId: props.progressData.studentId,
+        videoViewedTime: totalWatchedTime
+      };
+
+      console.log(requestBody);
+
+      try {
+        await dispatch(postProgress(requestBody));
+      } catch (error) {
+        console.error('Error dispatching progress:', error);
+      }
+    };
+ 
     dispatchProgress();
-    console.log("VideoLength: " + length + " Watched Length: " + watchedlength);
-  }, [newVideoId, length, watchedlength]); // Include length and watchedlength as dependencies
+  }, [totalWatchedTime, props.progressData]);
 
-  const calculatePercentage = () => {
-    if (!length || !watchedlength || length === 0) {
-      return '0%'; // Handle division by zero or missing values
-    }
-    const pdfread = props.progressData.pdfread;
-    
-    const percentage = (watchedlength / length) * 100;
-
-    if(pdfread!==true){
-      percentage*0.5;
-    }
-    return percentage.toFixed(2) + '%'; // Round to 2 decimal places and add '%' sign
-  };
-
-  const dispatchProgress = async () => {
-    const percentage = calculatePercentage();
-
-    const requestBody = {
-      courseId: props.progressData.courseId,
-      courseSectionId: props.progressData.courseSectionId,
-      courseSubSectionId: props.progressData.courseSubSectionId,
-      percentage: percentage,
-      studentId: props.progressData.studentId
-    };
-
-    console.log(requestBody)
-   
-    try {
-      const response = await axios.post('https://emerge-lms-api.onrender.com/api/v1/course-manager/track/progress', requestBody);
-      console.log('Progress dispatched successfully:', response.data);
-    } catch (error) {
-      console.error('Error dispatching progress:', error);
+  const opts = {
+    height: '100%',
+    width: '100%',
+    playerVars: {
+      autoplay: 0 // You can add more player parameters as needed
     }
   };
+
+  const onReady = (event) => {
+    event.target.playVideo();
+  };
+
+  const onStateChange = (event) => {
+    if (event.data === 1) { // If the player is playing
+      setLength(event.target.getDuration());
+      setIsPlaying(true);
+    } else if (event.data === 2) { // If the player is paused
+      setIsPaused(true);
+    } else {
+      setIsPlaying(false);
+      setIsPaused(false);
+    }
+  };
+
+  useEffect(() => {
+    let interval;
+    if (isPlaying && !isPaused) {
+      interval = setInterval(() => {
+        setTotalWatchedTime(prevTotalWatchedTime => prevTotalWatchedTime + 1); // Increment total watched time by 1 second
+      }, 1000);
+    } else {
+      clearInterval(interval);
+    }
+
+    return () => clearInterval(interval);
+  }, [isPlaying, isPaused]);
+
   return (
     <Fragment>
-      <div id="player" className="position-absolute top-0 end-0 start-0 end-0 bottom-0 h-100 w-100"></div>
+      {props.videoId === "" ? (
+        <div className="position-absolute text-error" style={{width: '100%', height:'100%', }}><h3 style={{display: 'flex', position: 'absolute', justifyContent: 'center', alignItems: 'center', zIndex: '9999'}}>No Video. please select content</h3></div>
+      ): (
+        <YouTube
+        videoId={props.videoId}
+        opts={opts}
+        id="player"
+        className="position-absolute top-0 end-0 start-0 end-0 bottom-0 h-100 w-100"
+        onReady={onReady}
+        onStateChange={onStateChange}
+      />
+      )}
+     
       <div className="position-absolute end-0 top-0 p-2 text-success">
-        <p><div id="videoProgress"></div> <div id="videoLength"></div></p>
+        <p>Video Progress: {totalWatchedTime} / {length}</p>
       </div>
     </Fragment>
   );

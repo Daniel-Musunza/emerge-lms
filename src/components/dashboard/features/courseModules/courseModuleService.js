@@ -11,8 +11,19 @@ const getcourseModules = async (id) => {
 	return response?.data;
 };
 
+const postProgress = async ( token, Data) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+	const response = await axios.post(`${baseUrl}course-manager/track/progress`, Data, config);
+	return response.data;
+};
+
 const courseModuleService = {
-	getcourseModules
+	getcourseModules,
+	postProgress
 };
 
 export default courseModuleService;

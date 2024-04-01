@@ -8,8 +8,8 @@
       "type": "image/x-icon"
     }
   ],
-  "name": "Emerge LMS Dashboard",
-  "short_name": "Emerge LMS Admin Dashboard",
+  "name": "EmergeLMS",
+  "short_name": "EmergeLMS",
   "start_url": ".",
   "theme_color": "#000000"
 }

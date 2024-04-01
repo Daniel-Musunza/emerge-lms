@@ -66,6 +66,8 @@ export const CourseResume = () => {
 		bookmarkedIDs = bookmarkedCourses.map(course => course.course.id); // Accessing 'id' from 'course'
 	}
 
+    console.log(bookmarkedCourses);
+
 	const queryKey = useMemo(() => ['courseModules', id], [id]);
 
 	// Use useQuery hook
@@ -80,8 +82,9 @@ export const CourseResume = () => {
 	);
 
 	const [selectedContent, setSelectedContent] = useState(null);
+	const [selectedItemId, setSelectedItemId] = useState(null);
 
-	const [YouTubeURL, setYouTubeURL] = useState('M7lc1UVf-VE');
+	const [YouTubeURL, setYouTubeURL] = useState('');
 
 	const extractVideoId = (url) => {
 		// Regular expression to match the YouTube video ID
@@ -123,7 +126,7 @@ export const CourseResume = () => {
 			toast("Failed to Bookmark");
 		}
 	};
-	const [read, setRead] = useState(localStorage.getItem(selectedContent?.id)); // Initialize read as false initially
+	const [read, setRead] = useState(localStorage.getItem(selectedContent?.id) || false); // Initialize read as false initially
 
 	// Function to handle the click event and set read to true
 	const handleLinkClick = (event) => {
@@ -144,7 +147,7 @@ export const CourseResume = () => {
 
 	const progressData = useMemo(() => ({
 		courseId: courseId,
-		courseSectionId: id,
+		courseSectionId: selectedItemId,
 		courseSubSectionId: selectedContent?.id,
 		pdfread: read,
 		studentId: studentData?.data?.id
@@ -243,6 +246,8 @@ export const CourseResume = () => {
 								accordionItems={courseModules}
 								courseContents={courseContents}
 								selectContent={selectContent}
+								selectedItemId = {selectedItemId}
+								setSelectedItemId = {setSelectedItemId}
 							/>
 						</Card>
 					</SimpleBar>

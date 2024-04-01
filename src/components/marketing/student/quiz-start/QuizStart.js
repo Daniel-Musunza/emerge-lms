@@ -28,7 +28,7 @@ const QuizStart = () => {
 	const currentRecords = QuizData.slice(indexOfFirstRecord, indexOfLastRecord);
 	const nPages = Math.ceil(QuizData.length / recordsPerPage);
 
-	const {  studentData } = useSelector((state) => state.students);
+	const { studentData } = useSelector((state) => state.students);
 
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
@@ -52,6 +52,7 @@ const QuizStart = () => {
 							<div className="ms-3">
 								<h3 className="mb-0">
 									<Link to="#" className="text-inherit">
+										
 										React Basic Quiz{' '}
 									</Link>
 								</h3>

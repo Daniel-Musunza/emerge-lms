@@ -17,7 +17,7 @@ import { mdiPlay } from '@mdi/js';
 import { fetchCourseContents } from '../../../dashboard/features/courseContents/courseContentSlice';
 
 
-const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
+const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selectedItemId, setSelectedItemId }) => {
 	const ContextAwareToggle = ({ children, eventKey, callback }) => {
 		const { activeEventKey } = useContext(AccordionContext);
 
@@ -51,10 +51,10 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
 
 	const dispatch = useDispatch();
 
-	const { courseContents } = useSelector(
+	const { courseContents, isLoading } = useSelector(
 		(state) => state.courseContents
 	);
-	const [selectedItemId, setSelectedItemId] = useState(null);
+	
 
 	const handleModuleSelect = async (id, e) => {
 		e.preventDefault();
@@ -66,11 +66,11 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
 
 	return (
 		<Fragment >
-			
+
 			<Accordion>
-				
+
 				<ListGroup as="ul" variant="flush">
-					
+
 					{accordionItems?.data?.sections
 						.map((item, index) => (
 
@@ -84,9 +84,16 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent }) => {
 								<ContextAwareToggle eventKey={item.id}>
 									{item}
 								</ContextAwareToggle>
-
+								{/* {isLoading && (
+									<ListGroup className="py-4" as="ul">
+										<ListGroup.Item>
+											Loading ...
+										</ListGroup.Item>
+									</ListGroup>
+								)} */}
 								{selectedItemId === item?.id && (
-									<Accordion  className="test" eventKey={item.id}>
+									<Accordion className="test" eventKey={item.id}>
+
 										<ListGroup className="py-4" as="ul">
 											{courseContents
 												.map((subitem, subindex) => (
