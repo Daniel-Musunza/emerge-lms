@@ -1,6 +1,6 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
-import { useQuery } from 'react-query';
+import { isError, useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Col, Row, Container, Tab, Nav, ListGroup, Image, Card } from 'react-bootstrap';
@@ -30,7 +30,8 @@ import CourseJavascript from 'assets/images/course/course-javascript.jpg';
 import Avatar1 from 'assets/images/avatar/avatar-1.jpg';
 
 import {
-	bookmarkCourse
+	bookmarkCourse,
+	payCourse
 } from '../../../../dashboard/features/courses/courseSlice';
 
 import courseService from '../../../../dashboard/features/courses/courseService';
@@ -46,37 +47,25 @@ const CourseSingle = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
-	
 
-	let userStore = localStorage.getItem('user');
 	let { id, courseId } = useParams();
-	const token = userStore?.data?.accessToken;
+	const user = JSON.parse(localStorage.getItem('user'));
+
+	const token = user?.data.accessToken;
 
 	const { data: studentData } = useQuery(
 		['studentData', token], // Include id and token in the query key
 		() => studentAction.getStudentData(token) // Pass a function that returns the data
 	);
-	
+
 	const studentId = studentData?.data?.id;
-	let bookmarkedCourses = [];
 
-	if (token && studentId) {
-		const { data } = useQuery(
-			'bookmarkedCourses', // The query key
-			() => courseService.getBookmarkedCourses(token, studentId), // Fetch function
-		);
+	const { data: bookmarkedCourses } = useQuery(
+		['bookmarkedCourses', token, studentId],
+		() => courseService.getBookmarkedCourses(token, studentId)
+	);
 
-		bookmarkedCourses = data ?? [];
-	}
-
-	console.log(bookmarkedCourses);
-
-	if (bookmarkedCourses.length > 0) {
-		const bookmarkedIDs = bookmarkedCourses?.map(course => course?.data?.id) ?? [];
-
-		console.log(bookmarkedIDs);
-	}
-
+	let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
 
 	const { data: courseModules } = useQuery(
 		['courseModules', id], // Include id and token in the query key
@@ -94,6 +83,8 @@ const CourseSingle = () => {
 	);
 
 	const [isOpen, setOpen] = useState(false);
+	const [paymentSection, togglePaymentSection] = useState(false);
+
 	const [YouTubeURL] = useState('JRzWRZahOVU');
 	const AllCoursesData = courses;
 
@@ -118,6 +109,35 @@ const CourseSingle = () => {
 		toast.success("Course Added to Bookmarks");
 	};
 
+	const [mpesaPhone, setMpesaPhone] = useState(null); // Use parentheses instead of square brackets
+
+	const HandleCoursePayment = async (e) => {
+		e.preventDefault();
+		const paymentData = {
+			courseId: courseId,
+			mpesaPhone: mpesaPhone,
+			studentId: studentData?.data?.id
+		};
+	
+		try {
+			const response = await dispatch(payCourse(paymentData));
+			// Assuming your action returns a response object with a success property
+			if (response.success) {
+				toast.success("Course Paid Successfully");
+			} else {
+				toast.error("Payment not successful...");
+			}
+		} catch (error) {
+			// Handle error from the action
+			console.error("Error occurred during payment:", error);
+			toast.error("An error occurred during payment.");
+		}
+	};
+	
+	const DisplayPaymentForm = () => {
+		togglePaymentSection((prev) => !prev); // Use !== instead of ==
+	};
+
 	if (isLoading) {
 		return <Spinner />
 	}
@@ -139,7 +159,11 @@ const CourseSingle = () => {
 									{thisCourse?.description}
 								</p>
 								<div className="d-flex align-items-center">
-									{thisCourse?.status !== "bookmarked" && (
+									{bookmarkedIDs && bookmarkedIDs.includes(thisCourse?.id) ? (
+										<div style={{ color: '#fff' }}>
+											Bookmarked
+										</div>
+									) : (
 										<GKTippy content="Add to Bookmarks" >
 											<div
 												className="bookmark text-white text-decoration-none"
@@ -231,8 +255,11 @@ const CourseSingle = () => {
 													accordionItems={courseModules}
 													courseContents={courseContents}
 													selectContent={selectContent}
+													selectedItemId={''}
+													setSelectedItemId={''}
 													itemClass="px-0"
 												/>
+
 											</Tab.Pane>
 
 										</Tab.Content>
@@ -280,15 +307,30 @@ const CourseSingle = () => {
 										<del className="fs-4 text-muted">${thisCourse?.price + 200}</del>
 									</div>
 									<div className="d-grid">
-										<Link to="#" className="btn btn-primary mb-2  ">
-											Start Free Month
-										</Link>
-										<Link
-											to="/marketing/pages/pricing/"
-											className="btn btn-outline-primary"
-										>
+										<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
 											Get Full Access
 										</Link>
+										{paymentSection && (
+											<>
+												<input
+													type='number'
+													min="0"
+													placeholder='Mpesa Number'
+													style={{ marginTop: '10px', marginBottom: '10px', height: '30px', borderRadius: '3px' }}
+
+													value={mpesaPhone}
+													onChange={(e) => setMpesaPhone(e.target.value)} // Corrected the syntax
+												/>
+												<Link
+													to=""
+													className="btn btn-outline-primary"
+													onClick={HandleCoursePayment}
+												>
+													Pay for this course
+												</Link>
+											</>
+										)}
+
 									</div>
 								</Card.Body>
 							</Card>

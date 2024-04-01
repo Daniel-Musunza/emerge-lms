@@ -45,6 +45,24 @@ export const bookmarkCourse = createAsyncThunk(
 	}
 );
 
+export const payCourse = createAsyncThunk(
+	'courses/pay',
+	async (Data, thunkAPI) => {
+		try {
+			const token = thunkAPI.getState().auth.user.data.accessToken;
+			return await courseService.payCourse(token, Data);
+		} catch (error) {
+			const message =
+				(error.response &&
+					error.response.data &&
+					error.response.data.message) ||
+				error.message ||
+				error.toString();
+			return thunkAPI.rejectWithValue(message);
+		}
+	}
+);
+
 export const courseSlice = createSlice({
 	name: 'course',
 	initialState,
@@ -79,6 +97,18 @@ export const courseSlice = createSlice({
 				state.isSuccess = true;
 			})
 			.addCase(bookmarkCourse.rejected, (state, action) => {
+				state.isLoading = false;
+				state.isError = true;
+				state.message = action.payload;
+			})
+			.addCase(payCourse.pending, (state) => {
+				state.isLoading = true;
+			})
+			.addCase(payCourse.fulfilled, (state, action) => {
+				state.isLoading = false;
+				state.isSuccess = true;
+			})
+			.addCase(payCourse.rejected, (state, action) => {
 				state.isLoading = false;
 				state.isError = true;
 				state.message = action.payload;

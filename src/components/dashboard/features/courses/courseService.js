@@ -25,10 +25,20 @@ const bookmarkCourse = async ( token, Data) => {
 	const response = await axios.post(API_URL+ 'course-manager/bookmark', Data, config);
 	return response.data;
 };
+const payCourse = async ( token, Data) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+	const response = await axios.post(API_URL+ 'course-manager/pay', Data, config);
+	return response.data;
+};
 const courseService = {
 	getCourses,
 	bookmarkCourse,
-	getBookmarkedCourses
+	getBookmarkedCourses,
+	payCourse
 };
 
 export default courseService;

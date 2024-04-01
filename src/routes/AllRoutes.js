@@ -151,17 +151,17 @@ const AllRoutes = () => {
 					path="/marketing/student/student-linked-accounts/"
 					element={<LinkedAccounts />}
 				/>
-				<Route path="/marketing/student/quiz/" element={<StudentQuiz />} />
+				<Route path="/marketing/student/quiz/:sectionId" element={<StudentQuiz />} />
 				<Route
-					path="/marketing/student/quiz/attempt/"
+					path="/marketing/student/quiz/attempt/:sectionId/:quizId"
 					element={<StudentQuizAttempt />}
 				/>
 				<Route
-					path="/marketing/student/quiz/start/"
+					path="/marketing/student/quiz/start/:sectionId/:quizId"
 					element={<StudentQuizStart />}
 				/>
 				<Route
-					path="/marketing/student/quiz/result/"
+					path="/marketing/student/quiz/result/:sectionId/:quizId"
 					element={<StudentQuizResult />}
 				/>
 				{/* </Route> */}

@@ -52,10 +52,8 @@ const CourseCard = ({
 			() => courseService.getBookmarkedCourses(token, studentId)
 		);
 
-		let bookmarkedIDs = [];
-		if (bookmarkedCourses?.length > 0) { // Removed parentheses from length
-			bookmarkedIDs = bookmarkedCourses.map(course => course.course.id); // Accessing 'id' from 'course'
-		}
+		let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
+
 
 		const AddToBookmark = async (courseId) => {
 			const bookmarkData = {
@@ -151,10 +149,9 @@ const CourseCard = ({
 						<Col className="col ms-2">
 							<span>{item.tutorName}</span>
 						</Col>
-
-						{bookmarkedIDs.includes(item?.id) ? (
+						{bookmarkedIDs && bookmarkedIDs.includes(item?.id) ? (
 							<div>
-
+								{/* Display the content for bookmarked courses */}
 							</div>
 						) : (
 							<Col xs="auto" style={{ cursor: 'pointer' }}>
@@ -165,6 +162,7 @@ const CourseCard = ({
 								</GKTippy>
 							</Col>
 						)}
+
 
 					</Row>
 					<span className={`${showprogressbar ? '' : 'd-none'}`}>

@@ -23,12 +23,12 @@ export const DashboardMenu = [
 		link: '/marketing/student/student-invoice/',
 		icon: 'pie-chart'
 	},
-	{
-		id: 5,
-		title: 'My Quiz Attempt',
-		link: '/marketing/student/quiz/',
-		icon: 'help-circle'
-	}
+	// {
+	// 	id: 5,
+	// 	title: 'My Quiz Attempt',
+	// 	link: '/marketing/student/quiz/',
+	// 	icon: 'help-circle'
+	// }
 ];
 
 export const AccountSettingsMenu = [

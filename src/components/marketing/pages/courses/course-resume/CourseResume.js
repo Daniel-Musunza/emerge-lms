@@ -40,33 +40,22 @@ export const CourseResume = () => {
 	const { user } = useSelector(
 		(state) => state.auth
 	);
+	const token = user?.data.accessToken;
 
-	const token = user?.data?.accessToken;
+	const { data: studentData } = useQuery(
+		['studentData', token], // Include id and token in the query key
+		() => studentAction.getStudentData(token) // Pass a function that returns the data
+	);
 
-	const studentId = user?.data?.id;
-	
-	const { data: studentData, isLoading: isLoading2 } = useQuery(
-		['studentData', token], // Query key
-		() => studentAction.getStudentData(token) // Fetch function
-	  );
-  
-	
-	let bookmarkedCourses = [];
-	if (token && studentId) {
-		const { data } = useQuery(
-			'bookmarkedCourses', // The query key
-			() => courseService.getBookmarkedCourses(token, studentId), // Fetch function
-		);
+	const studentId = studentData?.data?.id;
 
-		bookmarkedCourses = data?.data ?? [];
-	}
 
-	let bookmarkedIDs = [];
-	if (bookmarkedCourses.length > 0) { // Removed parentheses from length
-		bookmarkedIDs = bookmarkedCourses.map(course => course.course.id); // Accessing 'id' from 'course'
-	}
+	const { data: bookmarkedCourses } = useQuery(
+		['bookmarkedCourses', token, studentId],
+		() => courseService.getBookmarkedCourses(token, studentId)
+	);
 
-    console.log(bookmarkedCourses);
+	let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
 
 	const queryKey = useMemo(() => ['courseModules', id], [id]);
 
@@ -217,7 +206,7 @@ export const CourseResume = () => {
 											<Col xl={7} lg={7} md={12} sm={12}>
 												<div>
 													<div className="d-flex align-items-center">
-														{bookmarkedIDs.includes(courseId) ? (
+														{bookmarkedIDs?.includes(courseId) ? (
 															<div className="bookmark text-white text-decoration-none">
 																Bookmarked
 															</div>
@@ -246,8 +235,8 @@ export const CourseResume = () => {
 								accordionItems={courseModules}
 								courseContents={courseContents}
 								selectContent={selectContent}
-								selectedItemId = {selectedItemId}
-								setSelectedItemId = {setSelectedItemId}
+								selectedItemId={selectedItemId}
+								setSelectedItemId={setSelectedItemId}
 							/>
 						</Card>
 					</SimpleBar>

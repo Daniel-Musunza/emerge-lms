@@ -46,9 +46,9 @@ const Security = () => {
 		linkname: 'Create New Course',
 		link: '/marketing/instructor/add-new-course/'
 	};
-	if(isLoading2){
-		return <Spinner />
-	}
+	// if(isLoading){
+	// 	return <Spinner />
+	// }
 	return (
 			<ProfileLayout dashboardData={dashboardData}>
 			<Card className="border-0">

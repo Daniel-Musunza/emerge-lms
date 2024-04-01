@@ -1,10 +1,13 @@
 // import node module libraries
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, Container, Nav, Navbar, Spinner } from 'react-bootstrap';
 
-import {logout } from '../../dashboard/features/auth/authSlice';
+import { logout } from '../../dashboard/features/auth/authSlice';
+import courseService from '../../dashboard/features/courses/courseService';
+import courseModuleService from '../../dashboard/features/courseModules/courseModuleService';
 // import routes file
 import {
 	DashboardMenu,
@@ -18,10 +21,39 @@ const ProfileLayout = (props) => {
 	const location = useLocation();
 	const dashboardData = props.dashboardData;
 
+	const [openQuizSections, toggleQuizSections] = useState(false);
+	const { data: courses, isLoading: coursesLoading } = useQuery(
+		['courses'],
+		courseService.getCourses
+	);
+
+
+
 	const SignOut = () => {
 		dispatch(logout());
 		navigate('/');
 	};
+
+	const DisplayModules = () => {
+		toggleQuizSections((prev) => !prev); // Use !== instead of ==
+	  };
+	  
+	const CourseModules = ({ courseId }) => {
+		const queryKey = useMemo(() => ['courseModules', courseId], [courseId]);
+		const { data: courseModules } = useQuery(
+			queryKey,
+			() => courseModuleService.getcourseModules(courseId)
+		);
+
+		return (
+			<ul>
+				{courseModules?.data?.sections.map((y, index) => (
+					<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
+				))}
+			</ul>
+		);
+	};
+
 
 	return (
 		<Fragment>
@@ -69,26 +101,8 @@ const ProfileLayout = (props) => {
 											<Nav.Item
 												as="li"
 												key={index}
-												className={`${
-													item.link === location.pathname ? 'active' : ''
-												}`}
-											>
-												<Link className="nav-link" to={item.link}>
-													<i className={`fe fe-${item.icon} nav-icon`}></i>
-													{item.title}
-												</Link>
-											</Nav.Item>
-										))}
-										<Nav.Item className="navbar-header mt-4" as="li">
-											ACCOUNT SETTINGS
-										</Nav.Item>
-										{AccountSettingsMenu.map((item, index) => (
-											<Nav.Item
-												as="li"
-												key={index}
-												className={`${
-													item.link === location.pathname ? 'active' : ''
-												}`}
+												className={`${item.link === location.pathname ? 'active' : ''
+													}`}
 											>
 												<Link className="nav-link" to={item.link}>
 													<i className={`fe fe-${item.icon} nav-icon`}></i>
@@ -97,17 +111,55 @@ const ProfileLayout = (props) => {
 											</Nav.Item>
 										))}
 										<Nav.Item
+											as="li"
+											onClick={DisplayModules}
+											style={{ cursor: 'pointer' }}
+										>
+											<div className="nav-link" >
+												<i className={`fe fe-help-circle nav-icon`}></i>
+												My Quiz Attempt
+											</div>
+										</Nav.Item>
+										{openQuizSections && (
+											<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+												{courses?.data.courses.map((x) => (
+													<Fragment key={x.id}>
+														<li>{x.name}</li>
+														<CourseModules courseId={x?.content.id} />
+													</Fragment>
+												))}
+											</ul>
+										)}
+
+
+										<Nav.Item className="navbar-header mt-4" as="li">
+											ACCOUNT SETTINGS
+										</Nav.Item>
+										{AccountSettingsMenu.map((item, index) => (
+											<Nav.Item
 												as="li"
-												onClick={SignOut}
-												style={{cursor: 'pointer'}}
+												key={index}
+												className={`${item.link === location.pathname ? 'active' : ''
+													}`}
 											>
-												<div className="nav-link" >
-													<i className={`fe fe-power nav-icon`}></i>
-													Sign Out
-												</div>
+												<Link className="nav-link" to={item.link}>
+													<i className={`fe fe-${item.icon} nav-icon`}></i>
+													{item.title}
+												</Link>
 											</Nav.Item>
+										))}
+										<Nav.Item
+											as="li"
+											onClick={SignOut}
+											style={{ cursor: 'pointer' }}
+										>
+											<div className="nav-link" >
+												<i className={`fe fe-power nav-icon`}></i>
+												Sign Out
+											</div>
+										</Nav.Item>
 									</Nav>
-									
+
 								</Navbar.Collapse>
 							</Navbar>
 						</Col>

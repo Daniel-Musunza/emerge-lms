@@ -1,6 +1,7 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card } from 'react-bootstrap';
@@ -13,9 +14,11 @@ import QuizTimer from './QuizTimer';
 
 // import profile layout wrapper
 import ProfileLayout from '../ProfileLayout';
-
+import Spinner from 'components/Spinner';
 // import data files
 import { QuizData } from 'data/marketing/quiz/QuizData';
+import quizService from '../../../dashboard/features/quiz/quizService';
+import studentAction from 'store/studentAction';
 
 // import media files
 import CourseReact from 'assets/images/course/course-react.jpg';
@@ -28,14 +31,41 @@ const QuizStart = () => {
 	const currentRecords = QuizData.slice(indexOfFirstRecord, indexOfLastRecord);
 	const nPages = Math.ceil(QuizData.length / recordsPerPage);
 
-	const { studentData } = useSelector((state) => state.students);
+	const {sectionId, quizId} = useParams();
+	
+	const { user } = useSelector(
+		(state) => state.auth
+	);
+	const token = user?.data?.accessToken;
+	
+	const { data: studentData } = useQuery(
+		['studentData', token], // Query key
+		() => studentAction.getStudentData(token) // Fetch function
+	  );
+	
 
+	const quizData = {
+		sectionId,
+		quizId
+	}
+
+	const { data: quiz, isLoading } = useQuery(
+		['quiz', token], // Query key
+		() => quizService.getQuiz(token, quizData) // Fetch function
+	);
+
+	console.log(quiz)
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
 		linkname: 'Account Settings',
 		link: '/marketing/student/student-edit-profile/'
 	};
+
+	if(isLoading) {
+		<Spinner />
+	}
+
 	return (
 		<ProfileLayout dashboardData={dashboardData}>
 			<Card className="mb-4">
@@ -52,7 +82,7 @@ const QuizStart = () => {
 							<div className="ms-3">
 								<h3 className="mb-0">
 									<Link to="#" className="text-inherit">
-										
+
 										React Basic Quiz{' '}
 									</Link>
 								</h3>
