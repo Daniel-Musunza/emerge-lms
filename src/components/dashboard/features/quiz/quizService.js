@@ -8,10 +8,12 @@ const getQuiz = async (token, quizData) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
-	const response = await axios.get(API_URL + `quiz/student/${quizData.sectionId}`, quizData.quizId, config);
+	
+	const response = await axios.get(`${API_URL}quiz/student/${quizData.quizId}`, config);
 
 	return response.data;
 };
+
 
 const getFullQuiz = async (token, sectionId) => {
     const config = {
@@ -19,6 +21,8 @@ const getFullQuiz = async (token, sectionId) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
+
+	
 	const response = await axios.get(API_URL + `quiz/student/${sectionId}`, config);
 
 	return response.data;
@@ -43,7 +47,7 @@ const getAllQuestions = async (token, quizId) => {
 	};
 	const response = await axios.get(API_URL + `quiz-question/${quizId}`, config);
 
-	return response.data;
+	return response.data.data;
 };
 
 const getQuizAnswer = async (token, questionId) => {

@@ -2,7 +2,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { Card, Form, Row, Col, Button, Image } from 'react-bootstrap';
-
+import { isError, useQuery } from 'react-query';
 // import custom components
 import { FormSelect } from 'components/elements/form-select/FormSelect';
 import { FlatPickr } from 'components/elements/flat-pickr/FlatPickr';
@@ -19,21 +19,26 @@ import { countries as countriesList } from 'countries-list';
 
 const mycountries = Object.values(countriesList);
 
-import { fetchStudentData } from 'store/studentSlices';
+import studentAction from 'store/studentAction';
 import { useDispatch, useSelector } from 'react-redux';
 import Spinner from '../../Spinner';
 
 const EditProfile = () => {
 	const pathInfo = useLocation();
 	const navigate = useNavigate();
-	const { user, isLoading, isError, isSuccess, message } = useSelector(
+	const { user, isLoading } = useSelector(
 		(state) => state.auth
 	);
 	const account = pathInfo.pathname.substring(21, 11);
 
 	const dispatch = useDispatch();
+	const token = user?.data?.accessToken;
 
-	const { studentData } = useSelector((state) => state.students);
+	const { data: studentData} = useQuery(
+        ['studentData', token],
+        () => studentAction.getStudentData(token)
+    );
+
 	const [firstName, setFirstName] = useState(studentData?.data?.firstName || '');
 	const [lastName, setLastName] = useState(studentData?.data?.lastName || '');
 	const [contactNumber, setContactNumber] = useState(studentData?.data?.phone || '');
@@ -51,8 +56,7 @@ const EditProfile = () => {
 		if (!user) {
 			navigate('/authentication/sign-in');
 		}
-		dispatch(fetchStudentData());
-	}, [dispatch, user, navigate]);
+	}, [user, navigate]);
 
 
 

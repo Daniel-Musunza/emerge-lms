@@ -31,9 +31,7 @@ const Quiz = () => {
 		['quiz', token], // Query key
 		() => quizService.getFullQuiz(token, sectionId) // Fetch function
 	);
-
-	console.log(quiz)
-const quizId = quiz?.id || "noQuizId"
+const quizId = quiz?.data.id || "noQuizId"
 
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
@@ -49,10 +47,12 @@ const quizId = quiz?.id || "noQuizId"
 					<div className="text-center">
 						<img src={SurveyImg} alt="" className="img-fluid" />
 						<div className="px-lg-18">
-							<h1>Welcome to Quiz </h1>
+							<h1>Welcome to {quiz?.data.title} </h1>
 							<p className="mb-0">
-								Engage live or asynchronously with quiz and poll questions that
-								participants complete at their own pace.
+								Number of Questions: {quiz?.data.noOfQuestions}
+							</p>
+							<p className="mb-0">
+								Pass Mark: {quiz?.data.passMark}
 							</p>
 							<Link
 								to={`/marketing/student/quiz/start/${sectionId.sectionId}/${quizId}`}
