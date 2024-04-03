@@ -23,15 +23,15 @@ const Quiz = () => {
 	const { data: studentData } = useQuery(
 		['studentData', token], // Query key
 		() => studentAction.getStudentData(token) // Fetch function
-	  );
+	);
 
-	
+
 
 	const { data: quiz, isLoading } = useQuery(
 		['quiz', token], // Query key
 		() => quizService.getFullQuiz(token, sectionId) // Fetch function
 	);
-const quizId = quiz?.data.id || "noQuizId"
+	const quizId = quiz?.data?.id || "noQuizId"
 
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
@@ -46,21 +46,28 @@ const quizId = quiz?.data.id || "noQuizId"
 				<Card.Body className="p-10">
 					<div className="text-center">
 						<img src={SurveyImg} alt="" className="img-fluid" />
-						<div className="px-lg-18">
-							<h1>Welcome to {quiz?.data.title} </h1>
-							<p className="mb-0">
-								Number of Questions: {quiz?.data.noOfQuestions}
-							</p>
-							<p className="mb-0">
-								Pass Mark: {quiz?.data.passMark}
-							</p>
-							<Link
-								to={`/marketing/student/quiz/start/${sectionId.sectionId}/${quizId}`}
-								className="btn btn-primary mt-4"
-							>
-								Start Your Quiz
-							</Link>
-						</div>
+						{quiz?.data ? (
+							<div className="px-lg-18">
+								<h1>Welcome to {quiz?.data?.title} </h1>
+								<p className="mb-0">
+									Number of Questions: {quiz?.data?.noOfQuestions}
+								</p>
+								<p className="mb-0">
+									Pass Mark: {quiz?.data?.passMark}
+								</p>
+								<Link
+									to={`/marketing/student/quiz/start/${sectionId.sectionId}/${quizId}`}
+									className="btn btn-primary mt-4"
+								>
+									Start Your Quiz
+								</Link>
+							</div>
+						) : (
+							<div className="px-lg-18">
+								<h1>No Quiz Available </h1>
+							</div>
+						)}
+
 					</div>
 				</Card.Body>
 			</Card>

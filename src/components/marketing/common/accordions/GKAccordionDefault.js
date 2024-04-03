@@ -20,7 +20,7 @@ import { fetchCourseContents } from '../../../dashboard/features/courseContents/
 const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selectedItemId, setSelectedItemId }) => {
 	const ContextAwareToggle = ({ children, eventKey, callback }) => {
 		const { activeEventKey } = useContext(AccordionContext);
-
+		
 		const decoratedOnClick = useAccordionButton(
 			eventKey,
 			() => callback && callback(eventKey)
@@ -50,7 +50,9 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 	};
 
 	const dispatch = useDispatch();
-
+	const { user } = useSelector(
+		(state) => state.auth
+	);
 	const { courseContents, isLoading } = useSelector(
 		(state) => state.courseContents
 	);
@@ -126,13 +128,16 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 										</ListGroup>
 									</Accordion>
 								)}
-								<button disabled={item.locked} key={index} style={{ border: 'none', borderRadius: '5px' }}>
-									{item.locked ? (
-										<span style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</span>
-									) : (
-										<Link to={`/marketing/student/quiz/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</Link>
-									)}
-								</button>
+								{user && (
+									<button disabled={item.locked} key={index} style={{ border: 'none', borderRadius: '5px' }}>
+										{item.locked ? (
+											<span style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</span>
+										) : (
+											<Link to={`/marketing/student/quiz/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</Link>
+										)}
+									</button>
+								)}
+
 							</ListGroup.Item>
 
 						))}

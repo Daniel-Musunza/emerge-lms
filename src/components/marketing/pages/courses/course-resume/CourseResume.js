@@ -179,34 +179,36 @@ export const CourseResume = () => {
 										</div>
 										{selectedContent?.resources[0] && (
 											<>
-											{pdfUrl ? (
-												<div onClick={closePdf}>
-													<h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>Close PDF</h3>
-												</div>
-											) : (
-												<div onClick={handleLinkClick}>
-													<h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
-												</div>
-											)}
-											
+												{pdfUrl ? (
+													<div onClick={closePdf}>
+														<h3 style={{ color: 'blue', paddingLeft: '10px', cursor: 'pointer' }} className='small-screen-t-pdf view-pdf'>Close PDF</h3>
+													</div>
+												) : (
+													<div onClick={handleLinkClick}>
+														<h3 style={{ color: 'blue', paddingLeft: '10px', cursor: 'pointer' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
+													</div>
+												)}
+
 											</>
 										)}
 
 									</div>
-									{pdfUrl && (
+									<div style={{height: '80vh', overflowY: 'scroll'}}>
+										{pdfUrl && (
+											<div
+												className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
+												style={{ height: '100vh', overflowY: 'scroll' }}
+											>
+												<PDFViewer pdfUrl={pdfUrl} />
+											</div>
+										)}
+
 										<div
 											className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
-											style={{ height: '500px', overflowY: 'scroll' }}
+											style={{ height: '500px' }}
 										>
-											<PDFViewer pdfUrl={pdfUrl} />
+											<GKYouTube videoId={YouTubeURL} progressData={progressData} />
 										</div>
-									)}
-
-									<div
-										className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
-										style={{ height: '500px' }}
-									>
-										<GKYouTube videoId={YouTubeURL} progressData={progressData} />
 									</div>
 								</div>
 							</Col>

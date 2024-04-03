@@ -50,7 +50,8 @@ const CourseSingle = () => {
 
 	let { id, courseId } = useParams();
 	const user = JSON.parse(localStorage.getItem('user'));
-
+	const [selectedItemId, setSelectedItemId] = useState(null);
+	
 	const token = user?.data.accessToken;
 
 	const { data: studentData } = useQuery(
@@ -118,7 +119,7 @@ const CourseSingle = () => {
 			mpesaPhone: mpesaPhone,
 			studentId: studentData?.data?.id
 		};
-	
+
 		try {
 			const response = await dispatch(payCourse(paymentData));
 			// Assuming your action returns a response object with a success property
@@ -133,7 +134,7 @@ const CourseSingle = () => {
 			toast.error("An error occurred during payment.");
 		}
 	};
-	
+
 	const DisplayPaymentForm = () => {
 		togglePaymentSection((prev) => !prev); // Use !== instead of ==
 	};
@@ -255,8 +256,8 @@ const CourseSingle = () => {
 													accordionItems={courseModules}
 													courseContents={courseContents}
 													selectContent={selectContent}
-													selectedItemId={''}
-													setSelectedItemId={''}
+													selectedItemId={selectedItemId}
+													setSelectedItemId={setSelectedItemId}
 													itemClass="px-0"
 												/>
 

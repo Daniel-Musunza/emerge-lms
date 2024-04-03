@@ -152,7 +152,7 @@ const StudentDashboard = () => {
                                                                     ))}
                                                             </Row>
                                                         ) : (
-                                                            <h3>you have not subscribed to any course</h3>
+                                                            <p style={{textAlign: 'center'}}>you have not subscribed to any course</p>
                                                         )}
 
 

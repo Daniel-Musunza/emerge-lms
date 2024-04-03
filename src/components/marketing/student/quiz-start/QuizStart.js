@@ -3,7 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
-import { Card } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 
 // Import sub/custom components
 import Question from 'components/marketing/common/quiz/Question';
@@ -51,10 +51,11 @@ const QuizStart = () => {
     // Function to handle recording student's answer to a question
     const recordAnswer = async (answerId, questionId, resultId) => {
         const quizData = {
-			answerId,
-			questionId,
-			resultId
-		  }
+            answerId,
+            questionId,
+            resultId
+        };
+          
         try {
             const response = await quizService.startQuizTrack(token, quizData)
             console.log(response.data);
@@ -63,7 +64,25 @@ const QuizStart = () => {
         }
     };
 
-  
+    // Function to calculate quiz result
+    const calculateScore = async () => {
+        const quizData = { quizId }; // Adjust quizData as required
+          
+        try {
+            const response = await quizService.calculateScore(token, quizData);
+            const score = response.data.score; // Assuming response contains score
+            toast.success(`Quiz completed! Your score: ${score}`);
+        } catch (error) {
+            console.error('Error calculating result:', error);
+        }
+    };
+
+    // Handler for finish button click
+    const handleFinishQuiz = () => {
+        calculateScore(); // Call calculateScore function
+        // Additional logic to navigate or perform other actions after finishing the quiz
+    };
+
     return (
         <ProfileLayout dashboardData={dashboardData}>
             <Card className="mb-4">
@@ -107,6 +126,8 @@ const QuizStart = () => {
                     )}
                 </Card.Body>
             </Card>
+            {/* Finish button */}
+            <Button variant="primary" onClick={handleFinishQuiz}>Finish</Button>
             {/* Quiz Pagination */}
             <QuizPagination
                 nPages={nPages}

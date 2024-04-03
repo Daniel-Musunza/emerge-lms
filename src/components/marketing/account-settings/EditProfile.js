@@ -77,7 +77,7 @@ const EditProfile = () => {
 			firstName: firstName,
 			lastName: lastName,
 			phone: contactNumber,
-			file: photo
+			profilePicture: photo.image
 		};
 		console.log(formData)
 		await dispatch(updateUser(formData));
@@ -112,6 +112,7 @@ const EditProfile = () => {
 								className="avatar-xl rounded-circle"
 								alt="no image"
 								onClick={() => document.getElementById('upload').click()}
+								style={{cursor: 'pointer'}}
 							/>
 							<input
 								id="upload"

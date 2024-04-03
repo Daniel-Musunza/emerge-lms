@@ -67,7 +67,7 @@ const startQuizTrack = async (token, quizData) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
-	const response = await axios.post(API_URL + `quiz-result/`, quizData, config);
+	const response = await axios.post(API_URL + `quiz-tracker/`, quizData, config);
 
 	return response;
 };
