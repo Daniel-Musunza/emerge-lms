@@ -23,6 +23,7 @@ import courseService from '../../../../dashboard/features/courses/courseService'
 import studentAction from 'store/studentAction';
 
 import Spinner from '../../../../Spinner';
+import PDFViewer from './PDFViewer';
 
 // import data
 // import { CourseIndex } from 'data/marketing/CourseIndexData';
@@ -116,15 +117,19 @@ export const CourseResume = () => {
 		}
 	};
 	const [read, setRead] = useState(localStorage.getItem(selectedContent?.id) || false); // Initialize read as false initially
+	const [pdfUrl, setPdfUrl] = useState(null); // Initialize read as false initially
 
 	// Function to handle the click event and set read to true
 	const handleLinkClick = (event) => {
 		event.preventDefault(); // Prevents the default behavior of the anchor element
 		setRead(true);
 		localStorage.setItem(selectedContent?.id, 'true'); // Set the 'read' flag to true in localStorage
-		window.open(selectedContent?.resources[0], '_blank'); // Open the link in a new tab
+		setPdfUrl(selectedContent?.resources[0]); // Open the link in a new tab
 	};
 
+	const closePdf = () => {
+		setPdfUrl(null);
+	}
 
 	// Memoize props for ProfileCover component
 	const dashboardData = useMemo(() => ({
@@ -173,15 +178,30 @@ export const CourseResume = () => {
 											</h3>
 										</div>
 										{selectedContent?.resources[0] && (
-											<div onClick={handleLinkClick}>
-												<a href={`${selectedContent.resources[0]}`} target="_blank" rel="noopener noreferrer">
+											<>
+											{pdfUrl ? (
+												<div onClick={closePdf}>
+													<h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>Close PDF</h3>
+												</div>
+											) : (
+												<div onClick={handleLinkClick}>
 													<h3 style={{ color: 'blue', paddingLeft: '10px' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
-												</a>
-											</div>
-
+												</div>
+											)}
+											
+											</>
 										)}
 
 									</div>
+									{pdfUrl && (
+										<div
+											className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
+											style={{ height: '500px', overflowY: 'scroll' }}
+										>
+											<PDFViewer pdfUrl={pdfUrl} />
+										</div>
+									)}
+
 									<div
 										className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
 										style={{ height: '500px' }}

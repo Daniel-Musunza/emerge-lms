@@ -54,7 +54,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 	const { courseContents, isLoading } = useSelector(
 		(state) => state.courseContents
 	);
-	
+
 
 	const handleModuleSelect = async (id, e) => {
 		e.preventDefault();
@@ -73,7 +73,6 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 
 					{accordionItems?.data?.sections
 						.map((item, index) => (
-
 							<ListGroup.Item
 								key={item.id}
 								as="li"
@@ -127,8 +126,14 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 										</ListGroup>
 									</Accordion>
 								)}
+								<button disabled={item.locked} key={index} style={{ border: 'none', borderRadius: '5px' }}>
+									{item.locked ? (
+										<span style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</span>
+									) : (
+										<Link to={`/marketing/student/quiz/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</Link>
+									)}
+								</button>
 							</ListGroup.Item>
-
 
 						))}
 
