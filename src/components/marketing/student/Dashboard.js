@@ -33,6 +33,15 @@ const StudentDashboard = () => {
         courseService.getCourses
     );
 
+    const { data: paidCourses } = useQuery(
+        ['paidCourses', token, studentId],
+        () => courseService.getBookmarkedCourses(token, studentId)
+    );
+
+    console.log(paidCourses);
+
+    let paidIDs = paidCourses?.data.map(course => course.course.id);
+
     if (studentDataLoading || coursesLoading) {
         return <Spinner />;
     }
@@ -60,10 +69,18 @@ const StudentDashboard = () => {
                         <Col lg={12} md={12} sm={12}>
                             <Row className="mb-6">
                                 <Col md={12}>
-                                    <Tab.Container defaultActiveKey="bookmarked">
+                                    <Tab.Container defaultActiveKey="subscribed">
                                         <Card className="bg-transparent shadow-none ">
                                             <Card.Header className="border-0 p-0 bg-transparent">
                                                 <Nav className="nav-lb-tab">
+                                                <Nav.Item>
+                                                        <Nav.Link
+                                                            eventKey="subscribed"
+                                                            className="mb-sm-3 mb-md-0"
+                                                        >
+                                                            Subscribed
+                                                        </Nav.Link>
+                                                    </Nav.Item>
                                                     <Nav.Item className="ms-0">
                                                         <Nav.Link
                                                             eventKey="bookmarked"
@@ -72,18 +89,36 @@ const StudentDashboard = () => {
                                                             Bookmarked
                                                         </Nav.Link>
                                                     </Nav.Item>
-                                                    <Nav.Item>
+                                                    <Nav.Item className="ms-0">
                                                         <Nav.Link
-                                                            eventKey="learning"
+                                                            eventKey="all"
                                                             className="mb-sm-3 mb-md-0"
                                                         >
-                                                            Learning
+                                                            All Courses
                                                         </Nav.Link>
                                                     </Nav.Item>
+                                                    
+                                                    
                                                 </Nav>
                                             </Card.Header>
                                             <Card.Body className="p-0">
                                                 <Tab.Content>
+                                                    <Tab.Pane
+                                                        eventKey="all"
+                                                        className="pb-4 p-4 ps-0 pe-0"
+                                                    >
+                                                        {/* bookmarked started */}
+                                                        <Row>
+                                                            {courses?.data?.courses
+                                                                .map((item, index) => (
+                                                                    <Col lg={3} md={6} sm={12} key={index}>
+                                                                        <CourseCard item={item} />
+                                                                    </Col>
+                                                                ))}
+
+                                                        </Row>
+                                                        {/* end of bookmarked */}
+                                                    </Tab.Pane>
                                                     <Tab.Pane
                                                         eventKey="bookmarked"
                                                         className="pb-4 p-4 ps-0 pe-0"
@@ -102,24 +137,25 @@ const StudentDashboard = () => {
                                                         {/* end of bookmarked */}
                                                     </Tab.Pane>
                                                     <Tab.Pane
-                                                        eventKey="learning"
+                                                        eventKey="subscribed"
                                                         className="pb-4 p-4 ps-0 pe-0"
                                                     >
                                                         {/* learning courses started */}
-                                                        <Row>
-                                                            {courses?.data?.courses.filter(function (datasource) {
-                                                                return (
-                                                                    datasource.id === 1 ||
-                                                                    datasource.id === 2 ||
-                                                                    datasource.id === 3 ||
-                                                                    datasource.id === 4
-                                                                );
-                                                            }).map((item, index) => (
-                                                                <Col lg={3} md={6} sm={12} key={index}>
-                                                                    <CourseCard item={item} showprogressbar />
-                                                                </Col>
-                                                            ))}
-                                                        </Row>
+                                                        {paidIDs ? (
+                                                            <Row>
+                                                                {courses?.data?.courses
+                                                                    .filter((item) => paidIDs?.includes(item.id))
+                                                                    .map((item, index) => (
+                                                                        <Col lg={3} md={6} sm={12} key={index}>
+                                                                            <CourseCard item={item} showprogressbar />
+                                                                        </Col>
+                                                                    ))}
+                                                            </Row>
+                                                        ) : (
+                                                            <h3>you have not subscribed to any course</h3>
+                                                        )}
+
+
                                                         {/* end of learning courses */}
                                                     </Tab.Pane>
                                                 </Tab.Content>
