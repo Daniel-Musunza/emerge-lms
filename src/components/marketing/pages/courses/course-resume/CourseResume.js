@@ -197,7 +197,7 @@ export const CourseResume = () => {
 										{pdfUrl && (
 											<div
 												className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
-												style={{ height: '100vh', overflowY: 'scroll' }}
+												style={{ height: '500px', overflowY: 'scroll' }}
 											>
 												<PDFViewer pdfUrl={pdfUrl} />
 											</div>
@@ -205,7 +205,7 @@ export const CourseResume = () => {
 
 										<div
 											className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
-											style={{ height: '500px' }}
+											style={{ height: '600px' }}
 										>
 											<GKYouTube videoId={YouTubeURL} progressData={progressData} />
 										</div>
