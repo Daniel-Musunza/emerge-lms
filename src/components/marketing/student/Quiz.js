@@ -31,6 +31,9 @@ const Quiz = () => {
 		['quiz', token], // Query key
 		() => quizService.getFullQuiz(token, sectionId) // Fetch function
 	);
+
+	console.log(quiz);
+
 	const quizId = quiz?.data?.id || "noQuizId"
 
 	const dashboardData = {
@@ -63,9 +66,15 @@ const Quiz = () => {
 								</Link>
 							</div>
 						) : (
-							<div className="px-lg-18">
-								<h1>No Quiz Available </h1>
-							</div>
+							<>
+								{isLoading ? (
+									<p>Loading ...</p>
+								) : (
+									<div className="px-lg-18">
+										<h1>No Quiz Available </h1>
+									</div>
+								)}
+							</>
 						)}
 
 					</div>

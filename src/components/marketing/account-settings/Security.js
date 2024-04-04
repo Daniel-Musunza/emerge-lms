@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useQuery } from 'react';
 import {
 	Col,
 	Row,
@@ -16,8 +16,6 @@ import PasswordStrengthMeter from 'components/elements/passwordstrength/Password
 
 // import profile layout wrapper
 import ProfileLayout from 'components/marketing/student/ProfileLayout';
-import Spinner from '../../Spinner';
-import { fetchStudentData } from 'store/studentSlices';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Security = () => {
@@ -26,19 +24,15 @@ const Security = () => {
 	const [password, setPassword] = useState('');
 	const [confirmpassword, setConfirmPassword] = useState('');
 	const [currentpassword, setCurrentPassword] = useState('');
-	const navigate = useNavigate();
-	let userStore = localStorage.getItem('user');
+	const { user } = useSelector(
+		(state) => state.auth
+	);
 
-	const dispatch = useDispatch();
-
-	const { studentData } = useSelector((state) => state.students);
-
-	useEffect(() => {
-		if (!userStore) {
-			navigate('/authentication/sign-in');
-		}
-		dispatch(fetchStudentData());
-	}, [dispatch,userStore, navigate]);
+	const token = user?.data?.accessToken;
+	const { data: studentData } = useQuery(
+		['studentData', token], // Query key
+		() => studentAction.getStudentData(token) // Fetch function
+	);
 
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,

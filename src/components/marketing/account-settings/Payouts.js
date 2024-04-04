@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useQuery } from 'react';
 import {
 	Card,
 	Row,
@@ -48,19 +48,17 @@ const Payouts = () => {
 	const [filtering, setFiltering] = useState('');
 	const [rowSelection, setRowSelection] = useState({});
 	const navigate = useNavigate();
-	let userStore = localStorage.getItem('user');
-
+	
 	const dispatch = useDispatch();
+	const { user } = useSelector(
+		(state) => state.auth
+	);
 
-	const { isLoading2, studentData } = useSelector((state) => state.students);
-
-	useEffect(() => {
-		if (!userStore) {
-			navigate('/authentication/sign-in');
-		}
-		dispatch(fetchStudentData());
-	}, [dispatch,userStore, navigate]);
-
+	const token = user?.data?.accessToken;
+	const { data: studentData } = useQuery(
+		['studentData', token], // Query key
+		() => studentAction.getStudentData(token) // Fetch function
+	);
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,

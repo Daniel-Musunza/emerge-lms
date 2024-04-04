@@ -33,7 +33,7 @@ const StudentDashboard = () => {
         courseService.getCourses
     );
 
-    const { data: paidCourses } = useQuery(
+    const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
         ['paidCourses', token, studentId],
         () => courseService.getBookmarkedCourses(token, studentId)
     );
@@ -73,7 +73,7 @@ const StudentDashboard = () => {
                                         <Card className="bg-transparent shadow-none ">
                                             <Card.Header className="border-0 p-0 bg-transparent">
                                                 <Nav className="nav-lb-tab">
-                                                <Nav.Item>
+                                                    <Nav.Item>
                                                         <Nav.Link
                                                             eventKey="subscribed"
                                                             className="mb-sm-3 mb-md-0"
@@ -97,8 +97,8 @@ const StudentDashboard = () => {
                                                             All Courses
                                                         </Nav.Link>
                                                     </Nav.Item>
-                                                    
-                                                    
+
+
                                                 </Nav>
                                             </Card.Header>
                                             <Card.Body className="p-0">
@@ -141,7 +141,7 @@ const StudentDashboard = () => {
                                                         className="pb-4 p-4 ps-0 pe-0"
                                                     >
                                                         {/* learning courses started */}
-                                                        {paidIDs ? (
+                                                        {paidIDs && paidCourses.data.filter((item)=>item.paid === "paid") ? (
                                                             <Row>
                                                                 {courses?.data?.courses
                                                                     .filter((item) => paidIDs?.includes(item.id))
@@ -152,7 +152,14 @@ const StudentDashboard = () => {
                                                                     ))}
                                                             </Row>
                                                         ) : (
-                                                            <p style={{textAlign: 'center'}}>you have not subscribed to any course</p>
+                                                            <>
+                                                                {paidCoursesLoading ? (
+                                                                    <p style={{ textAlign: 'center' }}>Loading ...</p>
+                                                                ) : (
+                                                                    <p style={{ textAlign: 'center' }}>you have not subscribed to any course</p>
+                                                                )}
+                                                            </>
+
                                                         )}
 
 

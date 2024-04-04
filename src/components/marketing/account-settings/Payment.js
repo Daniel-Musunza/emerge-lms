@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, useQuery } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
@@ -86,8 +86,15 @@ const CardNumberInput = (props) => (
 );
 
 const Payment = () => {
-	const {  studentData } = useSelector((state) => state.students);
+	const { user } = useSelector(
+		(state) => state.auth
+	);
 
+	const token = user?.data?.accessToken;
+	const { data: studentData } = useQuery(
+		['studentData', token], // Query key
+		() => studentAction.getStudentData(token) // Fetch function
+	);
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,

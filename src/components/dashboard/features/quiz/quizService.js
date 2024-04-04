@@ -3,12 +3,12 @@ import { baseUrl } from '../../../../api/base';
 
 const API_URL = `${baseUrl}`;
 const getQuiz = async (token, quizData) => {
-    const config = {
+	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
 	};
-	
+
 	const response = await axios.get(`${API_URL}quiz/student/${quizData.quizId}`, config);
 
 	return response.data;
@@ -16,20 +16,20 @@ const getQuiz = async (token, quizData) => {
 
 
 const getFullQuiz = async (token, sectionId) => {
-    const config = {
+	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
 	};
 
+	const response = await axios.get(API_URL + `quiz/section/${sectionId}`, config);
+	// const response = await axios.get(API_URL + `quiz/section/839eaa83-4153-4d6c-9f07-0af068477787`, config);
 	
-	const response = await axios.get(API_URL + `quiz/student/${sectionId}`, config);
-
 	return response.data;
 };
 
 const getSingleQuestion = async (token, questionId) => {
-    const config = {
+	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
@@ -40,7 +40,7 @@ const getSingleQuestion = async (token, questionId) => {
 };
 
 const getAllQuestions = async (token, quizId) => {
-    const config = {
+	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
@@ -51,7 +51,7 @@ const getAllQuestions = async (token, quizId) => {
 };
 
 const getQuizAnswer = async (token, questionId) => {
-    const config = {
+	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
@@ -62,7 +62,7 @@ const getQuizAnswer = async (token, questionId) => {
 };
 
 const startQuizTrack = async (token, quizData) => {
-    const config = {
+	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
@@ -72,7 +72,7 @@ const startQuizTrack = async (token, quizData) => {
 	return response;
 };
 const calculateScore = async (token, quizData) => {
-    const config = {
+	const config = {
 		headers: {
 			Authorization: `Bearer ${token}`
 		}
@@ -84,11 +84,11 @@ const calculateScore = async (token, quizData) => {
 const courseService = {
 	getQuiz,
 	getFullQuiz,
-    getSingleQuestion,
-    getAllQuestions,
-    getQuizAnswer,
-    startQuizTrack,
-    calculateScore
+	getSingleQuestion,
+	getAllQuestions,
+	getQuizAnswer,
+	startQuizTrack,
+	calculateScore
 };
 
 export default courseService;
