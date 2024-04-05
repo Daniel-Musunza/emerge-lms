@@ -2,7 +2,7 @@
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
-const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
+const Pagination = ({ nPages, currentPage, setCurrentPage, handleFinishQuiz }) => {
 	const nextPage = () => {
 		if (currentPage !== nPages) setCurrentPage(currentPage + 1);
 	};
@@ -21,7 +21,7 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
 				</Button>
 			)}
 			{currentPage === nPages ? (
-				<Link className="btn btn-primary" to="/marketing/student/quiz/result/">
+				<Link className="btn btn-primary" to="/marketing/student/quiz/result/"  onClick={handleFinishQuiz}>
 					Finish
 				</Link>
 			) : (

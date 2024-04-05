@@ -38,8 +38,6 @@ const StudentDashboard = () => {
         () => courseService.getBookmarkedCourses(token, studentId)
     );
 
-    console.log(paidCourses);
-
     let paidIDs = paidCourses?.data.map(course => course.course.id);
 
     if (studentDataLoading || coursesLoading) {

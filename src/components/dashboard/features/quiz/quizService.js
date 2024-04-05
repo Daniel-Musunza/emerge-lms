@@ -21,8 +21,7 @@ const getFullQuiz = async (token, sectionId) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
-
-	const response = await axios.get(API_URL + `quiz/student/${sectionId}`, config);
+	const response = await axios.get(API_URL + `quiz/student/${sectionId.sectionId}`, config);
 	// const response = await axios.get(API_URL + `quiz/section/839eaa83-4153-4d6c-9f07-0af068477787`, config);
 	
 	return response.data;

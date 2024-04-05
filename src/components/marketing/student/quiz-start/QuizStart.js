@@ -38,12 +38,15 @@ const QuizStart = () => {
     const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
     const currentRecords = QuizData?.slice(indexOfFirstRecord, indexOfLastRecord);
     const nPages = Math.ceil(QuizData?.length / recordsPerPage);
+
     const dashboardData = {
         avatar: `${studentData?.data?.profilePicture}`,
         name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
         linkname: 'Account Settings',
         link: '/marketing/student/student-edit-profile/',
     };
+
+
     if (isLoading) {
         return <Spinner />;
     }
@@ -55,7 +58,7 @@ const QuizStart = () => {
             questionId,
             resultId
         };
-          
+          console.log(quizData)
         try {
             const response = await quizService.startQuizTrack(token, quizData)
             console.log(response.data);
@@ -65,8 +68,8 @@ const QuizStart = () => {
     };
 
     // Function to calculate quiz result
-    const calculateScore = async () => {
-        const quizData = { quizId }; // Adjust quizData as required
+    const calculateScore = async (quizId, resultId, studentId) => {
+        const quizData = { quizId, resultId, studentId}; // Adjust quizData as required
           
         try {
             const response = await quizService.calculateScore(token, quizData);
@@ -126,13 +129,11 @@ const QuizStart = () => {
                     )}
                 </Card.Body>
             </Card>
-            {/* Finish button */}
-            <Button variant="primary" onClick={handleFinishQuiz}>Finish</Button>
-            {/* Quiz Pagination */}
             <QuizPagination
                 nPages={nPages}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
+                handleFinishQuiz={handleFinishQuiz}
             />
         </ProfileLayout>
     );

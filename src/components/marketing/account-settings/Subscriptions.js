@@ -1,8 +1,10 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment, useQuery } from 'react';
+import React, { useState, useEffect, Fragment} from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
+import { useQuery } from 'react-query';
+
 import { Card, Badge, Form, Row, Col } from 'react-bootstrap';
 
 // import profile layout wrapper

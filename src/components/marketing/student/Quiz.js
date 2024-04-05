@@ -26,13 +26,15 @@ const Quiz = () => {
 	);
 
 
+    const { data: quiz, isLoading, refetch: refetchQuiz } = useQuery(
+        ['quiz', token, sectionId], // Query key including sectionId
+        () => quizService.getFullQuiz(token, sectionId) // Fetch function including sectionId
+    );
 
-	const { data: quiz, isLoading } = useQuery(
-		['quiz', token], // Query key
-		() => quizService.getFullQuiz(token, sectionId) // Fetch function
-	);
-
-	console.log(quiz);
+    // Use useEffect to refetch quiz when sectionId changes
+    useEffect(() => {
+        refetchQuiz();
+    }, [sectionId, refetchQuiz]);
 
 	const quizId = quiz?.data?.id || "noQuizId"
 

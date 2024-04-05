@@ -1,5 +1,7 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment} from 'react';
+import { useQuery } from 'react-query';
+
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,7 +14,15 @@ import ProfileLayout from './ProfileLayout';
 import QuizAttemptsData from 'data/marketing/quiz/QuizAttemptsData';
 
 const QuizAttempt = () => {
-	const {  studentData } = useSelector((state) => state.students);
+	const { user } = useSelector(
+		(state) => state.auth
+	);
+
+	const token = user?.data?.accessToken;
+	const { data: studentData } = useQuery(
+		['studentData', token], // Query key
+		() => studentAction.getStudentData(token) // Fetch function
+	);
 
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,

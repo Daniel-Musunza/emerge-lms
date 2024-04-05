@@ -1,5 +1,7 @@
 // import node module libraries
-import React, { useState, useMemo, useEffect, useQuery } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useQuery } from 'react-query';
+
 import {
 	Card,
 	Row,

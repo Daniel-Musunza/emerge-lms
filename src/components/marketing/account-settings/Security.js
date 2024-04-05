@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect, useQuery } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
 	Col,
 	Row,
@@ -10,6 +10,7 @@ import {
 	Button
 } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useQuery } from 'react-query';
 
 // import custom components
 import PasswordStrengthMeter from 'components/elements/passwordstrength/PasswordStrengthMeter';

@@ -4,7 +4,7 @@ import { ListGroup, Form } from 'react-bootstrap';
 const Question = (props) => {
     const { item, recordAnswer } = props; // Destructuring props to access item and recordAnswer
     const [selectedValue, setSelectedValue] = useState(""); // State to track selected answer
-
+console.log(item)
     // Function to handle selecting an answer
     const handleAnswerSelect = (answerId) => {
         setSelectedValue(answerId); // Update selected answer
