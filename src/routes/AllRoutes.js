@@ -161,7 +161,7 @@ const AllRoutes = () => {
 					element={<StudentQuizStart />}
 				/>
 				<Route
-					path="/marketing/student/quiz/result/"
+					path="/marketing/student/quiz/result/:score"
 					element={<StudentQuizResult />}
 				/>
 				{/* </Route> */}

@@ -47,10 +47,20 @@ const payCourse = async ( token, Data) => {
 	return response.data;
 };
 
+const getCourseAnalytics = async (token, courseData) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+	const response = await axios.get(API_URL + `course-manager/single/${courseData.courseId}/${courseData.studentId}`, config);
+	return response.data;
+};
 const courseService = {
 	getCourses,
 	bookmarkCourse,
 	getBookmarkedCourses,
+	getCourseAnalytics,
 	getPaidCourses,
 	payCourse
 };

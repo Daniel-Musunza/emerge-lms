@@ -26,9 +26,11 @@ const QuizStart = () => {
         studentAction.getStudentData(token)
     );
     const quizData = { sectionId, quizId };
+    
     const { data: quiz } = useQuery(['quiz', token], () =>
         quizService.getQuiz(token, quizData)
     );
+
     const { data: QuizData, isLoading } = useQuery(['Allquestions', token], () =>
         quizService.getAllQuestions(token, quizId)
     );
@@ -39,6 +41,7 @@ const QuizStart = () => {
     const currentRecords = QuizData?.slice(indexOfFirstRecord, indexOfLastRecord);
     const nPages = Math.ceil(QuizData?.length / recordsPerPage);
 
+    const [score, setScore] = useState(null)
     const dashboardData = {
         avatar: `${studentData?.data?.profilePicture}`,
         name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
@@ -52,14 +55,20 @@ const QuizStart = () => {
     }
 
     // Function to handle recording student's answer to a question
-    const recordAnswer = async (answerId, questionId, resultId) => {
-        const quizData = {
-            answerId,
-            questionId,
-            resultId
-        };
-          console.log(quizData)
+    const recordAnswer = async (answerId) => {
+        
         try {
+
+            const corectAnswer = await quizService.getQuizAnswer(token, {quizId: quizId, studentId: studentData?.data?.id});
+
+            const resultId = corectAnswer?.data?.id;
+
+            const quizData = {
+                answerId,
+                quizId,
+                resultId: resultId
+            };
+              console.log(quizData)
             const response = await quizService.startQuizTrack(token, quizData)
             console.log(response.data);
         } catch (error) {
@@ -74,6 +83,7 @@ const QuizStart = () => {
         try {
             const response = await quizService.calculateScore(token, quizData);
             const score = response.data.score; // Assuming response contains score
+            setScore(score);
             toast.success(`Quiz completed! Your score: ${score}`);
         } catch (error) {
             console.error('Error calculating result:', error);
@@ -108,7 +118,7 @@ const QuizStart = () => {
                             </div>
                         </div>
                         {/* Timer */}
-                        <QuizTimer hours={0} minutes={5} seconds={55} />
+                        <QuizTimer hours={0} minutes={5} seconds={55} score={score} />
                     </div>
                     {currentRecords && (
                         <>

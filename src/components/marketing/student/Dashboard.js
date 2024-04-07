@@ -7,6 +7,8 @@ import studentAction from 'store/studentAction';
 import { useSelector } from 'react-redux';
 import courseService from '../../dashboard/features/courses/courseService';
 import Spinner from '../../Spinner';
+import StatRightBadge from '../common/stats/StatRightBadge';
+import { Link } from 'react-router-dom';
 
 const StudentDashboard = () => {
     const { user } = useSelector(state => state.auth);
@@ -35,8 +37,9 @@ const StudentDashboard = () => {
 
     const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
         ['paidCourses', token, studentId],
-        () => courseService.getBookmarkedCourses(token, studentId)
+        () => courseService.getPaidCourses(token, studentId)
     );
+
 
     let paidIDs = paidCourses?.data.map(course => course.course.id);
 
@@ -61,7 +64,34 @@ const StudentDashboard = () => {
                 <Container>
                     {/* User info */}
                     <ProfileCover dashboardData={dashboardData} />
-
+                    <Row style={{ marginTop: '20px' }}>
+                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
+                            <StatRightBadge
+                                title="General Learning progress"
+                                subtitle="Recent course score"
+                                value="Good"
+                                badgeValue="80%"
+                                colorVariant="success"
+                            />
+                        </Col>
+                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
+                            <StatRightBadge
+                                title="Quizes Attempted"
+                                subtitle="Quizes to attempt"
+                                value="0"
+                                badgeValue="12"
+                                colorVariant="info"
+                            />
+                        </Col>
+                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
+                            <StatRightBadge
+                                title="Courses Subscribed"
+                                value={courses?.data?.courses.filter((item) => paidIDs?.includes(item.id)).length}
+                                badgeValue="learning"
+                                colorVariant="warning"
+                            />
+                        </Col>
+                    </Row>
                     {/* Content */}
                     <Row className="mt-0 mt-md-4">
                         <Col lg={12} md={12} sm={12}>
@@ -76,7 +106,7 @@ const StudentDashboard = () => {
                                                             eventKey="subscribed"
                                                             className="mb-sm-3 mb-md-0"
                                                         >
-                                                            Subscribed
+                                                            Subscribed {courses?.data?.courses.filter((item) => paidIDs?.includes(item.id)).length}
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     <Nav.Item className="ms-0">
@@ -84,7 +114,7 @@ const StudentDashboard = () => {
                                                             eventKey="bookmarked"
                                                             className="mb-sm-3 mb-md-0"
                                                         >
-                                                            Bookmarked
+                                                            Bookmarked  {courses?.data?.courses.filter((item) => bookmarkedIDs?.includes(item.id)).length}
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     <Nav.Item className="ms-0">
@@ -92,7 +122,7 @@ const StudentDashboard = () => {
                                                             eventKey="all"
                                                             className="mb-sm-3 mb-md-0"
                                                         >
-                                                            All Courses
+                                                            All Courses {courses?.data?.courses.length}
                                                         </Nav.Link>
                                                     </Nav.Item>
 
@@ -122,16 +152,28 @@ const StudentDashboard = () => {
                                                         className="pb-4 p-4 ps-0 pe-0"
                                                     >
                                                         {/* bookmarked started */}
-                                                        <Row>
-                                                            {courses?.data?.courses
-                                                                .filter((item) => bookmarkedIDs?.includes(item.id))
-                                                                .map((item, index) => (
-                                                                    <Col lg={3} md={6} sm={12} key={index}>
-                                                                        <CourseCard item={item} />
-                                                                    </Col>
-                                                                ))}
+                                                        {bookmarkedIDs?.length > 0 ? (
+                                                            <Row>
+                                                                {courses?.data?.courses
+                                                                    .filter((item) => bookmarkedIDs?.includes(item.id))
+                                                                    .map((item, index) => (
+                                                                        <Col lg={3} md={6} sm={12} key={index}>
+                                                                            <CourseCard item={item} />
+                                                                        </Col>
+                                                                    ))}
 
-                                                        </Row>
+                                                            </Row>
+                                                        ) : (
+
+                                                            <p style={{ textAlign: 'center' }}>you have zero bookamrked courses
+                                                                <Nav.Link
+                                                                    eventKey="all"
+                                                                    className="mb-sm-3 mb-md-0"
+                                                                >
+                                                                   add one to bookmarks
+                                                                </Nav.Link></p>
+
+                                                        )}
                                                         {/* end of bookmarked */}
                                                     </Tab.Pane>
                                                     <Tab.Pane
@@ -139,7 +181,7 @@ const StudentDashboard = () => {
                                                         className="pb-4 p-4 ps-0 pe-0"
                                                     >
                                                         {/* learning courses started */}
-                                                        {paidIDs && paidCourses.data.filter((item)=>item.paid === "paid") ? (
+                                                        {paidIDs?.length > 0 ? (
                                                             <Row>
                                                                 {courses?.data?.courses
                                                                     .filter((item) => paidIDs?.includes(item.id))
@@ -154,7 +196,13 @@ const StudentDashboard = () => {
                                                                 {paidCoursesLoading ? (
                                                                     <p style={{ textAlign: 'center' }}>Loading ...</p>
                                                                 ) : (
-                                                                    <p style={{ textAlign: 'center' }}>you have not subscribed to any course</p>
+                                                                    <p style={{ textAlign: 'center' }}>you have not subscribed to any course
+                                                                        <Nav.Link
+                                                                            eventKey="bookmarked"
+                                                                            className="mb-sm-3 mb-md-0"
+                                                                        >
+                                                                            Subscribe to one
+                                                                        </Nav.Link></p>
                                                                 )}
                                                             </>
 

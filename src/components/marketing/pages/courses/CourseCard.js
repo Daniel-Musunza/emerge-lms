@@ -66,6 +66,18 @@ const CourseCard = ({
 			toast.success("Course Added to Bookmarked");
 		};
 
+		const courseData = {
+			courseId: item.id,
+			studentId
+		}
+
+		const { data: courseAnalytics } = useQuery(
+			['courseAnalytics', token, courseData],
+			() => courseService.getCourseAnalytics(token, courseData)
+		);
+
+		console.log(courseAnalytics);
+		
 		const courseURL = `/marketing/courses/course-resume/${item.content.id}/${item.id}`;
 
 		return (
@@ -165,6 +177,7 @@ const CourseCard = ({
 
 
 					</Row>
+					{console.log(item)}
 					<span className={`${showprogressbar ? '' : 'd-none'}`}>
 						{' '}
 						<ProgressBar

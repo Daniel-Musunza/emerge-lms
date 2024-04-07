@@ -12,7 +12,7 @@ import ApexCharts from 'components/elements/charts/ApexCharts';
 // import profile layout wrapper
 import ProfileLayout from './ProfileLayout';
 
-const QuizResult = () => {
+const QuizResult = ({score}) => {
 
 	const { user } = useSelector(
 		(state) => state.auth
@@ -24,7 +24,7 @@ const QuizResult = () => {
 		() => studentAction.getStudentData(token) // Fetch function
 	);
 
-	let score = 85.83;
+	// let score = 85.83;
 	const QuizResultChartSeries = [score];
 	const QuizResultChartOptions = {
 		colors: ['#38a169'],
@@ -71,7 +71,7 @@ const QuizResult = () => {
 					<div className="mt-3">
 						<span>
 							Your Score:{' '}
-							<span className="text-dark">85.83% (85.83 points)</span>
+							<span className="text-dark">{score}% ({score} points)</span>
 						</span>
 						<br />
 						<span className="mt-2 d-block">

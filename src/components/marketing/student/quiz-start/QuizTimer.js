@@ -11,7 +11,7 @@ const QuizTimer = (props) => {
 	const navigate = useNavigate();
 	const tick = () => {
 		if (hrs === 0 && mins === 0 && secs === 0) {
-			navigate.push('/marketing/student/quiz/result/');
+			navigate(`/marketing/student/quiz/result/${score}`);
 		} else if (mins === 0 && secs === 0) {
 			setTime([hrs - 1, 59, 59]);
 		} else if (secs === 0) {
