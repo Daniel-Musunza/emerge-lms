@@ -9,9 +9,10 @@ const QuizTimer = (props) => {
 		props.seconds
 	]);
 	const navigate = useNavigate();
+	const results = props.results;
 	const tick = () => {
 		if (hrs === 0 && mins === 0 && secs === 0) {
-			navigate(`/marketing/student/quiz/result/${score}`);
+			navigate(`/marketing/student/quiz/result/${results.score}/${results.quiz.noOfQuestions}/${results.quiz.passMark}`);
 		} else if (mins === 0 && secs === 0) {
 			setTime([hrs - 1, 59, 59]);
 		} else if (secs === 0) {

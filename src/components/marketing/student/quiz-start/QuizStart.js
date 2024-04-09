@@ -19,14 +19,17 @@ import studentAction from 'store/studentAction';
 import axios from 'axios';
 
 const QuizStart = () => {
+    const navigate = useNavigate();
     const { sectionId, quizId } = useParams();
+    const [results, setResult] = useState(null);
+
     const { user } = useSelector((state) => state.auth);
     const token = user?.data?.accessToken;
     const { data: studentData } = useQuery(['studentData', token], () =>
         studentAction.getStudentData(token)
     );
     const quizData = { sectionId, quizId };
-    
+
     const { data: quiz } = useQuery(['quiz', token], () =>
         quizService.getQuiz(token, quizData)
     );
@@ -41,7 +44,6 @@ const QuizStart = () => {
     const currentRecords = QuizData?.slice(indexOfFirstRecord, indexOfLastRecord);
     const nPages = Math.ceil(QuizData?.length / recordsPerPage);
 
-    const [score, setScore] = useState(null)
     const dashboardData = {
         avatar: `${studentData?.data?.profilePicture}`,
         name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
@@ -55,36 +57,46 @@ const QuizStart = () => {
     }
 
     // Function to handle recording student's answer to a question
-    const recordAnswer = async (answerId) => {
-        
+    const recordAnswer = async (answerId, questionId) => {
+
         try {
 
-            const corectAnswer = await quizService.getQuizAnswer(token, {quizId: quizId, studentId: studentData?.data?.id});
+            const corectAnswer = await quizService.getQuizAnswer(token, { quizId: quizId, studentId: studentData?.data?.id });
 
-            const resultId = corectAnswer?.data?.id;
+            const resultId = corectAnswer?.id;
 
             const quizData = {
                 answerId,
-                quizId,
+                questionId,
                 resultId: resultId
             };
-              console.log(quizData)
-            const response = await quizService.startQuizTrack(token, quizData)
-            console.log(response.data);
+            await quizService.startQuizTrack(token, quizData)
         } catch (error) {
             console.error('Error recording answer:', error);
         }
     };
 
+
     // Function to calculate quiz result
-    const calculateScore = async (quizId, resultId, studentId) => {
-        const quizData = { quizId, resultId, studentId}; // Adjust quizData as required
-          
+    const calculateScore = async () => {
+
+        const corectAnswer = await quizService.getQuizAnswer(token, { quizId: quizId, studentId: studentData?.data?.id });
+
+        const resultId = corectAnswer?.id;
+
+        const quizData = {
+            quizId: quizId,
+            studentId: studentData?.data?.id,
+            resultId
+        };
+
         try {
             const response = await quizService.calculateScore(token, quizData);
-            const score = response.data.score; // Assuming response contains score
-            setScore(score);
-            toast.success(`Quiz completed! Your score: ${score}`);
+            const result = response?.data;
+           await setResult(result);
+           
+            navigate(`/marketing/student/quiz/result/${results.score}/${results.quiz.noOfQuestions}/${results.quiz.passMark}`);
+
         } catch (error) {
             console.error('Error calculating result:', error);
         }
@@ -118,7 +130,7 @@ const QuizStart = () => {
                             </div>
                         </div>
                         {/* Timer */}
-                        <QuizTimer hours={0} minutes={5} seconds={55} score={score} />
+                        <QuizTimer hours={0} minutes={5} seconds={55} results={results} />
                     </div>
                     {currentRecords && (
                         <>

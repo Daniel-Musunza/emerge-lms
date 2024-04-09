@@ -60,7 +60,6 @@ const CourseCard = ({
 				courseId: courseId,
 				studentId: studentId // Assuming studentId is defined somewhere
 			};
-			console.log(bookmarkData);
 
 			await dispatch(bookmarkCourse(bookmarkData));
 			toast.success("Course Added to Bookmarked");
@@ -75,8 +74,6 @@ const CourseCard = ({
 			['courseAnalytics', token, courseData],
 			() => courseService.getCourseAnalytics(token, courseData)
 		);
-
-		console.log(courseAnalytics);
 		
 		const courseURL = `/marketing/courses/course-resume/${item.content.id}/${item.id}`;
 
@@ -177,12 +174,11 @@ const CourseCard = ({
 
 
 					</Row>
-					{console.log(item)}
 					<span className={`${showprogressbar ? '' : 'd-none'}`}>
 						{' '}
 						<ProgressBar
 							variant="success"
-							now={item.progress}
+							now={40}
 							className="mt-3"
 							style={{ height: '5px' }}
 						/>

@@ -56,6 +56,7 @@ const getCourseAnalytics = async (token, courseData) => {
 	const response = await axios.get(API_URL + `course-manager/single/${courseData.courseId}/${courseData.studentId}`, config);
 	return response.data;
 };
+
 const courseService = {
 	getCourses,
 	bookmarkCourse,

@@ -55,10 +55,9 @@ const getQuizAnswer = async (token, quizData) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
-	console.log(quizData)
 	const response = await axios.post(API_URL + `quiz-result/`, quizData, config);
 
-	return response.data;
+	return response.data.data;
 };
 
 const startQuizTrack = async (token, quizData) => {
@@ -67,6 +66,7 @@ const startQuizTrack = async (token, quizData) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
+	
 	const response = await axios.post(API_URL + `quiz-tracker/`, quizData, config);
 
 	return response.data;
@@ -80,6 +80,7 @@ const calculateScore = async (token, quizData) => {
 	const response = await axios.post(API_URL + `quiz-result/calculate-score`, quizData, config);
 
 	return response.data;
+
 };
 const courseService = {
 	getQuiz,

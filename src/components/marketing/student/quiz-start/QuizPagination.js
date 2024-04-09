@@ -21,7 +21,7 @@ const Pagination = ({ nPages, currentPage, setCurrentPage, handleFinishQuiz }) =
 				</Button>
 			)}
 			{currentPage === nPages ? (
-				<Link className="btn btn-primary" to="/marketing/student/quiz/result/"  onClick={handleFinishQuiz}>
+				<Link className="btn btn-primary" to={``}  onClick={handleFinishQuiz}>
 					Finish
 				</Link>
 			) : (

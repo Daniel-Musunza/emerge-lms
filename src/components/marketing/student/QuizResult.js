@@ -5,15 +5,15 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card } from 'react-bootstrap';
-
+import studentAction from 'store/studentAction';
 // import custom components
 import ApexCharts from 'components/elements/charts/ApexCharts';
 
 // import profile layout wrapper
 import ProfileLayout from './ProfileLayout';
 
-const QuizResult = ({score}) => {
-
+const QuizResult = () => {
+ const {rawscore, noOfQuestions, passMark} = useParams();
 	const { user } = useSelector(
 		(state) => state.auth
 	);
@@ -24,13 +24,15 @@ const QuizResult = ({score}) => {
 		() => studentAction.getStudentData(token) // Fetch function
 	);
 
-	// let score = 85.83;
+	
+	let score = parseFloat((rawscore / noOfQuestions * 100).toFixed(2));
+
 	const QuizResultChartSeries = [score];
 	const QuizResultChartOptions = {
 		colors: ['#38a169'],
 		plotOptions: {
 			radialBar: {
-				hollow: { margin: -2, size: '50%', background: '#d1f5ea' },
+				hollow: { margin: -2, size: `${passMark}%`, background: '#d1f5ea' },
 				dataLabels: {
 					name: { show: true, fontSize: '18px', fontWeight: 600, offsetY: 7 },
 					value: { show: false }
@@ -52,11 +54,23 @@ const QuizResult = ({score}) => {
 			<Card>
 				<Card.Body className="p-10 text-center">
 					<div className="mb-4 ">
-						<h2>🎉 Congratulations. You passed!</h2>
-						<p className="mb-0 px-lg-14">
-							You are successfully completed the quiz. Now you click on finish
-							and back to your quiz page.
-						</p>
+						{score > passMark ? (
+							<>
+								<h2>🎉 Congratulations. You passed!</h2>
+								<p className="mb-0 px-lg-14">
+									You are successfully completed the quiz. Now you click on finish
+									and back to your quiz page.
+								</p>
+							</>
+						) : (
+							<>
+								<h2>You failed the quiz!</h2>
+								<p className="mb-0 px-lg-14">
+									please go through the contents again and try the quiz later.
+								</p>
+							</>
+						)}
+
 					</div>
 					<div className="d-flex justify-content-center">
 						<div className="resultChart">
@@ -75,11 +89,11 @@ const QuizResult = ({score}) => {
 						</span>
 						<br />
 						<span className="mt-2 d-block">
-							Passing Score: <span className="text-dark">80%</span>
+							Passing Score: <span className="text-dark">{passMark}%</span>
 						</span>
 					</div>
 					<div className="mt-5">
-						<Link to="#" className="btn btn-primary">
+						<Link to="/marketing/student/dashboard/" className="btn btn-primary">
 							Finish
 						</Link>
 						<Link to="#" className="btn btn-outline-secondary ms-2">
