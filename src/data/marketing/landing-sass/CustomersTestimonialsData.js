@@ -1,8 +1,8 @@
 import { v4 as uuid } from 'uuid';
 
 // import media files
-import HubSpot from 'assets/images/svg/hubspot-logo.svg';
-import Slack from 'assets/images/svg/slack-logo.svg';
+import HubSpot from 'assets/images/svg/hubspot-logo.png';
+import Slack from 'assets/images/svg/slack-logo.png';
 
 export const CustomersTestimonialsData = [
 	{

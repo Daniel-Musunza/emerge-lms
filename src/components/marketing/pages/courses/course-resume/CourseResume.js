@@ -66,7 +66,6 @@ export const CourseResume = () => {
 		() => courseModuleService.getcourseModules(id)
 	);
 
-
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
 	);
@@ -259,6 +258,7 @@ export const CourseResume = () => {
 								selectContent={selectContent}
 								selectedItemId={selectedItemId}
 								setSelectedItemId={setSelectedItemId}
+								courseId ={courseId }
 							/>
 						</Card>
 					</SimpleBar>

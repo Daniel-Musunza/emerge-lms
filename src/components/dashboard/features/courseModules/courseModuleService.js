@@ -7,9 +7,9 @@ const getcourseModules = async (id) => {
 	
 	const response = await axios.get(API_URL + 'student/' + id);
 
-
 	return response?.data;
 };
+
 
 const postProgress = async ( token, Data) => {
 	const config = {

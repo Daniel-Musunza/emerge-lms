@@ -21,13 +21,23 @@ const ProfileLayout = (props) => {
 	const location = useLocation();
 	const dashboardData = props.dashboardData;
 
+	const { user } = useSelector(state => state.auth);
+	const token = user?.data?.accessToken;
+	const studentId = user?.data?.id;
+
 	const [openQuizSections, toggleQuizSections] = useState(false);
 	const { data: courses, isLoading: coursesLoading } = useQuery(
 		['courses'],
 		courseService.getCourses
 	);
 
+	const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
+		['paidCourses', token, studentId],
+		() => courseService.getPaidCourses(token, studentId)
+	);
 
+
+	let paidIDs = paidCourses?.data.map(course => course.course.id);
 
 	const SignOut = () => {
 		dispatch(logout());
@@ -36,8 +46,8 @@ const ProfileLayout = (props) => {
 
 	const DisplayModules = () => {
 		toggleQuizSections((prev) => !prev); // Use !== instead of ==
-	  };
-	  
+	};
+
 	const CourseModules = ({ courseId }) => {
 		const queryKey = useMemo(() => ['courseModules', courseId], [courseId]);
 		const { data: courseModules } = useQuery(
@@ -48,7 +58,15 @@ const ProfileLayout = (props) => {
 		return (
 			<ul>
 				{courseModules?.data?.sections.map((y, index) => (
-					<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
+					<>
+						{y?.progress < 80 ? (
+							<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
+						) : (
+							<span style={{ border: 'none', borderRadius: '5px', opacity: 0.5 }}> {y.title}</span>
+
+						)}
+					</>
+
 				))}
 			</ul>
 		);
@@ -121,14 +139,30 @@ const ProfileLayout = (props) => {
 											</div>
 										</Nav.Item>
 										{openQuizSections && (
-											<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
-												{courses?.data.courses.map((x) => (
-													<Fragment key={x.id}>
-														<li>{x.name}</li>
-														<CourseModules courseId={x?.content.id} />
-													</Fragment>
-												))}
-											</ul>
+											<>
+												{paidIDs?.length > 0 ? (
+													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+														{courses?.data.courses
+															.filter((item) => paidIDs?.includes(item.id))
+															.map((x) => (
+																<Fragment key={x.id}>
+																	<li>{x.name}</li>
+																	<CourseModules courseId={x?.content.id} />
+																</Fragment>
+															))}
+													</ul>
+												) : (
+													<>
+														{paidCoursesLoading ? (
+															<p style={{ textAlign: 'center' }}>Loading ...</p>
+														) : (
+															<p style={{ textAlign: 'center', color: 'red' }}>No courses subscribed</p>
+														)}
+													</>
+
+												)}
+											</>
+
 										)}
 
 

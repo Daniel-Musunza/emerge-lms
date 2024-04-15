@@ -19,7 +19,7 @@ const ComparePlan = () => {
 			{/* FAQs section */}
 			<FAQs />
 
-			{/* developer geeks */}
+			{/* developer Daruur */}
 			<DeveloperEmergeLMS />
 		</Fragment>
 	);

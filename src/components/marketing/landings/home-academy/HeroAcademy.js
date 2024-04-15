@@ -31,13 +31,12 @@ const HeroAcademy = () => {
 								Most trusted education platform
 							</h5>
 							<h1 className="display-3 fw-bold mb-3">
-								Grow your skills and advance career
+							Ready to unlock your potential and shape your future with confidence? 
 							</h1>
-							<p className="pe-lg-10 mb-5">
-								Start, switch, or advance your career with more than 5,000
-								courses, Professional Certificates, and degrees from world-class
-								universities and companies.
+							<p className="pe-lg-10 mb-5">Enrol now and embark on a journey of discovery, inspiration and limitless possibilities!
 							</p>
+							<p className="pe-lg-10 mb-5">No matter where you are, empower yourself with cutting-edge courses designed to grow and propel your career and ambition forward. 
+</p>
 							<Link to="/authentication/sign-up" className="btn btn-primary">
 								Join Free Now
 							</Link>

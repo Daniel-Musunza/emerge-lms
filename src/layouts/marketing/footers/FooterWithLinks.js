@@ -59,27 +59,27 @@ const FooterWithLinks = () => {
 									className="nav nav-footer flex-column nav-x-0"
 								>
 									<ListGroup.Item as="li" bsPrefix=" ">
-										<Link to="#" className="nav-link">
+										<Link to="/marketing/pages/about/" className="nav-link">
 											About
 										</Link>
 									</ListGroup.Item>
 									<ListGroup.Item as="li" bsPrefix=" ">
-										<Link to="#" className="nav-link">
+										<Link to="/marketing/pages/pricing/" className="nav-link">
 											Pricing
 										</Link>
 									</ListGroup.Item>
 									<ListGroup.Item as="li" bsPrefix=" ">
-										<Link to="#" className="nav-link">
+										<Link to="/marketing/blog/listing/" className="nav-link">
 											Blog
 										</Link>
 									</ListGroup.Item>
 									<ListGroup.Item as="li" bsPrefix=" ">
-										<Link to="#" className="nav-link">
+										<Link to="/marketing/pages/career/career/Career" className="nav-link">
 											Careers
 										</Link>
 									</ListGroup.Item>
 									<ListGroup.Item as="li" bsPrefix=" ">
-										<Link to="#" className="nav-link">
+										<Link to="/marketing/pages/contact/" className="nav-link">
 											Contact
 										</Link>
 									</ListGroup.Item>
@@ -96,7 +96,7 @@ const FooterWithLinks = () => {
 									className="nav nav-footer flex-column nav-x-0"
 								>
 									<ListGroup.Item as="li" bsPrefix=" ">
-										<Link to="#" className="nav-link">
+										<Link to="/marketing/help-center/" className="nav-link">
 											Help and Support
 										</Link>
 									</ListGroup.Item>
@@ -164,7 +164,7 @@ const FooterWithLinks = () => {
 					<Row className="align-items-center g-0 border-top py-2 mt-6">
 						{/* Desc  */}
 						<Col lg={4} md={5} sm={12}>
-							<span>© 2023 EmergeLMS-UI, Inc. All Rights Reserved</span>
+							<span>© 2023 Daruur LMS, Inc. All Rights Reserved</span>
 						</Col>
 						{/*  Links  */}
 						<Col

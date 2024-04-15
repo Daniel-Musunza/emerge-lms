@@ -52,7 +52,29 @@ import Tooltips from 'components/elements/bootstrap/Tooltips';
 
 
 // IMPORTS FOR HELP CENTER PAGES ( v1.3.0 )
+import About from 'components/marketing/pages/about/About';
+import Pricing from 'components/marketing/pages/pricing/Pricing';
+import ComparePlan from 'components/marketing/pages/compare-plan/ComparePlan'; // new v1.1.0
+import Contact from 'components/marketing/pages/contact/Contact'; // new v1.1.0
+
+// IMPORTS FOR HELP CENTER PAGES ( v1.3.0 )
 import HelpCenter from 'components/marketing/pages/help-center/help-center/HelpCenter';
+import HelpCenterFAQ from 'components/marketing/pages/help-center/help-center-faq/HelpCenterFAQ';
+import HelpCenterGuide from 'components/marketing/pages/help-center/help-center-guide/HelpCenterGuide';
+import HelpCenterGuideSingle from 'components/marketing/pages/help-center/help-center-guide-single/HelpCenterGuideSingle';
+import HelpCenterSupport from 'components/marketing/pages/help-center/help-center-support/HelpCenterSupport';
+
+/* IMPORTS FOR FRONT BLOG SUBMENU  ROUTERS */
+import BlogListing from 'components/marketing/blog/BlogListing';
+import BlogArticleSingle from 'components/marketing/blog/BlogArticleSingle';
+import BlogCategory from 'components/marketing/blog/BlogCategory';
+import BlogSidebar from 'components/marketing/blog/BlogSidebar';
+
+/* IMPORTS FOR FRONT CAREER SUBMENU  ROUTERS */
+import Career from 'components/marketing/pages/career/career/Career'; // new v1.1.0
+import CareerList from 'components/marketing/pages/career/career-list/CareerList'; // new v1.1.0
+import CareerSingle from 'components/marketing/pages/career/career-single/CareerSingle'; // new v1.1.0
+
 
 import TermsAndConditions from 'components/marketing/pages/specialty/TermsAndConditions';
 
@@ -95,6 +117,7 @@ import AllCourses from 'components/marketing/pages/courses/AllCourses';
 import VerifyEmail from 'components/dashboard/authentication/verifyEmail';
 
 import CheckLoggedIn from './CheckLoggedIn';
+import HelpCenterLayout from 'layouts/marketing/HelpCenterLayout';
 
 // Inside the route or navigation logic
 
@@ -182,6 +205,24 @@ const AllRoutes = () => {
 				path="/marketing/courses/course-single/:id/:courseId"
 				element={<CourseSingle />}
 			/>
+
+			<Route path="/marketing/pages/about/" element={<About />} />
+			<Route
+				path="/marketing/courses/course-resume/"
+				element={<CourseResume />}
+			/>
+			{/* Career */}
+			<Route path="/marketing/pages/career/career/Career" element={<Career />} />
+			<Route path="/marketing/pages/contact/" element={<Contact />} />
+			<Route path="/marketing/blog/sidebar/" element={<BlogSidebar />} />
+			<Route path="/marketing/pages/pricing/" element={<Pricing />} />
+				<Route
+					path="/marketing/blog/article-single/:id"
+					element={<BlogArticleSingle />}
+				/>
+				<Route path="/marketing/blog/category/" element={<BlogCategory />} />
+				<Route path="/marketing/blog/listing/" element={<BlogListing />} />
+				
 			{/* Routes with BlankLayout */}
 			<Route element={<BlankLayout />}>
 
@@ -201,9 +242,25 @@ const AllRoutes = () => {
 				/>
 			</Route>
 
-			{/* Routes with HelpCenterTransparentLayout */}
 			<Route element={<HelpCenterTransparentLayout />}>
 				<Route path="/marketing/help-center/" element={<HelpCenter />} />
+			</Route>
+
+			{/* Routes with HelpCenterLayout */}
+			<Route element={<HelpCenterLayout />}>
+				<Route path="/marketing/help-center/faq/" element={<HelpCenterFAQ />} />
+				<Route
+					path="/marketing/help-center/guide/"
+					element={<HelpCenterGuide />}
+				/>
+				<Route
+					path="/marketing/help-center/guide-single/:categoryslug/:articleslug"
+					element={<HelpCenterGuideSingle />}
+				/>
+				<Route
+					path="/marketing/help-center/support/"
+					element={<HelpCenterSupport />}
+				/>
 			</Route>
 
 

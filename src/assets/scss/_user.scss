@@ -2,33 +2,3 @@
 // user.scss
 // Use this to write your custom SCSS
 //
-//
-// user.scss
-// Use this to write your custom SCSS
-//
-
-.alert-box {
-    // outline: 0;
-    // border-color: red;
-    // animation-name: bounce;
-    // animation-duration: .5s;
-    // animation-delay: 0.25s;
-    position: absolute;
-  }
-
-  .spinner-container {
-    position: fixed; /* Fixed positioning */
-    top: 0;
-    left: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    background-color: rgba(0, 0, 0, 0.5); /* Optional: semi-transparent background */
-    z-index: 9999; /* Ensure the spinner appears above other content */
-  }
-
-  .sign-in{
-    background-color: #3D50A4;
-  }

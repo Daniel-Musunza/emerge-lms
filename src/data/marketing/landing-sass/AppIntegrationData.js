@@ -1,10 +1,10 @@
 import { v4 as uuid } from 'uuid';
 
 // import media files
-import Dropbox from 'assets/images/brand/dropbox-logo.svg';
+import Dropbox from 'assets/images/brand/dropbox-logo.png';
 import HubSpot from 'assets/images/brand/hubspot.svg';
 import Drive from 'assets/images/brand/google-drive.svg';
-import Slack from 'assets/images/brand/slack-logo.svg';
+import Slack from 'assets/images/brand/slack-logo.png';
 import Zapier from 'assets/images/brand/zapier.svg';
 
 export const AppIntegrationData = [

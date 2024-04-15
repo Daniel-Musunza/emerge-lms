@@ -20,12 +20,15 @@ import {
 } from 'data/marketing/pricing/PricingPlansData';
 import LogoList1 from 'data/marketing/clientlogos/LogoList1';
 import FAQsData from 'data/marketing/pricing/FAQsData';
+import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
+import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 
 const Pricing = () => {
 	const [Pricing, togglePricing] = useToggle(true);
 
 	return (
 		<Fragment>
+			<NavbarMegaMenu />
 			<section className="py-lg-13 py-8 bg-primary">
 				<Container>
 					{/* Page header */}
@@ -66,8 +69,20 @@ const Pricing = () => {
 			{/* Content */}
 			<section className="mt-n8 pb-8">
 				<Container>
-					<Row>
-						<Col lg={4} md={12} sm={12}>
+					<Row >
+						<Col lg={3.5} md={12} sm={12} style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '10px', margin: '10px' }}>
+							<p>We believe in making quality education accessible to all, which is why our course pricing is designed with affordability and value in mind. Our courses are competitively priced to ensure that even aspiring and steadfast visionaries and professionals in hard to reach and marginalised areas can access top-notch education without breaking the bank.
+							</p>
+						</Col>
+						<Col lg={3.5} md={12} sm={12} style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '10px', margin: '10px' }}>
+							<p>With transparent pricing structures and no hidden fees, you can enrol in courses confidently, knowing that you're getting exceptional value for your investment.
+							</p>
+						</Col>
+						<Col lg={3.5} md={12} sm={12} style={{ backgroundColor: '#fff', padding: '15px', borderRadius: '10px', margin: '10px' }}>
+							<p>Furthermore, we offer flexible payment options and discounts for bulk enrolments, making it easier for organizations, educational institutions, and community groups to empower their members with relevant skills and knowledge. We are committed to fostering economic growth and community resilience in remote, arid and undeveloped regions, and our fair and accessible pricing reflects this dedication to inclusivity and opportunity for all.
+							</p>
+						</Col>
+						{/* <Col lg={4} md={12} sm={12}>
 							<PricingCard content={starter} pricingMode={Pricing} />
 						</Col>
 						<Col lg={4} md={12} sm={12}>
@@ -75,63 +90,17 @@ const Pricing = () => {
 						</Col>
 						<Col lg={4} md={12} sm={12}>
 							<PricingCard content={team} pricingMode={Pricing} />
-						</Col>
+						</Col> */}
 					</Row>
 				</Container>
 			</section>
 
 			{/* Client logo */}
-			<LogosTopHeading2
+			{/* <LogosTopHeading2
 				title="Loved by over 5 million users from companies like"
 				logos={LogoList1}
-			/>
-
-			{/* FAQ */}
-			<section className="py-lg-10 py-5">
-				<Container>
-					<Row>
-						{/* Row */}
-						<Col md={12} sm={12}>
-							<div className="mb-8 text-center">
-								<h2 className="h1">Frequently Asked Questions</h2>
-							</div>
-						</Col>
-					</Row>
-					{/* Row */}
-					<Row>
-						{/* FAQs List */}
-						{FAQsData.map((item, index) => {
-							return (
-								<Col lg={4} md={6} sm={12} className="mb-3" key={index}>
-									<h4>{item.question}</h4>
-									<p>{item.answer}</p>
-								</Col>
-							);
-						})}
-						{/* Col */}
-						<Col md={12} sm={12} className="mt-lg-10 mt-4">
-							{/* Card*/}
-							<Card>
-								{/* Card body */}
-								<Card.Body>
-									<div className="d-lg-flex justify-content-between align-items-center">
-										<h4 className="mb-0">Have other questions?</h4>
-										<span>
-											Send us a mail via:{' '}
-											<Link
-												to="https://codescandy.com/contact-us/"
-												target="_blank"
-											>
-												support@example.com
-											</Link>
-										</span>
-									</div>
-								</Card.Body>
-							</Card>
-						</Col>
-					</Row>
-				</Container>
-			</section>
+			/> */}
+			<FooterWithLinks />
 		</Fragment>
 	);
 };

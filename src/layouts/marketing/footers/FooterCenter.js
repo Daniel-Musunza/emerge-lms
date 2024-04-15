@@ -52,7 +52,7 @@ const FooterCenter = () => {
 						</div>
 					</Col>
 					<Col lg={8} md={12} sm={12}>
-						<span>© 2023 EmergeLMS-UI, Inc. All Rights Reserved</span>
+						<span>© 2023 Daruur LMS, Inc. All Rights Reserved</span>
 					</Col>
 				</Row>
 			</Container>

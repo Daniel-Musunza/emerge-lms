@@ -64,19 +64,25 @@ const CourseCard = ({
 			await dispatch(bookmarkCourse(bookmarkData));
 			toast.success("Course Added to Bookmarked");
 		};
-
 		const courseData = {
 			courseId: item.id,
 			studentId
 		}
-
 		const { data: courseAnalytics } = useQuery(
 			['courseAnalytics', token, courseData],
 			() => courseService.getCourseAnalytics(token, courseData)
 		);
-		
-		const courseURL = `/marketing/courses/course-resume/${item.content.id}/${item.id}`;
+		const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
+			['paidCourses', token, studentId],
+			() => courseService.getPaidCourses(token, studentId)
+		);
+	
 
+		let paidIDs = paidCourses?.data.map(course => course.course.id);
+
+		// Initialize courseURL
+		const courseURL = paidIDs?.includes(item.id) ? `/marketing/courses/course-resume/${item.content.id}/${item.id}` : '';
+		// const courseURL = `/marketing/courses/course-resume/${item.content.id}/${item.id}`;
 		return (
 			<Card className={`mb-4 card-hover ${extraclass}`}>
 				<Link to={user ? courseURL : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
@@ -178,7 +184,7 @@ const CourseCard = ({
 						{' '}
 						<ProgressBar
 							variant="success"
-							now={40}
+							now={courseAnalytics?.data?.coursePercentage}
 							className="mt-3"
 							style={{ height: '5px' }}
 						/>

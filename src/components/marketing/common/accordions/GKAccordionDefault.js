@@ -1,5 +1,6 @@
 // import node module libraries
 import React, { useContext, Fragment, useState, useEffect } from 'react';
+import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -16,11 +17,14 @@ import { mdiPlay } from '@mdi/js';
 
 import { fetchCourseContents } from '../../../dashboard/features/courseContents/courseContentSlice';
 
+import courseService from '../../../dashboard/features/courses/courseService';
 
-const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selectedItemId, setSelectedItemId }) => {
+import studentAction from 'store/studentAction';
+
+const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selectedItemId, setSelectedItemId, courseId }) => {
 	const ContextAwareToggle = ({ children, eventKey, callback }) => {
 		const { activeEventKey } = useContext(AccordionContext);
-		
+
 		const decoratedOnClick = useAccordionButton(
 			eventKey,
 			() => callback && callback(eventKey)
@@ -53,10 +57,39 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 	const { user } = useSelector(
 		(state) => state.auth
 	);
+
+	const token = user?.data.accessToken;
+
+	const { data: studentData } = useQuery(
+		['studentData', token],
+		() => studentAction.getStudentData(token)
+	);
+
+	const studentId = studentData?.data?.id;
+
 	const { courseContents, isLoading } = useSelector(
 		(state) => state.courseContents
 	);
 
+	const courseData = {
+		courseId,
+		studentId
+	}
+
+
+	const { data: courseAnalytics } = useQuery(
+		['courseAnalytics', token, courseData],
+		() => courseService.getCourseAnalytics(token, courseData)
+	);
+
+	console.log(courseAnalytics?.data);
+
+	const sectionProgress = courseAnalytics?.data?.courseManager.progress.map((item) => (
+		{
+			id: item.id,
+			progress: item.progress
+		}
+	))
 
 	const handleModuleSelect = async (id, e) => {
 		e.preventDefault();
@@ -128,14 +161,24 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 										</ListGroup>
 									</Accordion>
 								)}
-								{user && (
-									<button disabled={item.locked} key={index} style={{ border: 'none', borderRadius: '5px' }}>
-										{item.locked ? (
-											<span style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</span>
-										) : (
-											<Link to={`/marketing/student/quiz/${item.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</Link>
-										)}
+
+
+								{item?.progress < 80 ? (
+									<Link to={`/marketing/student/quiz/${item.id}`}>
+										<button key={index} style={{ border: 'none', borderRadius: '5px', textDecoration: 'none', color: 'inherit', backgroundColor: '754FFE' }}>Attempt Quiz</button>
+									</Link>
+								) : (
+									<button
+										key={index}
+										style={{
+											border: 'none',
+											borderRadius: '5px',
+											opacity: 0.5, // Reduce opacity when disabled
+										}}
+									>
+										<span style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</span>
 									</button>
+
 								)}
 
 							</ListGroup.Item>
