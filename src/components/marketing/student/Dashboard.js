@@ -9,6 +9,7 @@ import courseService from '../../dashboard/features/courses/courseService';
 import Spinner from '../../Spinner';
 import StatRightBadge from '../common/stats/StatRightBadge';
 import { Link } from 'react-router-dom';
+import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 
 const StudentDashboard = () => {
     const { user } = useSelector(state => state.auth);
@@ -69,8 +70,8 @@ const StudentDashboard = () => {
                             <StatRightBadge
                                 title="General Learning progress"
                                 subtitle="Recent course score"
-                                value="Good"
-                                badgeValue="80%"
+                                value="0"
+                                badgeValue="0"
                                 colorVariant="success"
                             />
                         </Col>
@@ -79,7 +80,7 @@ const StudentDashboard = () => {
                                 title="Quizes Attempted"
                                 subtitle="Quizes to attempt"
                                 value="0"
-                                badgeValue="12"
+                                badgeValue="0"
                                 colorVariant="info"
                             />
                         </Col>
@@ -221,6 +222,7 @@ const StudentDashboard = () => {
                     </Row>
                 </Container>
             </section>
+            <FooterWithLinks />
         </Fragment>
     );
 };

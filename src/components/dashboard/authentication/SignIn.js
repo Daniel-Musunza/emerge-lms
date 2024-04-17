@@ -50,11 +50,9 @@ const SignIn = () => {
 		};
 		try {
 			await dispatch(login(formData));
-
-			if (isSuccess) {
-				toast.success("Success...");
-			}
+			toast.success("Success...");
 		} catch (error) {
+			console.log(error);
 			toast.error("Failed!! confirm your email or password");
 		}
 	};

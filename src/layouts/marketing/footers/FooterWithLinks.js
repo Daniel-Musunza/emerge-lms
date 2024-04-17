@@ -30,9 +30,7 @@ const FooterWithLinks = () => {
 								<Image src={FooterLogo} alt="" className="logo-inverse" style={{ width: '40px', height: 'auto' }} />
 								<div className="mt-4">
 									<p>
-										emerge is feature-rich components and beautifully Bootstrap
-										UIKit for developers, built with bootstrap responsive
-										framework.
+									Daruur Learning Management system offers a transformative journey of self-discovery and career advancement through cutting-edge courses, empowering individuals to unlock their potential and shape their future with confidence.
 									</p>
 									{/* social media */}
 									<div className="fs-4 mt-4">
@@ -59,20 +57,25 @@ const FooterWithLinks = () => {
 									className="nav nav-footer flex-column nav-x-0"
 								>
 									<ListGroup.Item as="li" bsPrefix=" ">
+										<Link to="/" className="nav-link">
+											Home
+										</Link>
+									</ListGroup.Item>
+									{/* <ListGroup.Item as="li" bsPrefix=" ">
 										<Link to="/marketing/pages/about/" className="nav-link">
 											About
 										</Link>
-									</ListGroup.Item>
+									</ListGroup.Item> */}
 									<ListGroup.Item as="li" bsPrefix=" ">
 										<Link to="/marketing/pages/pricing/" className="nav-link">
 											Pricing
 										</Link>
 									</ListGroup.Item>
-									<ListGroup.Item as="li" bsPrefix=" ">
+									{/* <ListGroup.Item as="li" bsPrefix=" ">
 										<Link to="/marketing/blog/listing/" className="nav-link">
 											Blog
 										</Link>
-									</ListGroup.Item>
+									</ListGroup.Item> */}
 									<ListGroup.Item as="li" bsPrefix=" ">
 										<Link to="/marketing/pages/career/career/Career" className="nav-link">
 											Careers
@@ -101,25 +104,25 @@ const FooterWithLinks = () => {
 										</Link>
 									</ListGroup.Item>
 									<ListGroup.Item as="li" bsPrefix=" ">
-										<Link to="#" className="nav-link">
+										<Link to="/marketing/pages/become-instructor" className="nav-link">
 											Become Instructor
 										</Link>
 									</ListGroup.Item>
 									<ListGroup.Item as="li" bsPrefix=" ">
-										<Link to="#" className="nav-link">
+										<Link to="/marketing/pages/get-the-app/" className="nav-link">
 											Get the app
 										</Link>
 									</ListGroup.Item>
-									<ListGroup.Item as="li" bsPrefix=" ">
+									{/* <ListGroup.Item as="li" bsPrefix=" ">
 										<Link to="#" className="nav-link">
 											FAQ’s
 										</Link>
-									</ListGroup.Item>
-									<ListGroup.Item as="li" bsPrefix=" ">
+									</ListGroup.Item> */}
+									{/* <ListGroup.Item as="li" bsPrefix=" ">
 										<Link to="#" className="nav-link">
 											Tutorial
 										</Link>
-									</ListGroup.Item>
+									</ListGroup.Item> */}
 								</ListGroup>
 							</div>
 						</Col>
@@ -127,9 +130,9 @@ const FooterWithLinks = () => {
 							{/* contact info */}
 							<div className="mb-4">
 								<h3 className="fw-bold mb-3">Get in touch</h3>
-								<p>339 McDermott Points Hettingerhaven, NV 15283</p>
+								<p>Dalal House, Sir Mbarak Hinawy Road - Fort Jesus, Mombasa, Kenya .</p>
 								<p className="mb-1">
-									Email: <Link to="#">support@emergesui.com</Link>
+									Email: <Link to="#">support@daruurlms.com</Link>
 								</p>
 								<p>
 									Phone:{' '}

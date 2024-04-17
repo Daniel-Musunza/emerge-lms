@@ -36,8 +36,7 @@ const SignUp = () => {
 				password: password
 			};
 			try {
-			const response = await dispatch(register(formData));
-				if (response.status === 200) {
+			 await dispatch(register(formData));
 					toast.success('Success... We have just sent you an email. Please verify your account and proceed to login.', {
 						containerClass: 'larger-toast-container'
 					});
@@ -45,9 +44,7 @@ const SignUp = () => {
 					setTimeout(function () {
 						window.close(); // Close the window upon successful verification
 					}, 10000); // 10 seconds delay (10000 milliseconds)
-				} else {
-					toast.error("Registration failed");
-				}
+			
 			} catch (error) {
 				if (error.response && error.response.status === 409) {
 					toast.error("Email is already registered. Please use a different email address.", {

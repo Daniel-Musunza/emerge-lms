@@ -51,7 +51,7 @@ const Contact = () => {
 									</p>
 									<p className="fs-4">
 										<EnvelopeOpen size={16} className="text-primary me-2" />{' '}
-										hello@geekui.com
+										hello@daruurlms.com
 									</p>
 									<p className="fs-4 ">
 										<GeoAlt size={17} className="text-primary me-2" /> 2652

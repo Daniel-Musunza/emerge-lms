@@ -42,6 +42,7 @@ import Spinner from '../../../../Spinner';
 // import data files
 import { CourseIndex } from 'data/marketing/CourseIndexData';
 import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
+import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 
 const CourseSingle = () => {
 	const dispatch = useDispatch();
@@ -51,7 +52,7 @@ const CourseSingle = () => {
 	let { id, courseId } = useParams();
 	const user = JSON.parse(localStorage.getItem('user'));
 	const [selectedItemId, setSelectedItemId] = useState(null);
-	
+
 	const token = user?.data.accessToken;
 
 	const { data: studentData } = useQuery(
@@ -308,11 +309,12 @@ const CourseSingle = () => {
 										<del className="fs-4 text-muted">${thisCourse?.price + 200}</del>
 									</div>
 									<div className="d-grid">
-										<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
-											Get Full Access
-										</Link>
-										{paymentSection && (
+
+										{paymentSection ? (
 											<>
+												<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
+													See Less
+												</Link>
 												<input
 													type='number'
 													min="0"
@@ -330,6 +332,10 @@ const CourseSingle = () => {
 													Pay for this course
 												</Link>
 											</>
+										) : (
+											<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
+												Get Full Access
+											</Link>
 										)}
 
 									</div>
@@ -397,7 +403,7 @@ const CourseSingle = () => {
 											<h4 className="mb-0">{thisCourse?.tutorName}</h4>
 											<p className="mb-1 fs-6">{thisCourse?.category}</p>
 											<span className="fs-6">
-												<span className="text-warning">4.5</span>
+												<span className="text-warning"></span>
 												<span className="mdi mdi-star text-warning me-2"></span>
 												Instructor Rating
 											</span>
@@ -406,19 +412,19 @@ const CourseSingle = () => {
 									<Row className="border-top mt-3 border-bottom mb-3 g-0">
 										<Col>
 											<div className="pe-1 ps-2 py-3">
-												<h5 className="mb-0">11,604</h5>
+												<h5 className="mb-0">0</h5>
 												<span>Students</span>
 											</div>
 										</Col>
 										<Col className="border-start">
 											<div className="pe-1 ps-3 py-3">
-												<h5 className="mb-0">32</h5>
+												<h5 className="mb-0">1</h5>
 												<span>Courses</span>
 											</div>
 										</Col>
 										<Col className="border-start">
 											<div className="pe-1 ps-3 py-3">
-												<h5 className="mb-0">12,230</h5>
+												<h5 className="mb-0">0</h5>
 												<span>Reviews</span>
 											</div>
 										</Col>
@@ -456,6 +462,7 @@ const CourseSingle = () => {
 					</div>
 				</Container>
 			</section>
+			<FooterWithLinks />
 		</Fragment>
 	);
 };

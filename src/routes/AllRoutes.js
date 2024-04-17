@@ -118,6 +118,8 @@ import VerifyEmail from 'components/dashboard/authentication/verifyEmail';
 
 import CheckLoggedIn from './CheckLoggedIn';
 import HelpCenterLayout from 'layouts/marketing/HelpCenterLayout';
+import GetApp from 'components/marketing/pages/GetApp';
+import BecomeAnInstructor from 'components/marketing/pages/BecomeInstructor';
 
 // Inside the route or navigation logic
 
@@ -216,6 +218,9 @@ const AllRoutes = () => {
 			<Route path="/marketing/pages/contact/" element={<Contact />} />
 			<Route path="/marketing/blog/sidebar/" element={<BlogSidebar />} />
 			<Route path="/marketing/pages/pricing/" element={<Pricing />} />
+			<Route path="/marketing/pages/get-the-app/" element={<GetApp />} />
+			<Route path="/marketing/pages/become-instructor/" element={<BecomeAnInstructor />} />
+			
 				<Route
 					path="/marketing/blog/article-single/:id"
 					element={<BlogArticleSingle />}
