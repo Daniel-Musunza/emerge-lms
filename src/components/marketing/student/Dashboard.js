@@ -70,8 +70,8 @@ const StudentDashboard = () => {
                             <StatRightBadge
                                 title="General Learning progress"
                                 subtitle="Recent course score"
-                                value="0"
-                                badgeValue="0"
+                                value="Good Start"
+                                badgeValue="0%"
                                 colorVariant="success"
                             />
                         </Col>
@@ -166,7 +166,7 @@ const StudentDashboard = () => {
                                                             </Row>
                                                         ) : (
 
-                                                            <p style={{ textAlign: 'center' }}>you have zero bookamrked courses
+                                                            <p style={{ textAlign: 'center' }}>you have zero bookmarked courses
                                                                 <Nav.Link
                                                                     eventKey="all"
                                                                     className="mb-sm-3 mb-md-0"

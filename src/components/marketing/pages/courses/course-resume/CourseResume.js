@@ -108,13 +108,13 @@ export const CourseResume = () => {
 				courseId: courseId,
 				studentId: studentData?.data?.id
 			}
-			console.log(bookmarkData)
 			await dispatch(bookmarkCourse(bookmarkData));
 			toast.success("Course Added to Bookmarks");
 		} catch (err) {
 			toast("Failed to Bookmark");
 		}
 	};
+	
 	const [read, setRead] = useState(localStorage.getItem(selectedContent?.id) || false); // Initialize read as false initially
 	const [pdfUrl, setPdfUrl] = useState(null); // Initialize read as false initially
 
@@ -220,7 +220,7 @@ export const CourseResume = () => {
 						<Card>
 							<Card.Header>
 
-								<section className="bg-primary" style={{ padding: '10px', margin: '10px', width: 'fit-content', borderRadius: '5px' }}>
+								{/* <section className="bg-primary" style={{ padding: '10px', margin: '10px', width: 'fit-content', borderRadius: '5px' }}>
 									<Container>
 
 										<Row className="align-items-center">
@@ -248,7 +248,7 @@ export const CourseResume = () => {
 											</Col>
 										</Row>
 									</Container>
-								</section>
+								</section> */}
 								<h4 className="mb-0">Table of Content</h4>
 							</Card.Header>
 							{/* Course Index Accordion */}

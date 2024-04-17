@@ -49,6 +49,7 @@ const CourseSingle = () => {
 	const navigate = useNavigate();
 
 
+	const [loading, setLoading] = useState(null);
 	let { id, courseId } = useParams();
 	const user = JSON.parse(localStorage.getItem('user'));
 	const [selectedItemId, setSelectedItemId] = useState(null);
@@ -101,14 +102,25 @@ const CourseSingle = () => {
 		return
 	};
 
-	const AddToBookmark = async (e) => {
+	const addToBookmark = async (e) => {
 		e.preventDefault();
+		setLoading(true); // Set loading state to true before dispatching action
+
 		const bookmarkData = {
-			courseId: courseId,
-			studentId: studentData?.data?.id
+			courseId: thisCourse?.id, // Assuming course ID is accessible from thisCourse
+			studentId: studentId // Assuming student ID is passed as props
+		};
+
+		try {
+			// Dispatching action to bookmark the course
+			await dispatch(bookmarkCourse(bookmarkData));
+			toast.success("Course Added to Bookmarks"); // Display success message
+		} catch (error) {
+			console.error(error); // Log any errors
+			toast.error("Failed to add course to Bookmarks"); // Display error message
 		}
-		await dispatch(bookmarkCourse(bookmarkData));
-		toast.success("Course Added to Bookmarks");
+
+		setLoading(false); // Set loading state back to false after dispatching action
 	};
 
 	const [mpesaPhone, setMpesaPhone] = useState(null); // Use parentheses instead of square brackets
@@ -166,23 +178,29 @@ const CourseSingle = () => {
 											Bookmarked
 										</div>
 									) : (
-										<GKTippy content="Add to Bookmarks" >
-											<div
-												className="bookmark text-white text-decoration-none"
-												onClick={AddToBookmark}
-											>
-												<i className="fe fe-bookmark text-white-50 me-2"></i>
-												Bookmark
-											</div>
-										</GKTippy>
+										<>
+											{loading ? (
+												<h4>Bookmarking...</h4>
+											) : (
+												<GKTippy content="Add to Bookmarks" >
+													<div
+														className="bookmark text-white text-decoration-none"
+														onClick={addToBookmark} // Call addToBookmark function on click
+													>
+														<i className="fe fe-bookmark text-white-50 me-2"></i>
+														Bookmark
+													</div>
+												</GKTippy>
+											)}
+										</>
 									)}
 									<span className="text-white ms-3">
-										<i className="fe fe-user text-white-50"></i> 1200 Enrolled{' '}
+										<i className="fe fe-user text-white-50"></i> 0 Enrolled{' '}
 									</span>
 									<span className="ms-4">
 										<span className="text-warning">
-											<Ratings rating={4.5} />
-											<span className="text-white ms-1">(140)</span>
+											<Ratings rating={0} />
+											<span className="text-white ms-1">(0)</span>
 										</span>
 									</span>
 									<span className="text-white ms-4 d-none d-md-block">
@@ -221,6 +239,7 @@ const CourseSingle = () => {
 										<span className="align-middle">Intermediate</span>
 									</span>
 								</div>
+								);
 							</div>
 						</Col>
 					</Row>

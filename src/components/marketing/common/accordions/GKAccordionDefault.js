@@ -82,14 +82,10 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 		() => courseService.getCourseAnalytics(token, courseData)
 	);
 
-	console.log(courseAnalytics?.data);
+	const sectionProgress = courseAnalytics?.data?.progress || [];
 
-	const sectionProgress = courseAnalytics?.data?.courseManager.progress.map((item) => (
-		{
-			id: item.id,
-			progress: item.progress
-		}
-	))
+	// Check if section progress is less than 80%
+	const sectionComplete = sectionProgress.some(item => item.id === item.id && item.progress < 80);
 
 	const handleModuleSelect = async (id, e) => {
 		e.preventDefault();
@@ -163,7 +159,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 								)}
 
 
-								{item?.progress < 80 ? (
+								{sectionComplete ? (
 									<Link to={`/marketing/student/quiz/${item.id}`}>
 										<button key={index} style={{ border: 'none', borderRadius: '5px', textDecoration: 'none', color: 'inherit', backgroundColor: '754FFE' }}>Attempt Quiz</button>
 									</Link>

@@ -37,7 +37,7 @@ const CourseCard = ({
 	const GridView = () => {
 		const dispatch = useDispatch();
 		const user = JSON.parse(localStorage.getItem('user'));
-
+		const [loading, setLoading] = useState(null);
 		const token = user?.data.accessToken;
 
 		const { data: studentData } = useQuery(
@@ -54,35 +54,52 @@ const CourseCard = ({
 
 		let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
 
+		const AddToBookmark = async (e, courseId) => {
+			e.preventDefault();
+			setLoading(true); // Set loading state to true before dispatching action
 
-		const AddToBookmark = async (courseId) => {
 			const bookmarkData = {
-				courseId: courseId,
-				studentId: studentId // Assuming studentId is defined somewhere
+				courseId: courseId, // Assuming course ID is accessible from thisCourse
+				studentId: studentId // Assuming student ID is passed as props
 			};
 
-			await dispatch(bookmarkCourse(bookmarkData));
-			toast.success("Course Added to Bookmarked");
+			try {
+				// Dispatching action to bookmark the course
+				await dispatch(bookmarkCourse(bookmarkData));
+
+				toast.success("Course Added to Bookmarks"); // Display success message
+			} catch (error) {
+				console.error(error); // Log any errors
+				toast.error("Failed to add course to Bookmarks"); // Display error message
+			}
+
+			setLoading(false); // Set loading state back to false after dispatching action
 		};
+		
+		const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
+			['paidCourses', token, studentId],
+			() => courseService.getPaidCourses(token, studentId)
+		);
+
+
+		let paidIDs = paidCourses?.data.map(course => course.course.id);
+
 		const courseData = {
 			courseId: item.id,
 			studentId
 		}
 		const { data: courseAnalytics } = useQuery(
 			['courseAnalytics', token, courseData],
-			() => courseService.getCourseAnalytics(token, courseData)
+			() => courseService.getCourseAnalytics(token, courseData),
+			{
+				enabled: paidIDs?.includes(item.id) // Set enabled to true only if item.id is in paidIDs
+			}
 		);
-		const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
-			['paidCourses', token, studentId],
-			() => courseService.getPaidCourses(token, studentId)
-		);
-	
-
-		let paidIDs = paidCourses?.data.map(course => course.course.id);
 
 		// Initialize courseURL
 		const courseURL = paidIDs?.includes(item.id) ? `/marketing/courses/course-resume/${item.content.id}/${item.id}` : '';
 		// const courseURL = `/marketing/courses/course-resume/${item.content.id}/${item.id}`;
+
 		return (
 			<Card className={`mb-4 card-hover ${extraclass}`}>
 				<Link to={user ? courseURL : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
@@ -164,20 +181,24 @@ const CourseCard = ({
 						<Col className="col ms-2">
 							<span>{item.tutorName}</span>
 						</Col>
+
 						{bookmarkedIDs && bookmarkedIDs.includes(item?.id) ? (
 							<div>
 								{/* Display the content for bookmarked courses */}
 							</div>
 						) : (
 							<Col xs="auto" style={{ cursor: 'pointer' }}>
-								<GKTippy content="Add to Bookmarks">
-									<div onClick={() => AddToBookmark(item?.id)}>
-										<i className="fe fe-bookmark"></i>
-									</div>
-								</GKTippy>
+								{loading ? (
+									<h4>Bookmarking...</h4>
+								) : (
+									<GKTippy content="Add to Bookmarks" >
+										<div onClick={(e) => AddToBookmark(e, item?.id)}>
+											<i className="fe fe-bookmark"></i>
+										</div>
+									</GKTippy>
+								)}
 							</Col>
 						)}
-
 
 					</Row>
 					<span className={`${showprogressbar ? '' : 'd-none'}`}>

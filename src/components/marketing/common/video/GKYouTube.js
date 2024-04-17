@@ -42,7 +42,6 @@ const GKYouTube = (props) => {
         videoViewedTime: totalWatchedTime
       };
 
-      console.log(requestBody);
 
       try {
         await dispatch(postProgress(requestBody));

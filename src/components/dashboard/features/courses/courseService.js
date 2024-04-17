@@ -13,6 +13,9 @@ const getBookmarkedCourses = async (token, studentId) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
+
+	// console.log(token+ " "+ studentId);
+
 	const response = await axios.get(API_URL + 'course-manager/bookmarked/' + studentId, config);
 	return response.data;
 };
@@ -33,6 +36,7 @@ const bookmarkCourse = async ( token, Data) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
+
 	const response = await axios.post(API_URL+ 'course-manager/bookmark', Data, config);
 	return response.data;
 };
@@ -53,15 +57,12 @@ const getCourseAnalytics = async (token, courseData) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
-	// /api/v1/course-manager/single/{courseId}/{studentId}
-	
 	const response = await axios.get(API_URL + `course-manager/single/${courseData.courseId}/${courseData.studentId}`, config);
 	
-	const managerId = response?.data
+	const managerId = response?.data.data.courseManager.id
 
 	const response2 = await axios.get(API_URL + `course-manager/progress/${managerId}`, config);
 
-	console.log(response2.data);
 	return response2.data;
 
 };
