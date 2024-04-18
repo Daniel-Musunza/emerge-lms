@@ -31,6 +31,7 @@ const StudentDashboard = () => {
     );
 
     let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
+    
     const { data: courses, isLoading: coursesLoading } = useQuery(
         ['courses'],
         courseService.getCourses

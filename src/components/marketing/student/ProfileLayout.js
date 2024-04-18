@@ -7,6 +7,7 @@ import { Row, Col, Container, Nav, Navbar, Spinner } from 'react-bootstrap';
 
 import { logout } from '../../dashboard/features/auth/authSlice';
 import courseService from '../../dashboard/features/courses/courseService';
+import studentAction from 'store/studentAction';
 import courseModuleService from '../../dashboard/features/courseModules/courseModuleService';
 // import routes file
 import {
@@ -22,8 +23,18 @@ const ProfileLayout = (props) => {
 	const dashboardData = props.dashboardData;
 
 	const { user } = useSelector(state => state.auth);
+
 	const token = user?.data?.accessToken;
-	const studentId = user?.data?.id;
+
+	const { data: studentData, isLoading: studentDataLoading } = useQuery(
+		['studentData', token],
+		() => studentAction.getStudentData(token),
+		{
+			enabled: !!token, // Only fetch data when token is available
+		}
+	);
+
+	let studentId = studentData?.data?.id;
 
 	const [openQuizSections, toggleQuizSections] = useState(false);
 	const { data: courses, isLoading: coursesLoading } = useQuery(
@@ -38,6 +49,7 @@ const ProfileLayout = (props) => {
 
 
 	let paidIDs = paidCourses?.data.map(course => course.course.id);
+
 
 	const SignOut = () => {
 		dispatch(logout());
@@ -55,11 +67,24 @@ const ProfileLayout = (props) => {
 			() => courseModuleService.getcourseModules(courseId)
 		);
 
+		const courseData = {
+			courseId,
+			studentId
+		}
+	
+	
+		const { data: courseAnalytics } = useQuery(
+			['courseAnalytics', token, courseData],
+			() => courseService.getCourseAnalytics(token, courseData)
+		);
+	
+		const sectionProgress = courseAnalytics?.data?.progress || [];
+
 		return (
 			<ul>
 				{courseModules?.data?.sections.map((y, index) => (
 					<>
-						{y?.progress < 80 ? (
+						{sectionProgress.some((x, index2) => index2 === index && x.sectionPercentage > 80) ? (
 							<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
 						) : (
 							<span style={{ border: 'none', borderRadius: '5px', opacity: 0.5 }}> {y.title}</span>
