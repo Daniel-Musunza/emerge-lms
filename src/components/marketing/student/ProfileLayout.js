@@ -37,6 +37,7 @@ const ProfileLayout = (props) => {
 	let studentId = studentData?.data?.id;
 
 	const [openQuizSections, toggleQuizSections] = useState(false);
+
 	const { data: courses, isLoading: coursesLoading } = useQuery(
 		['courses'],
 		courseService.getCourses
@@ -47,8 +48,7 @@ const ProfileLayout = (props) => {
 		() => courseService.getPaidCourses(token, studentId)
 	);
 
-
-	let paidIDs = paidCourses?.data.map(course => course.course.id);
+	let paidIDs = paidCourses?.data?.map(course => course.course.id);
 
 
 	const SignOut = () => {
@@ -60,11 +60,11 @@ const ProfileLayout = (props) => {
 		toggleQuizSections((prev) => !prev); // Use !== instead of ==
 	};
 
-	const CourseModules = ({ courseId }) => {
-		const queryKey = useMemo(() => ['courseModules', courseId], [courseId]);
+	const CourseModules = ({ courseId, courseContentId, studentId }) => {
+		const queryKey = useMemo(() => ['courseModules', courseContentId], [courseContentId]);
 		const { data: courseModules } = useQuery(
 			queryKey,
-			() => courseModuleService.getcourseModules(courseId)
+			() => courseModuleService.getcourseModules(courseContentId)
 		);
 
 		const courseData = {
@@ -72,26 +72,22 @@ const ProfileLayout = (props) => {
 			studentId
 		}
 	
-	
 		const { data: courseAnalytics } = useQuery(
 			['courseAnalytics', token, courseData],
 			() => courseService.getCourseAnalytics(token, courseData)
 		);
 	
 		const sectionProgress = courseAnalytics?.data?.progress || [];
-
 		return (
 			<ul>
 				{courseModules?.data?.sections.map((y, index) => (
 					<>
-						{sectionProgress.some((x, index2) => index2 === index && x.sectionPercentage > 80) ? (
+						{sectionProgress.some(x => x.section.id === y.id && x.sectionPercentage > 80) ? (
 							<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
 						) : (
 							<span style={{ border: 'none', borderRadius: '5px', opacity: 0.5 }}> {y.title}</span>
-
 						)}
 					</>
-
 				))}
 			</ul>
 		);
@@ -172,7 +168,7 @@ const ProfileLayout = (props) => {
 															.map((x) => (
 																<Fragment key={x.id}>
 																	<li>{x.name}</li>
-																	<CourseModules courseId={x?.content.id} />
+																	<CourseModules courseId={x?.id} courseContentId={x?.content.id} studentId={studentId}/>
 																</Fragment>
 															))}
 													</ul>

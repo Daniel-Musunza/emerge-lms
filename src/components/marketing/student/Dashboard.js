@@ -23,6 +23,7 @@ const StudentDashboard = () => {
         }
     );
 
+
     const studentId = studentData?.data?.id;
 
     const { data: bookmarkedCourses } = useQuery(
@@ -30,7 +31,7 @@ const StudentDashboard = () => {
         () => courseService.getBookmarkedCourses(token, studentId)
     );
 
-    let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
+    let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
     
     const { data: courses, isLoading: coursesLoading } = useQuery(
         ['courses'],
@@ -43,7 +44,7 @@ const StudentDashboard = () => {
     );
 
 
-    let paidIDs = paidCourses?.data.map(course => course.course.id);
+    let paidIDs = paidCourses?.data?.map(course => course.course.id);
 
     if (studentDataLoading || coursesLoading) {
         return <Spinner />;

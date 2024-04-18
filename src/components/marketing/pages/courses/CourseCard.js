@@ -52,7 +52,7 @@ const CourseCard = ({
 			() => courseService.getBookmarkedCourses(token, studentId)
 		);
 
-		let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
+		let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
 
 		const AddToBookmark = async (e, courseId) => {
 			e.preventDefault();
@@ -82,7 +82,7 @@ const CourseCard = ({
 		);
 
 
-		let paidIDs = paidCourses?.data.map(course => course.course.id);
+		let paidIDs = paidCourses?.data?.map(course => course.course.id);
 
 		const courseData = {
 			courseId: item.id,
@@ -203,6 +203,7 @@ const CourseCard = ({
 					</Row>
 					<span className={`${showprogressbar ? '' : 'd-none'}`}>
 						{' '}
+
 						<ProgressBar
 							variant="success"
 							now={courseAnalytics?.data?.coursePercentage}
