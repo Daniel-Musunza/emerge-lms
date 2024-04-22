@@ -7,11 +7,13 @@ import { isError, useQuery } from 'react-query';
 import { FormSelect } from 'components/elements/form-select/FormSelect';
 import { FlatPickr } from 'components/elements/flat-pickr/FlatPickr';
 
-
+import axios from 'axios';
 // import media files
 import {
 	updateUser
 } from '../../dashboard/features/auth/authSlice';
+import { baseUrl } from '../../../api/base';
+import { toast } from 'react-toastify';
 
 // import profile layout wrapper
 import ProfileLayout from '../student/ProfileLayout';
@@ -26,7 +28,7 @@ import Spinner from '../../Spinner';
 const EditProfile = () => {
 	const pathInfo = useLocation();
 	const navigate = useNavigate();
-	const { user, isLoading } = useSelector(
+	const { user, isLoading, isSuccess, isError } = useSelector(
 		(state) => state.auth
 	);
 	const account = pathInfo.pathname.substring(21, 11);
@@ -34,10 +36,10 @@ const EditProfile = () => {
 	const dispatch = useDispatch();
 	const token = user?.data?.accessToken;
 
-	const { data: studentData} = useQuery(
-        ['studentData', token],
-        () => studentAction.getStudentData(token)
-    );
+	let { data: studentData } = useQuery(
+		['studentData', token],
+		() => studentAction.getStudentData(token)
+	);
 
 	const [firstName, setFirstName] = useState(studentData?.data?.firstName || '');
 	const [lastName, setLastName] = useState(studentData?.data?.lastName || '');
@@ -56,6 +58,8 @@ const EditProfile = () => {
 		if (!user) {
 			navigate('/authentication/sign-in');
 		}
+
+
 	}, [user, navigate]);
 
 
@@ -67,20 +71,59 @@ const EditProfile = () => {
 		link: '/marketing/student/student-edit-profile/'
 	};
 
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
+		// Prepare form data
 		const formData = {
 			address: addressLine1,
 			birthDate: birthday, // Use the timestamp instead of the string
 			country: country,
 			firstName: firstName,
 			lastName: lastName,
-			phone: contactNumber,
-			profilePicture: photo.image
+			phone: contactNumber
 		};
-		console.log(formData)
-		await dispatch(updateUser(formData));
+
+		
+			if (photo.image) {
+
+				// Set up request headers with authorization token
+				const config = {
+					headers: {
+						Authorization: `Bearer ${token}`
+					}
+				};
+
+				// Prepare image data as FormData
+				const imageData = new FormData();
+				imageData.append('file', photo.image);
+
+				// Upload image and get returned filename
+				const response = await axios.post(`${baseUrl}files-upload`, imageData, config);
+				const url = response?.data.data.url;
+			
+				// Update user profile with uploaded image URL
+				await dispatch(updateUser({ ...formData, profilePicture: url }));
+
+
+			} else {
+				// If no photo, update user profile without image
+				await dispatch(updateUser(formData));
+			}
+			// Display success message
+
+			if (isSuccess) {
+				toast.success("Profile Updated Successfully...");
+			}else if (isError){
+				toast.error("Failed to update profile")
+			}
+			// Fetch updated student data
+			studentData = useQuery(
+				['studentData', token],
+				() => studentAction.getStudentData(token)
+			);
+		
 	};
 
 	if (isLoading) {
@@ -112,7 +155,7 @@ const EditProfile = () => {
 								className="avatar-xl rounded-circle"
 								alt="no image"
 								onClick={() => document.getElementById('upload').click()}
-								style={{cursor: 'pointer'}}
+								style={{ cursor: 'pointer' }}
 							/>
 							<input
 								id="upload"
@@ -185,11 +228,11 @@ const EditProfile = () => {
 									<Form.Group className="mb-3" controlId="formBirthday">
 										<Form.Label>Birthday</Form.Label>
 										<Form.Control
-                                            type="date"
-                                            placeholder="Date of Birth"
-                                            value={birthday ? birthday.slice(0, 10) : ''}
-                                            onChange={(e) => setBirthday(e.target.value)}
-                                        />
+											type="date"
+											placeholder="Date of Birth"
+											value={birthday ? birthday.slice(0, 10) : ''}
+											onChange={(e) => setBirthday(e.target.value)}
+										/>
 
 									</Form.Group>
 								</Col>

@@ -32,7 +32,7 @@ const StudentDashboard = () => {
     );
 
     let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
-    
+
     const { data: courses, isLoading: coursesLoading } = useQuery(
         ['courses'],
         courseService.getCourses
@@ -79,7 +79,7 @@ const StudentDashboard = () => {
                         </Col>
                         <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
-                                title="Quizes Attempted"
+                                title="Quizes Completed"
                                 subtitle="Quizes to attempt"
                                 value="0"
                                 badgeValue="0"
@@ -173,7 +173,7 @@ const StudentDashboard = () => {
                                                                     eventKey="all"
                                                                     className="mb-sm-3 mb-md-0"
                                                                 >
-                                                                   add one to bookmarks
+                                                                    add one to bookmarks
                                                                 </Nav.Link></p>
 
                                                         )}
