@@ -88,13 +88,15 @@ const CourseCard = ({
 			courseId: item.id,
 			studentId
 		}
+
 		const { data: courseAnalytics } = useQuery(
 			['courseAnalytics', token, courseData],
 			() => courseService.getCourseAnalytics(token, courseData),
 			{
-				enabled: paidIDs?.includes(item.id) // Set enabled to true only if item.id is in paidIDs
+				enabled: paidIDs?.includes(item.id) && token == true // Set enabled to true only if item.id is in paidIDs and token is truthy
 			}
 		);
+
 
 		// Initialize courseURL
 		// const courseURL = paidIDs?.includes(item.id) ? `/marketing/courses/course-resume/${item.content.id}/${item.id}` : '';
