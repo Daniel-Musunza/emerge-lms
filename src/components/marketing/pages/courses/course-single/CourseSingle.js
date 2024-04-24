@@ -68,7 +68,7 @@ const CourseSingle = () => {
 		() => courseService.getBookmarkedCourses(token, studentId)
 	);
 
-	let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
+	let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
 
 	const { data: courseModules } = useQuery(
 		['courseModules', id], // Include id and token in the query key
