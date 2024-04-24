@@ -105,7 +105,7 @@ const CourseCard = ({
 		return (
 			<Card className={`mb-4 card-hover ${extraclass}`}>
 		
-					<Link to={user ? courseURL1 : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+					<Link to={`/marketing/courses/course-resume/${item.content.id}/${item.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
 						<>
 							{item.image ? (
 								<Image
