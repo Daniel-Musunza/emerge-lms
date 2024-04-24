@@ -153,8 +153,8 @@ export const CourseResume = () => {
 	return (
 		<Fragment>
 			<NavbarDefault dashboardData={dashboardData} />
-			<main>
-				<section className="mt-6 course-container">
+			<main >
+				<section className="mt-4 course-container">
 					<Container fluid>
 						<Row>
 							<Col sm={12} md={12} lg={12}>
@@ -215,7 +215,7 @@ export const CourseResume = () => {
 					</Container>
 				</section>
 				{/*  Card */}
-				<section className="card course-sidebar " id="courseAccordion">
+				<section className="card course-sidebar mt-6" id="courseAccordion">
 					<SimpleBar style={{ maxHeight: '93vh' }}>
 						<Card>
 							<Card.Header>

@@ -97,7 +97,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 	return (
 		<Fragment >
 
-			<Accordion>
+			<Accordion >
 
 				<ListGroup as="ul" variant="flush">
 

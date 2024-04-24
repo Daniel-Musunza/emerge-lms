@@ -12,7 +12,9 @@ import { Link } from 'react-router-dom';
 import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 
 const StudentDashboard = () => {
+
     const { user } = useSelector(state => state.auth);
+
     const token = user?.data?.accessToken;
 
     const { data: studentData, isLoading: studentDataLoading } = useQuery(
@@ -22,7 +24,6 @@ const StudentDashboard = () => {
             enabled: !!token, // Only fetch data when token is available
         }
     );
-
 
     const studentId = studentData?.data?.id;
 
@@ -43,6 +44,7 @@ const StudentDashboard = () => {
         () => courseService.getPaidCourses(token, studentId)
     );
 
+    console.log(courses);
 
     let paidIDs = paidCourses?.data?.map(course => course.course.id);
 
@@ -230,20 +232,3 @@ const StudentDashboard = () => {
 };
 
 export default StudentDashboard;
-
-// {tabs.map((tab, index) => (
-//     <Tab.Pane
-//         eventKey={tab}
-//         className="pb-4 p-4 ps-0 pe-0"
-//         key={index}
-//     >
-//         <Row>
-//             {courses?.data?.courses
-//             .map((item, index) => (
-//                 <Col lg={3} md={6} sm={12} key={index}>
-//                     <CourseCard item={item} />
-//                 </Col>
-//             ))}
-//         </Row>
-//     </Tab.Pane>
-// ))}

@@ -16,7 +16,7 @@ const AcademyStats = () => {
 					>
 						<StatTopBigIcon
 							title="Qualified Instructor"
-							value="316,000+"
+							value="1"
 							iconName="award"
 							colorVariant="info"
 						/>
@@ -28,7 +28,7 @@ const AcademyStats = () => {
 					>
 						<StatTopBigIcon
 							title="Course enrolments"
-							value="1.8 Billion+"
+							value="3"
 							iconName="users"
 							colorVariant="warning"
 						/>
@@ -39,8 +39,8 @@ const AcademyStats = () => {
 						className="border-top-lg border-bottom border-end-md "
 					>
 						<StatTopBigIcon
-							title="Courses in 42 languages"
-							value="41,000+"
+							title="Courses in 3 languages"
+							value="6"
 							iconName="tv"
 							colorVariant="primary"
 						/>
@@ -48,7 +48,7 @@ const AcademyStats = () => {
 					<Col lg={3} md={6} className="border-top-lg border-bottom ">
 						<StatTopBigIcon
 							title="Online Videos"
-							value="179,000+"
+							value="20+"
 							iconName="film"
 							colorVariant="success"
 						/>

@@ -152,6 +152,15 @@ const CourseSingle = () => {
 		togglePaymentSection((prev) => !prev); // Use !== instead of ==
 	};
 
+	const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
+		['paidCourses', token, studentId],
+		() => courseService.getPaidCourses(token, studentId)
+	);
+
+
+	let paidIDs = paidCourses?.data?.map(course => course.course.id);
+
+
 	if (isLoading) {
 		return <Spinner />
 	}
@@ -278,6 +287,7 @@ const CourseSingle = () => {
 													selectContent={selectContent}
 													selectedItemId={selectedItemId}
 													setSelectedItemId={setSelectedItemId}
+													courseId={courseId}
 													itemClass="px-0"
 												/>
 
@@ -324,38 +334,49 @@ const CourseSingle = () => {
 								<Card.Body>
 									{/* Price single page */}
 									<div className="mb-3">
-										<span className="text-dark fw-bold h2 me-2">${thisCourse?.price}</span>
-										<del className="fs-4 text-muted">${thisCourse?.price + 200}</del>
+										<span className="text-dark fw-bold h2 me-2">Ksh {thisCourse?.price}</span>
+										<del className="fs-4 text-muted">Ksh {thisCourse?.price + 200}</del>
 									</div>
+
 									<div className="d-grid">
-
-										{paymentSection ? (
+										{paidIDs?.includes(thisCourse.id) ? (
 											<>
-												<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
-													See Less
-												</Link>
-												<input
-													type='number'
-													min="0"
-													placeholder='Mpesa Number'
-													style={{ marginTop: '10px', marginBottom: '10px', height: '30px', borderRadius: '3px' }}
-
-													value={mpesaPhone}
-													onChange={(e) => setMpesaPhone(e.target.value)} // Corrected the syntax
-												/>
-												<Link
-													to=""
-													className="btn btn-outline-primary"
-													onClick={HandleCoursePayment}
-												>
-													Pay for this course
+												<Link to="#" className="btn mb-2 ">
+													Course fully Paid
 												</Link>
 											</>
 										) : (
-											<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
-												Get Full Access
-											</Link>
+											<>
+												{paymentSection ? (
+													<>
+														<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
+															See Less
+														</Link>
+														<input
+															type='number'
+															min="0"
+															placeholder='Mpesa Number'
+															style={{ marginTop: '10px', marginBottom: '10px', height: '30px', borderRadius: '3px' }}
+
+															value={mpesaPhone}
+															onChange={(e) => setMpesaPhone(e.target.value)} // Corrected the syntax
+														/>
+														<Link
+															to=""
+															className="btn btn-outline-primary"
+															onClick={HandleCoursePayment}
+														>
+															Pay for this course
+														</Link>
+													</>
+												) : (
+													<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
+														Get Full Access
+													</Link>
+												)}
+											</>
 										)}
+
 
 									</div>
 								</Card.Body>
@@ -431,19 +452,19 @@ const CourseSingle = () => {
 									<Row className="border-top mt-3 border-bottom mb-3 g-0">
 										<Col>
 											<div className="pe-1 ps-2 py-3">
-												<h5 className="mb-0">0</h5>
+												<h5 className="mb-0">{thisCourse?.popularity ? thisCourse?.popularity : 0}</h5>
 												<span>Students</span>
 											</div>
 										</Col>
 										<Col className="border-start">
 											<div className="pe-1 ps-3 py-3">
-												<h5 className="mb-0">1</h5>
+												<h5 className="mb-0">{thisCourse?.tutorNoCourses ? thisCourse?.tutorNoCourses : 1}</h5>
 												<span>Courses</span>
 											</div>
 										</Col>
 										<Col className="border-start">
 											<div className="pe-1 ps-3 py-3">
-												<h5 className="mb-0">0</h5>
+												<h5 className="mb-0">{thisCourse?.tutorNoReviews ? thisCourse?.tutorNoReviews : 0}</h5>
 												<span>Reviews</span>
 											</div>
 										</Col>

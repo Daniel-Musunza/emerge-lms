@@ -18,9 +18,11 @@ import Logo from 'assets/images/brand/logo/logo.png';
 import NavbarDefaultRoutes from 'routes/marketing/NavbarDefault';
 
 const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
+
 	const isDesktop = useMediaQuery({
 		query: '(min-width: 1224px)'
 	});
+
 	const isLaptop = useMediaQuery({
 		query: '(min-width: 1024px)'
 	});
@@ -33,17 +35,19 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 				onToggle={(collapsed) => setExpandedMenu(collapsed)}
 				expanded={expandedMenu}
 				expand="lg"
-				className="navbar p-2 navbar-default py-2"
+				className="navbar p-2 navbar-default py-2 mt-5"
 			>
 				<Container fluid className="px-0 ps-2">
 
 					<div className="d-flex align-items-center">
 						<div className="me-2 position-relative d-flex justify-content-end align-items-end mt-n5">
+							
 							<Image
 								src={dashboardData.avatar}
 								className="avatar-xl rounded-circle border border-4 border-white position-relative"
 								alt=""
 							/>
+
 							{dashboardData?.verified ? (
 								<Link
 									to="#"
@@ -58,6 +62,7 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 							) : (
 								''
 							)}
+
 						</div>
 						<div className="lh-1">
 							<h2 className="mb-0">
@@ -82,6 +87,7 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 								</Link>
 							</div>
 					</div>
+
 					<Navbar.Collapse id="basic-navbar-nav">
 
 						<Nav className="navbar-nav navbar-right-wrap ms-auto d-flex nav-top-wrap">
@@ -118,6 +124,7 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 						</Nav>
 						{/* end of right side quick / shortcut menu  */}
 					</Navbar.Collapse>
+
 				</Container>
 			</Navbar>
 		</Fragment>
