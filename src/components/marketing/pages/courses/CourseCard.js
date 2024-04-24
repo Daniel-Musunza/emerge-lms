@@ -93,7 +93,7 @@ const CourseCard = ({
 			['courseAnalytics', token, courseData],
 			() => courseService.getCourseAnalytics(token, courseData),
 			{
-				enabled: paidIDs?.includes(item.id) && token? true: false// Set enabled to true only if item.id is in paidIDs and token is truthy
+				enabled: paidIDs?.includes(item.id) && token ? true : false// Set enabled to true only if item.id is in paidIDs and token is truthy
 			}
 		);
 
@@ -103,9 +103,10 @@ const CourseCard = ({
 		const courseURL1 = `/marketing/courses/course-resume/${item.content.id}/${item.id}`;
 
 		return (
+
 			<Card className={`mb-4 card-hover ${extraclass}`}>
-		
-					<Link to={`/marketing/courses/course-resume/${item.content.id}/${item.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+				{/* {paidIDs?.includes(item.id) ? (
+					<Link to={user ? courseURL1 : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
 						<>
 							{item.image ? (
 								<Image
@@ -122,7 +123,6 @@ const CourseCard = ({
 								/>
 							)}
 
-							{/* Card body  */}
 							<Card.Body>
 								<h3 className="h4 mb-2 text-truncate-line-2 ">
 									<Link to={link} className="text-inherit">
@@ -130,12 +130,9 @@ const CourseCard = ({
 									</Link>
 								</h3>
 								<ListGroup as="ul" bsPrefix="list-inline" className="mb-3">
-									{/* <ListGroup.Item as="li" bsPrefix="list-inline-item">
-							<i className="far fa-clock me-1"></i>
-							{item.duration}
-						</ListGroup.Item> */}
+					
 									<ListGroup.Item as="li" bsPrefix="list-inline-item">
-										{/* <LevelIcon level={item.level} /> */}
+								
 										<div style={{ height: '50px', display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
 
 									</ListGroup.Item>
@@ -145,14 +142,7 @@ const CourseCard = ({
 										{item.description.length > 35 ? item.description.slice(0, 35) : item.description}
 									</div>
 
-									{/* <span className="text-warning me-1 mb-1">
-							<Ratings rating={item.rating} size="0.92rem" />
-						</span>
-						<span className="text-warning me-1"> {item.rating.toFixed(1)}</span>
-						<span className="fs-6 text-muted">
-							{' '}
-							({numberWithCommas(item.ratingby)})
-						</span> */}
+							
 								</div>
 								<div
 									className={`lh-1 mt-3 ${free ||
@@ -171,6 +161,117 @@ const CourseCard = ({
 							</Card.Body>
 						</>
 					</Link>
+				) : (
+					<Link to="" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+						<>
+							{item.image ? (
+								<Image
+									src={item.image}
+									alt=""
+									className="card-img-top rounded-top-md"
+									style={{ height: '200px' }}
+								/>
+							) : (
+								<Image
+									src="noimage.jpg"
+									alt=""
+									className="card-img-top rounded-top-md"
+								/>
+							)}
+
+							<Card.Body>
+								<h3 className="h4 mb-2 text-truncate-line-2 ">
+									<Link to={link} className="text-inherit">
+										{item.name}
+									</Link>
+								</h3>
+								<ListGroup as="ul" bsPrefix="list-inline" className="mb-3">
+								
+									<ListGroup.Item as="li" bsPrefix="list-inline-item">
+								
+										<div style={{ height: '50px', display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
+
+									</ListGroup.Item>
+								</ListGroup>
+								<div className={`lh-1 d-flex align-items-center`}>
+									<div className="description">
+										{item.description.length > 35 ? item.description.slice(0, 35) : item.description}
+									</div>
+
+								</div>
+								<div
+									className={`lh-1 mt-3 ${free ||
+										item.price === undefined ||
+										item.price <= 0 ||
+										item.discount === undefined
+										? 'd-none'
+										: ''
+										}`}
+								>
+									<span className="text-dark fw-bold">
+										${item.price - item.discount}
+									</span>{' '}
+									<del className="fs-6 text-muted">Price: ${item.price}</del>
+								</div>
+							</Card.Body>
+						</>
+					</Link>
+				)} */}
+
+				<Link to={user ? courseURL1 : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
+					<div>
+						{item.image ? (
+							<Image
+								src={item.image}
+								alt=""
+								className="card-img-top rounded-top-md"
+								style={{ height: '200px' }}
+							/>
+						) : (
+							<Image
+								src="noimage.jpg"
+								alt=""
+								className="card-img-top rounded-top-md"
+							/>
+						)}
+
+						{/* Card body  */}
+						<Card.Body>
+							<h3 className="h4 mb-2 text-truncate-line-2 ">
+								<Link to={link} className="text-inherit">
+									{item.name}
+								</Link>
+							</h3>
+							<ListGroup as="ul" bsPrefix="list-inline" className="mb-3">
+
+								<ListGroup.Item as="li" bsPrefix="list-inline-item">
+									<div style={{ height: '50px', display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
+
+								</ListGroup.Item>
+							</ListGroup>
+							<div className={`lh-1 d-flex align-items-center`}>
+								<div className="description">
+									{item.description.length > 35 ? item.description.slice(0, 35) : item.description}
+								</div>
+
+							</div>
+							<div
+								className={`lh-1 mt-3 ${free ||
+									item.price === undefined ||
+									item.price <= 0 ||
+									item.discount === undefined
+									? 'd-none'
+									: ''
+									}`}
+							>
+								<span className="text-dark fw-bold">
+									${item.price - item.discount}
+								</span>{' '}
+								<del className="fs-6 text-muted">Price: ${item.price}</del>
+							</div>
+						</Card.Body>
+					</div>
+				</Link>
 				{/* Card Footer */}
 				<Card.Footer>
 					<Row className="align-items-center g-0">
@@ -216,16 +317,8 @@ const CourseCard = ({
 					</span>
 				</Card.Footer>
 				<Card.Footer>
-					<Link content="View Single Course" to={`/marketing/courses/course-single/${item?.content?.id}/${item?.id}`}>
-						<Row className="align-items-center g-0">
-							<Col xs="auto">
-
-								<div>
-									View Single Course
-								</div>
-
-							</Col>
-						</Row>
+					<Link to={`/marketing/courses/course-single/${item?.content?.id}/${item?.id}`}>
+						<div>View Single Course</div>
 					</Link>
 				</Card.Footer>
 			</Card>

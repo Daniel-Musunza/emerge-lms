@@ -81,13 +81,14 @@ const ProfileLayout = (props) => {
 		return (
 			<ul>
 				{courseModules?.data?.sections.map((y, index) => (
-					<>
-						{sectionProgress.some(x => x.section.id === y.id && x.sectionPercentage > 80) ? (
-							<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
-						) : (
-							<span style={{ border: 'none', borderRadius: '5px', opacity: 0.5 }}> {y.title}</span>
-						)}
-					</>
+					// <>
+					// 	{sectionProgress.some(x => x.section.id === y.id && x.sectionPercentage > 80) ? (
+					// 		<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
+					// 	) : (
+					// 		<span style={{ border: 'none', borderRadius: '5px', opacity: 0.5 }}> {y.title}</span>
+					// 	)}
+					// </>
+					<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
 				))}
 			</ul>
 		);
