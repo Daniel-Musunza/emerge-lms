@@ -93,7 +93,7 @@ const CourseCard = ({
 			['courseAnalytics', token, courseData],
 			() => courseService.getCourseAnalytics(token, courseData),
 			{
-				enabled: paidIDs?.includes(item.id) && token == true // Set enabled to true only if item.id is in paidIDs and token is truthy
+				enabled: paidIDs?.includes(item.id) && token? true: false// Set enabled to true only if item.id is in paidIDs and token is truthy
 			}
 		);
 

@@ -51,24 +51,35 @@ const CourseSingle = () => {
 
 	const [loading, setLoading] = useState(null);
 	let { id, courseId } = useParams();
-	const user = JSON.parse(localStorage.getItem('user'));
 	const [selectedItemId, setSelectedItemId] = useState(null);
 
-	const token = user?.data.accessToken;
+	const user = JSON.parse(localStorage.getItem('user'));
+	
+	let studentId = null;
+	let bookmarkedIDs = [];
 
-	const { data: studentData } = useQuery(
-		['studentData', token], // Include id and token in the query key
-		() => studentAction.getStudentData(token) // Pass a function that returns the data
-	);
+	let paidIDs = [];
 
-	const studentId = studentData?.data?.id;
+	if (user) {
+		const token = user?.data?.accessToken;
+		const { data: studentData } = useQuery(
+			['studentData', token],
+			() => studentAction.getStudentData(token)
+		);
+		studentId = studentData?.data?.id;
+		const { data: bookmarkedCourses } = useQuery(
+			['bookmarkedCourses', token, studentId],
+			() => courseService.getBookmarkedCourses(token, studentId)
+		);
+		bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
+		const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
+			['paidCourses', token, studentId],
+			() => courseService.getPaidCourses(token, studentId)
+		);
+		paidIDs = paidCourses?.data?.map(course => course.course.id);
+	}
 
-	const { data: bookmarkedCourses } = useQuery(
-		['bookmarkedCourses', token, studentId],
-		() => courseService.getBookmarkedCourses(token, studentId)
-	);
 
-	let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
 
 	const { data: courseModules } = useQuery(
 		['courseModules', id], // Include id and token in the query key
@@ -151,14 +162,6 @@ const CourseSingle = () => {
 	const DisplayPaymentForm = () => {
 		togglePaymentSection((prev) => !prev); // Use !== instead of ==
 	};
-
-	const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
-		['paidCourses', token, studentId],
-		() => courseService.getPaidCourses(token, studentId)
-	);
-
-
-	let paidIDs = paidCourses?.data?.map(course => course.course.id);
 
 
 	if (isLoading) {
