@@ -41,6 +41,14 @@ export const CourseResume = () => {
 	const { user } = useSelector(
 		(state) => state.auth
 	);
+
+	useEffect(() => {
+		if(!user){
+			navigate('/authentication/sign-in');
+		}
+        
+    }, [user, navigate]);
+
 	const token = user?.data.accessToken;
 
 	const { data: studentData } = useQuery(
@@ -56,7 +64,7 @@ export const CourseResume = () => {
 		() => courseService.getBookmarkedCourses(token, studentId)
 	);
 
-	let bookmarkedIDs = bookmarkedCourses?.data.map(course => course.course.id);
+	let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
 
 	const queryKey = useMemo(() => ['courseModules', id], [id]);
 

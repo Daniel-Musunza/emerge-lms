@@ -3,7 +3,7 @@ import { Fragment, useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, } from 'react-router-dom';
 import {
 	Image,
 	Card,
@@ -35,6 +35,7 @@ const CourseCard = ({
 }) => {
 	/** Used in Course Index, Course Category, Course Filter Page, Student Dashboard etc...  */
 	const GridView = () => {
+		const navigate = useNavigate();
 		const dispatch = useDispatch();
 		const user = JSON.parse(localStorage.getItem('user'));
 		const [loading, setLoading] = useState(null);
@@ -97,11 +98,10 @@ const CourseCard = ({
 			}
 		);
 
-
-		// Initialize courseURL
-		// const courseURL = paidIDs?.includes(item.id) ? `/marketing/courses/course-resume/${item.content.id}/${item.id}` : '';
-		const courseURL1 = `/marketing/courses/course-resume/${item.content.id}/${item.id}`;
-
+		const handleNavigate = (e) => {
+			e.preventDefault();
+			navigate(`/marketing/courses/course-resume/${item.content.id}/${item.id}`);
+		}
 		return (
 
 			<Card className={`mb-4 card-hover ${extraclass}`}>
@@ -218,59 +218,61 @@ const CourseCard = ({
 					</Link>
 				)} */}
 
-				<Link to={user ? courseURL1 : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-					<div>
-						{item.image ? (
-							<Image
-								src={item.image}
-								alt=""
-								className="card-img-top rounded-top-md"
-								style={{ height: '200px' }}
-							/>
-						) : (
-							<Image
-								src="noimage.jpg"
-								alt=""
-								className="card-img-top rounded-top-md"
-							/>
-						)}
+				<Link
+					to="#"
+					onClick={handleNavigate} 
+					style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
 
-						{/* Card body  */}
-						<Card.Body>
-							<h3 className="h4 mb-2 text-truncate-line-2 ">
-								<Link to={link} className="text-inherit">
-									{item.name}
-								</Link>
-							</h3>
-							<ListGroup as="ul" bsPrefix="list-inline" className="mb-3">
+					{item.image ? (
+						<Image
+							src={item.image}
+							alt=""
+							className="card-img-top rounded-top-md"
+							style={{ height: '200px' }}
+						/>
+					) : (
+						<Image
+							src="noimage.jpg"
+							alt=""
+							className="card-img-top rounded-top-md"
+						/>
+					)}
 
-								<ListGroup.Item as="li" bsPrefix="list-inline-item">
-									<div style={{ height: '50px', display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
+					{/* Card body  */}
+					<Card.Body>
+						<h3 className="h4 mb-2 text-truncate-line-2 ">
+							<Link to={link} className="text-inherit">
+								{item.name}
+							</Link>
+						</h3>
+						<ListGroup as="ul" bsPrefix="list-inline" className="mb-3">
 
-								</ListGroup.Item>
-							</ListGroup>
-							<div className={`lh-1 d-flex align-items-center`}>
-								<div className="description">
-									{item.description.length > 35 ? item.description.slice(0, 35) : item.description}
-								</div>
+							<ListGroup.Item as="li" bsPrefix="list-inline-item">
+								<div style={{ height: '50px', display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
 
+							</ListGroup.Item>
+						</ListGroup>
+						<div className={`lh-1 d-flex align-items-center`}>
+							<div className="description">
+								{item.description.length > 35 ? item.description.slice(0, 35) : item.description}
 							</div>
-							<div
-								className={`lh-1 mt-3 ${free ||
-									item.price === undefined ||
-									item.price <= 0 ||
-									item.discount === undefined
-									? 'd-none'
-									: ''
-									}`}
-							>
-								<span className="text-dark fw-bold">
-									${item.price - item.discount}
-								</span>{' '}
-								<del className="fs-6 text-muted">Price: ${item.price}</del>
-							</div>
-						</Card.Body>
-					</div>
+
+						</div>
+						<div
+							className={`lh-1 mt-3 ${free ||
+								item.price === undefined ||
+								item.price <= 0 ||
+								item.discount === undefined
+								? 'd-none'
+								: ''
+								}`}
+						>
+							<span className="text-dark fw-bold">
+								${item.price - item.discount}
+							</span>{' '}
+							<del className="fs-6 text-muted">Price: ${item.price}</del>
+						</div>
+					</Card.Body>
 				</Link>
 				{/* Card Footer */}
 				<Card.Footer>
