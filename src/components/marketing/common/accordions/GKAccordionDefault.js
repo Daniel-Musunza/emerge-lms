@@ -58,15 +58,19 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 		(state) => state.auth
 	);
 
-	const token = user?.data.accessToken;
+	let token = null;
+	let studentId = null;
 
-	const { data: studentData } = useQuery(
-		['studentData', token],
-		() => studentAction.getStudentData(token)
-	);
+	if (user) {
+		token = user?.data.accessToken;
 
-	const studentId = studentData?.data?.id;
+		const { data: studentData } = useQuery(
+			['studentData', token],
+			() => studentAction.getStudentData(token)
+		);
 
+		studentId = studentData?.data?.id;
+	}
 	const { courseContents, isLoading } = useSelector(
 		(state) => state.courseContents
 	);
@@ -78,7 +82,10 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 
 	const { data: courseAnalytics } = useQuery(
 		['courseAnalytics', token, courseData],
-		() => courseService.getCourseAnalytics(token, courseData)
+		() => courseService.getCourseAnalytics(token, courseData),
+		{
+			enabled: token ? true : false// Set enabled to true only if item.id is in paidIDs and token is truthy
+		}
 	);
 
 
@@ -178,11 +185,11 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 
 								)} */}
 
-							
-										<Link to={`/marketing/student/quiz/${item.id}`}>
-											<button key={index} style={{ border: 'none', borderRadius: '5px', textDecoration: 'none', color: 'inherit', backgroundColor: '754FFE' }}>Attempt Quiz</button>
-										</Link>
-								
+
+								<Link to={`/marketing/student/quiz/${item.id}`}>
+									<button key={index} style={{ border: 'none', borderRadius: '5px', textDecoration: 'none', color: 'inherit', backgroundColor: '754FFE' }}>Attempt Quiz</button>
+								</Link>
+
 							</ListGroup.Item>
 
 						))}

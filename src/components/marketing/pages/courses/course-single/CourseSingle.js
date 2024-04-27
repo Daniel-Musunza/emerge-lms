@@ -54,29 +54,38 @@ const CourseSingle = () => {
 	const [selectedItemId, setSelectedItemId] = useState(null);
 
 	const user = JSON.parse(localStorage.getItem('user'));
-	
+
 	let studentId = null;
 	let bookmarkedIDs = [];
 
 	let paidIDs = [];
 
+	let token = null;
+
 	if (user) {
-		const token = user?.data?.accessToken;
+		token = user?.data?.accessToken;
+
 		const { data: studentData } = useQuery(
 			['studentData', token],
 			() => studentAction.getStudentData(token)
 		);
+
 		studentId = studentData?.data?.id;
+
 		const { data: bookmarkedCourses } = useQuery(
 			['bookmarkedCourses', token, studentId],
 			() => courseService.getBookmarkedCourses(token, studentId)
 		);
+
 		bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
+
 		const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
 			['paidCourses', token, studentId],
 			() => courseService.getPaidCourses(token, studentId)
 		);
+
 		paidIDs = paidCourses?.data?.map(course => course.course.id);
+		
 	}
 
 
@@ -189,7 +198,7 @@ const CourseSingle = () => {
 										<div style={{ color: '#fff' }}>
 											Bookmarked
 										</div>
-									) : (
+									) : user ? (
 										<>
 											{loading ? (
 												<h4>Bookmarking...</h4>
@@ -205,6 +214,8 @@ const CourseSingle = () => {
 												</GKTippy>
 											)}
 										</>
+									) : (
+										<></>
 									)}
 									<span className="text-white ms-3">
 										<i className="fe fe-user text-white-50"></i> 0 Enrolled{' '}

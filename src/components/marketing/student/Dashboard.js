@@ -13,6 +13,11 @@ import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 
 const StudentDashboard = () => {
 
+    const { data: courses, isLoading: coursesLoading } = useQuery(
+        ['courses'],
+        courseService.getCourses
+    );
+
     const { user } = useSelector(state => state.auth);
 
     const token = user?.data?.accessToken;
@@ -34,17 +39,10 @@ const StudentDashboard = () => {
 
     let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
 
-    const { data: courses, isLoading: coursesLoading } = useQuery(
-        ['courses'],
-        courseService.getCourses
-    );
-
     const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
         ['paidCourses', token, studentId],
         () => courseService.getPaidCourses(token, studentId)
     );
-
-    console.log(courses);
 
     let paidIDs = paidCourses?.data?.map(course => course.course.id);
 

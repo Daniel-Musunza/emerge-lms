@@ -97,6 +97,7 @@ const EditProfile = () => {
 
 				// Prepare image data as FormData
 				const imageData = new FormData();
+				
 				imageData.append('file', photo.image);
 
 				// Upload image and get returned filename
@@ -119,10 +120,7 @@ const EditProfile = () => {
 				toast.error("Failed to update profile")
 			}
 			// Fetch updated student data
-			studentData = useQuery(
-				['studentData', token],
-				() => studentAction.getStudentData(token)
-			);
+	
 		
 	};
 
