@@ -61,11 +61,12 @@ const Payouts = () => {
 		['studentData', token], // Query key
 		() => studentAction.getStudentData(token) // Fetch function
 	);
+	
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
-		linkname: 'Create New Course',
-		link: '/marketing/instructor/add-new-course/'
+		linkname: 'Account Settings',
+		link: '/marketing/student/student-edit-profile/'
 	};
 	
 	const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (

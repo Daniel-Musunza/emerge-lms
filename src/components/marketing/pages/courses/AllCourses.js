@@ -48,7 +48,7 @@ const AllCourses = () => {
 							<div className="mb-6">
 								<h2 className="mb-1 h1">All Courses</h2>
 								<p>
-									These are all EmergeLMS Courses.
+									These are all DaruurLMS Courses.
 								</p>
 							</div>
 						</Col>

@@ -51,14 +51,14 @@ export const MostAskedFAQs = [
 	},
 	{
 		id: uuid(),
-		title: 'How do I take a EmergeLMS course?',
+		title: 'How do I take a DaruurLMS course?',
 		content: `Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
 		squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
 		quinoa nesciunt laborum eiusmod.`
 	},
 	{
 		id: uuid(),
-		title: 'How Does EmergeLMS Courses Work?',
+		title: 'How Does DaruurLMS Courses Work?',
 		content: `Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
 		squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck
 		quinoa nesciunt laborum eiusmod.`
@@ -118,7 +118,7 @@ export const SupportFAQs = [
 	},
 	{
 		id: uuid(),
-		title: 'How do I take a EmergeLMS course?',
+		title: 'How do I take a DaruurLMS course?',
 		content: `Anim pariatur cliche reprehenderit, enim eiusmod high life
 		accusamus terry richardson ad
 		squid. 3 wolf moon officia aute, non cupidatat skateboard
@@ -127,7 +127,7 @@ export const SupportFAQs = [
 	},
 	{
 		id: uuid(),
-		title: 'How Does EmergeLMS Courses Work?',
+		title: 'How Does DaruurLMS Courses Work?',
 		content: `Anim pariatur cliche reprehenderit, enim eiusmod high life
 		accusamus terry richardson ad
 		squid. 3 wolf moon officia aute, non cupidatat skateboard

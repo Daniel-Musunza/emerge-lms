@@ -5,18 +5,18 @@ import { Col, Row, Image } from 'react-bootstrap';
 
 // import media files
 import ErrorImage from 'assets/images/error/404-error-img.svg';
-
+import Logo from 'assets/images/brand/logo/logo.png';
 const Error404 = () => {
 	return (
 		<Fragment>
-			<Row className="align-items-center justify-content-center g-0 py-lg-22 py-10">
+			<Row className="align-items-center justify-content-center g-0 py-lg-12 py-10">
 				<Col
 					xl={{ offset: 1, span: 4 }}
 					lg={6}
 					md={12}
 					className="text-center text-lg-start"
 				>
-					<h1 className="display-1 mb-3">404</h1>
+					<Image src={Logo} alt="" className="w-2" />
 					<p className="mb-5 lead">
 						Oops! Sorry, we couldn’t find the page you were looking for. If you
 						think this is a problem with us, please{' '}

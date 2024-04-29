@@ -26,7 +26,7 @@ const GuidesResourcesData = [
 		id: 1,
 		categoryslug: 'getting-started',
 		title: 'Getting Started',
-		description: 'Get your Help EmergeLMS account set up in just 6 simple steps.',
+		description: 'Get your Help DaruurLMS account set up in just 6 simple steps.',
 		totalarticles: 31,
 		articles: [
 			{
@@ -50,7 +50,7 @@ const GuidesResourcesData = [
 			{
 				id: 14,
 				articleslug: 'navigating-within-the-geeks-app',
-				articletitle: 'Navigating within the EmergeLMS app',
+				articletitle: 'Navigating within the DaruurLMS app',
 				content: articleContent
 			},
 			{
@@ -145,7 +145,7 @@ const GuidesResourcesData = [
 		id: 4,
 		title: 'General Settings',
 		categoryslug: 'general-settings',
-		description: 'Get your Help EmergeLMS account set up in just 6 simple steps.',
+		description: 'Get your Help DaruurLMS account set up in just 6 simple steps.',
 		totalarticles: 6,
 		articles: [
 			{
@@ -184,7 +184,7 @@ const GuidesResourcesData = [
 		id: 5,
 		title: 'Payments',
 		categoryslug: 'payments',
-		description: 'Get your Help EmergeLMS account set up in just 6 simple steps.',
+		description: 'Get your Help DaruurLMS account set up in just 6 simple steps.',
 		totalarticles: 5,
 		articles: [
 			{
@@ -218,7 +218,7 @@ const GuidesResourcesData = [
 			{
 				id: 61,
 				articleslug: 'learn-about-geeks-docs',
-				articletitle: 'Learn about EmergeLMS Docs',
+				articletitle: 'Learn about DaruurLMS Docs',
 				content: articleContent
 			},
 			{

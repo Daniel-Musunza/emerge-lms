@@ -41,7 +41,7 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 
 					<div className="d-flex align-items-center">
 						<div className="me-2 position-relative d-flex justify-content-end align-items-end mt-n5">
-							
+
 							<Image
 								src={dashboardData.avatar}
 								className="avatar-xl rounded-circle border border-4 border-white position-relative"
@@ -71,21 +71,24 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 							<p className="mb-0 d-block">student</p>
 						</div>
 						<div className="links2">
-								<Link
-									to={dashboardData.link}
-									style={{ fontSize: '12px', margin: '2px'  }}
-								>
-									{dashboardData.linkname}
+							<Link
+								to={dashboardData.link}
+								style={{ fontSize: '10px', margin: '2px', position: 'relative', marginRight: '10px' }}
+							>
+								<button style={{ backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px' }}>{dashboardData.linkname}</button>
 
-								</Link>
-								<Link
-									to="/marketing/student/dashboard/"
-									style={{ fontSize: '12px', margin: '2px' }}
-								>
-									Courses
 
-								</Link>
-							</div>
+
+							</Link>
+							<Link
+								to="/marketing/student/dashboard/"
+								style={{ fontSize: '10px', margin: '2px', position: 'relative', marginRight: '10px' }}
+							>
+
+								<button style={{ backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px' }}>Courses</button>
+
+							</Link>
+						</div>
 					</div>
 
 					<Navbar.Collapse id="basic-navbar-nav">
@@ -113,10 +116,10 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 
 							<span
 								className={`${login
-										? isDesktop || isLaptop
-											? 'd-flex'
-											: 'd-none'
+									? isDesktop || isLaptop
+										? 'd-flex'
 										: 'd-none'
+									: 'd-none'
 									}`}
 							>
 								<QuickMenu />

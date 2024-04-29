@@ -8,14 +8,14 @@ export const DeveloperEmergeLMSData = [
 	{
 		id: uuid(),
 		image: Avatar1,
-		content: `"EmergeLMS has created an incredibly seamless experience for app design. My mind is blown fusce consequat ligula in dui congue interdum."`,
+		content: `"DaruurLMS has created an incredibly seamless experience for app design. My mind is blown fusce consequat ligula in dui congue interdum."`,
 		name: 'Ronald Richards',
 		designation: 'Payments Engineer'
 	},
 	{
 		id: uuid(),
 		image: Avatar9,
-		content: `"EmergeLMS has created an incredibly seamless experience for app design. My mind is blown fusce consequat ligula in dui congue interdum."`,
+		content: `"DaruurLMS has created an incredibly seamless experience for app design. My mind is blown fusce consequat ligula in dui congue interdum."`,
 		name: 'Ronald Richards',
 		designation: 'Payments Engineer'
 	}

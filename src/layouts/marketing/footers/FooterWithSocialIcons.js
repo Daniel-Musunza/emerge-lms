@@ -12,7 +12,7 @@ const FooterWithSocialIcons = () => {
 			<Col xl={{ offset: 1, span: 10 }} lg={12} md={12}>
 				<Row className="align-items-center mt-6 mb-4">
 					<Col md={6} xl={8} lg={8} xs={8}>
-						<p className="mb-0">© EmergeLMS. 2023.</p>
+						<p className="mb-0">© DaruurLMS. 2023.</p>
 					</Col>
 					<Col
 						md={6}

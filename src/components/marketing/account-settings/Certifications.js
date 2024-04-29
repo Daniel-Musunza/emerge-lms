@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment} from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { useQuery } from 'react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -10,7 +10,7 @@ import { Card, ListGroup, Row, Col, Form } from 'react-bootstrap';
 // import dashboard layout
 import ProfileLayout from 'components/marketing/student/ProfileLayout';
 
-const BillingInfo = () => {
+const Certifications = () => {
 	const { user } = useSelector(
 		(state) => state.auth
 	);
@@ -31,13 +31,13 @@ const BillingInfo = () => {
 			<Card className="border-0">
 				<Card.Header>
 					<div className="mb-3 mb-lg-0">
-						<h3 className="mb-0">Billing Address</h3>
+						<h3 className="mb-0">My Certifications</h3>
 						<p className="mb-0">
-							Changes to your billing infomration will take effect starting with
-							scheduled payment and will be refelected on your next invoice.
+							Certifications are earned upon completing a course.
 						</p>
 					</div>
 				</Card.Header>
+
 				<Card.Body>
 					{/* List group */}
 					<ListGroup variant="flush" className="mb-4">
@@ -52,7 +52,7 @@ const BillingInfo = () => {
 											className="me-1"
 										/>
 										<Form.Check.Label>
-											<span className="h4">Billing Address #1</span>
+											<span className="h4">Course #1</span>
 											<span className="d-block">
 												1901 Thornridge Cir. Shiloh, Hawaii 81063
 											</span>
@@ -60,9 +60,9 @@ const BillingInfo = () => {
 									</Form.Check>
 								</Col>
 								<Col xs="auto">
-									<Link to="#" className="btn btn-outline-secondary btn-sm">
-										Edit Address
-									</Link>
+									<a href="#" className="btn btn-outline-secondary btn-sm">
+										Download
+									</a>
 								</Col>
 							</Row>
 						</ListGroup.Item>
@@ -76,7 +76,7 @@ const BillingInfo = () => {
 											className="me-1"
 										/>
 										<Form.Check.Label>
-											<span className="h4">Billing Address #2</span>
+											<span className="h4">Course #2</span>
 											<span className="d-block">
 												1901 Thornridge Cir. Shiloh, Hawaii 81063
 											</span>
@@ -84,29 +84,17 @@ const BillingInfo = () => {
 									</Form.Check>
 								</Col>
 								<Col xs="auto">
-									<Link to="#" className="btn btn-outline-secondary btn-sm">
-										Edit Address
-									</Link>
+								<a href="#" className="btn btn-outline-secondary btn-sm">
+										Download
+									</a>
 								</Col>
 							</Row>
 						</ListGroup.Item>
 					</ListGroup>
-
-					{/* Add new address */}
-					<Link to="#" className="btn btn-primary mb-5">
-						{' '}
-						Add New Address{' '}
-					</Link>
-
-					<p className="mb-0">
-						Your text location determines the taxes that are applied to yout
-						bill.
-					</p>
-					<Link to="#">How do I correct my tax location?</Link>
 				</Card.Body>
 			</Card>
 		</ProfileLayout>
 	);
 };
 
-export default BillingInfo;
+export default Certifications;

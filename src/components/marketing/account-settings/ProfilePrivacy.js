@@ -34,7 +34,7 @@ const ProfilePrivacy = () => {
 						<h3 className="mb-0">Profile Privacy Settings</h3>
 						<p className="mb-0">
 							Making your profile public allow other users to see what you have
-							been learning on EmergeLMS.
+							been learning on DaruurLMS.
 						</p>
 					</div>
 				</Card.Header>

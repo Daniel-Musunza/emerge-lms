@@ -69,6 +69,7 @@ const getCourseAnalytics = async (token, courseData) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
+	
 	const response = await axios.get(API_URL + `course-manager/single/${courseData.courseId}/${courseData.studentId}`, config);
 
 	const managerId = response?.data.data.courseManager.id

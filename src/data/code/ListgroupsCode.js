@@ -168,7 +168,7 @@ export const GroupWithIconCode = `
         <div className="d-flex mt-2">
             <Image src={Avatar1} alt="" className="avatar-sm rounded-circle"/>
             <div className="ms-2">
-                <h5 className="mb-n1">EmergeLMS Courses</h5>
+                <h5 className="mb-n1">DaruurLMS Courses</h5>
                 <small>Admin</small>
             </div>
         </div>

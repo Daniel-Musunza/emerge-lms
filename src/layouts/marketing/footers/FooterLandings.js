@@ -43,7 +43,7 @@ const FooterLandings = () => {
 									Start Learning for Free
 								</Link>{' '}
 								<Link to="/authentication/sign-up" className="btn btn-info">
-									EmergeLMS for Business
+									DaruurLMS for Business
 								</Link>
 							</div>
 						</Col>

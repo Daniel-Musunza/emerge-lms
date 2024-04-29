@@ -43,11 +43,11 @@ export const CourseResume = () => {
 	);
 
 	useEffect(() => {
-		if(!user){
+		if (!user) {
 			navigate('/authentication/sign-in');
 		}
-        
-    }, [user, navigate]);
+
+	}, [user, navigate]);
 
 	const token = user?.data.accessToken;
 
@@ -122,9 +122,10 @@ export const CourseResume = () => {
 			toast("Failed to Bookmark");
 		}
 	};
-	
+
 	const [read, setRead] = useState(localStorage.getItem(selectedContent?.id) || false); // Initialize read as false initially
 	const [pdfUrl, setPdfUrl] = useState(null); // Initialize read as false initially
+	const [fullScreen, setFullScreen] = useState(null);
 
 	// Function to handle the click event and set read to true
 	const handleLinkClick = (event) => {
@@ -136,6 +137,14 @@ export const CourseResume = () => {
 
 	const closePdf = () => {
 		setPdfUrl(null);
+	}
+	const closeScreen = (event) => {
+		event.preventDefault();
+		setFullScreen(false);
+	}
+	const openFullScreen = (event) => {
+		event.preventDefault();
+		setFullScreen(true);
 	}
 
 	// Memoize props for ProfileCover component
@@ -161,6 +170,16 @@ export const CourseResume = () => {
 	return (
 		<Fragment>
 			<NavbarDefault dashboardData={dashboardData} />
+			{fullScreen && (
+				
+				<div className="pdf-full-screen" style={{ width: '100%', height: '100%', zIndex: '9999', position: 'absolute' }}>
+					
+					<div  className="close-full-screen" onClick={closeScreen}>
+						<button style={{backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px', width: '100px', height: '30px'}}>Close</button>
+					</div>
+					<PDFViewer pdfUrl={pdfUrl} />
+				</div>
+			)}
 			<main >
 				<section className="mt-4 course-container">
 					<Container fluid>
@@ -187,12 +206,20 @@ export const CourseResume = () => {
 										{selectedContent?.resources[0] && (
 											<>
 												{pdfUrl ? (
-													<div onClick={closePdf}>
-														<h3 style={{ color: 'blue', paddingLeft: '10px', cursor: 'pointer' }} className='small-screen-t-pdf view-pdf'>Close PDF</h3>
+													<div className='flex flex-col'>
+														<div onClick={closePdf}>
+														<button style={{backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px', width: '150px', height: '40px'}}>Close PDF</button>
+
+														</div>
+
+														<div onClick={openFullScreen} >
+															<h3 style={{ color: '#6343D8', paddingLeft: '10px', cursor: 'pointer' }} className='small-screen-t-pdf view-pdf'>Full Screen</h3>
+														</div>
 													</div>
+
 												) : (
 													<div onClick={handleLinkClick}>
-														<h3 style={{ color: 'blue', paddingLeft: '10px', cursor: 'pointer' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
+														<h3 style={{ color: '#6343D8', paddingLeft: '10px', cursor: 'pointer' }} className='small-screen-t-pdf view-pdf'>View Notes</h3>
 													</div>
 												)}
 
@@ -200,7 +227,7 @@ export const CourseResume = () => {
 										)}
 
 									</div>
-									<div style={{height: '80vh', overflowY: 'scroll'}}>
+									<div style={{ height: '80vh', overflowY: 'scroll' }}>
 										{pdfUrl && (
 											<div
 												className="embed-responsive position-relative w-100 d-block overflow-hidden p-0"
@@ -266,7 +293,7 @@ export const CourseResume = () => {
 								selectContent={selectContent}
 								selectedItemId={selectedItemId}
 								setSelectedItemId={setSelectedItemId}
-								courseId ={courseId }
+								courseId={courseId}
 							/>
 						</Card>
 					</SimpleBar>

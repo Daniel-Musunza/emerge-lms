@@ -135,7 +135,7 @@ const CourseCategory = () => {
 							<div className="mb-5">
 								<h2 className="mb-1">All JavaScript courses</h2>
 								<p className="mb-0">
-									EmergeLMS instructors specialize in teaching the whole scope of
+									DaruurLMS instructors specialize in teaching the whole scope of
 									JavaScript—beginner to advanced. Whether you’re interested in
 									back-end development, or app and website building, Udemy has a
 									JavaScript course for you.

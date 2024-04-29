@@ -66,16 +66,19 @@ const ProfileCover = ({ dashboardData}) => {
 							<div className="links2">
 								<Link
 									to={dashboardData.link}
-									style={{ fontSize: '12px', margin: '2px' }}
+									style={{ fontSize: '10px', margin: '2px', position: 'relative', marginRight: '10px' }}
 								>
-									{dashboardData.linkname}
+								<button style={{backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px'}}>{dashboardData.linkname}</button>
+
+									
 
 								</Link>
 								<Link
 									to="/marketing/student/dashboard/"
-									style={{ fontSize: '12px', margin: '2px' }}
+									style={{ fontSize: '10px', margin: '2px', position: 'relative', marginRight: '10px' }}
 								>
-									Courses
+									
+									<button style={{backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px'}}>Courses</button>
 
 								</Link>
 							</div>

@@ -69,7 +69,7 @@ const PositionListData = [
 		id: uuid(),
 		department: 'General & Administrative',
 		description:
-			'Recruit, retain, and enable our growing number of EmergeLMS through programs that support our people and our business.',
+			'Recruit, retain, and enable our growing number of DaruurLMS through programs that support our people and our business.',
 		jobtitles: [
 			{
 				id: uuid(),

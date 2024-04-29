@@ -100,7 +100,6 @@ import StudentQuizAttempt from 'components/marketing/student/QuizAttempt';
 import StudentQuizResult from 'components/marketing/student/QuizResult';
 
 // Account Settings
-import BillingInfo from 'components/marketing/account-settings/BillingInfo';
 import Invoice from 'components/marketing/account-settings/Invoice';
 import InvoiceDetails from 'components/marketing/account-settings/InvoiceDetails';
 import BlankLayout from 'layouts/marketing/BlankLayout';
@@ -120,9 +119,10 @@ import CheckLoggedIn from './CheckLoggedIn';
 import HelpCenterLayout from 'layouts/marketing/HelpCenterLayout';
 import GetApp from 'components/marketing/pages/GetApp';
 import BecomeAnInstructor from 'components/marketing/pages/BecomeInstructor';
+import Certifications from 'components/marketing/account-settings/Certifications';
 
 // Inside the route or navigation logic
-
+import Error404 from 'components/marketing/pages/specialty/Error404';
 
 const AllRoutes = () => {
 	return (
@@ -136,8 +136,8 @@ const AllRoutes = () => {
 					element={<Subscriptions />}
 				/>
 				<Route
-					path="/marketing/student/student-billing-info/"
-					element={<BillingInfo />}
+					path="/marketing/student/student-certifications/"
+					element={<Certifications />}
 				/>
 				<Route
 					path="/marketing/student/student-payment/"
@@ -210,7 +210,7 @@ const AllRoutes = () => {
 
 			<Route path="/marketing/pages/about/" element={<About />} />
 			<Route
-				path="/marketing/courses/course-resume/"
+				path="/marketing/courses/course-resume/:id/:courseId"
 				element={<CourseResume />}
 			/>
 			{/* Career */}
@@ -220,14 +220,14 @@ const AllRoutes = () => {
 			<Route path="/marketing/pages/pricing/" element={<Pricing />} />
 			<Route path="/marketing/pages/get-the-app/" element={<GetApp />} />
 			<Route path="/marketing/pages/become-instructor/" element={<BecomeAnInstructor />} />
-			
-				<Route
-					path="/marketing/blog/article-single/:id"
-					element={<BlogArticleSingle />}
-				/>
-				<Route path="/marketing/blog/category/" element={<BlogCategory />} />
-				<Route path="/marketing/blog/listing/" element={<BlogListing />} />
-				
+
+			<Route
+				path="/marketing/blog/article-single/:id"
+				element={<BlogArticleSingle />}
+			/>
+			<Route path="/marketing/blog/category/" element={<BlogCategory />} />
+			<Route path="/marketing/blog/listing/" element={<BlogListing />} />
+
 			{/* Routes with BlankLayout */}
 			<Route element={<BlankLayout />}>
 
@@ -241,6 +241,7 @@ const AllRoutes = () => {
 
 			{/* Routes with AcademyLayout */}
 			<Route element={<AcademyLayout />}>
+				<Route path="/marketing/specialty/404-error/" element={<Error404 />} />
 				<Route
 					path="/"
 					element={<HomeAcademy />}
@@ -339,6 +340,7 @@ const AllRoutes = () => {
 
 
 			</Route>
+
 
 			{/*Redirect*/}
 			<Route

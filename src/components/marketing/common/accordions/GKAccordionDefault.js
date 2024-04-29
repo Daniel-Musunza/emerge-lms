@@ -71,7 +71,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 
 		studentId = studentData?.data?.id;
 	}
-	const { courseContents, isLoading } = useSelector(
+	const { courseContents } = useSelector(
 		(state) => state.courseContents
 	);
 
@@ -91,13 +91,16 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 
 	const sectionProgress = courseAnalytics?.data?.progress || [];
 
+	const [isLoading, setLoading] = useState(null);
 
 	// Check if section progress is less than 80%
 	const handleModuleSelect = async (id, e) => {
 		e.preventDefault();
-
-		await dispatch(fetchCourseContents(id)); // Use `id` instead of `selectedItemId`
 		setSelectedItemId(id);
+		setLoading(true)
+		await dispatch(fetchCourseContents(id)); // Use `id` instead of `selectedItemId`
+
+		setLoading(false)
 	};
 
 
@@ -120,47 +123,47 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 								<ContextAwareToggle eventKey={item.id}>
 									{item}
 								</ContextAwareToggle>
-								{/* {isLoading && (
-									<ListGroup className="py-4" as="ul">
-										<ListGroup.Item>
-											Loading ...
-										</ListGroup.Item>
-									</ListGroup>
-								)} */}
+
 								{selectedItemId === item?.id && (
 									<Accordion className="test" eventKey={item.id}>
-
-										<ListGroup className="py-4" as="ul">
-											{courseContents
-												.map((subitem, subindex) => (
-													<ListGroup.Item
-														key={subindex}
-														as="li"
-														disabled={subitem.locked}
-														className="px-0 py-1 border-0"
-														style={{ cursor: 'pointer' }}
-													>
-														<div
-															className={`d-flex justify-content-between align-items-center text-inherit text-decoration-none`}
-															onClick={(e) => selectContent(subitem, e)}
+										{isLoading ? (
+											<p>
+												Loading ...
+											</p>
+										) : (
+											<ListGroup className="py-4" as="ul">
+												{courseContents
+													.map((subitem, subindex) => (
+														<ListGroup.Item
+															key={subindex}
+															as="li"
+															disabled={subitem.locked}
+															className="px-0 py-1 border-0"
+															style={{ cursor: 'pointer' }}
 														>
-															<div className="text-truncate ">
-																<span className="icon-shape bg-light icon-sm rounded-circle me-2">
-																	{subitem.locked ? (
-																		<i className="fe fe-lock fs-4"></i>
-																	) : (
-																		<Icon path={mdiPlay} size={0.8} />
-																	)}{' '}
-																</span>
-																<span className="fs-5">{subitem.title}</span>
+															<div
+																className={`d-flex justify-content-between align-items-center text-inherit text-decoration-none`}
+																onClick={(e) => selectContent(subitem, e)}
+															>
+																<div className="text-truncate ">
+																	<span className="icon-shape bg-light icon-sm rounded-circle me-2">
+																		{subitem.locked ? (
+																			<i className="fe fe-lock fs-4"></i>
+																		) : (
+																			<Icon path={mdiPlay} size={0.8} />
+																		)}{' '}
+																	</span>
+																	<span className="fs-5">{subitem.title}</span>
+																</div>
+																<div className="text-truncate">
+																	<span>{subitem.description}</span>
+																</div>
 															</div>
-															<div className="text-truncate">
-																<span>{subitem.description}</span>
-															</div>
-														</div>
-													</ListGroup.Item>
-												))}
-										</ListGroup>
+														</ListGroup.Item>
+													))}
+											</ListGroup>
+										)}
+
 									</Accordion>
 								)}
 

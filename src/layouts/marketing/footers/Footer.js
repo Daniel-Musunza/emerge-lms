@@ -11,7 +11,7 @@ const Footer = ({ bgColor }) => {
 				<Row className="align-items-center g-0 border-top py-2">
 					{/* Desc */}
 					<Col md={6} sm={12} className="text-center text-md-start">
-						<span>© 2024 EmergeLMS. All Rights Reserved.</span>
+						<span>© 2024 DaruurLMS. All Rights Reserved.</span>
 					</Col>
 					{/* Links */}
 					<Col md={6} sm={12}>

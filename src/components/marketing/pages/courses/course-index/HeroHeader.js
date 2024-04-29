@@ -17,7 +17,7 @@ const HeroHeader = () => {
 					<Col xl={5} lg={6} md={12}>
 						<div className="py-5 py-lg-0">
 							<h1 className="text-white display-4 fw-bold">
-								Welcome to EmergeLMS UI Learning Application
+								Welcome to DaruurLMS UI Learning Application
 							</h1>
 							<p className="text-white-50 mb-4 lead">
 								Hand-picked Instructor and expertly crafted courses, designed

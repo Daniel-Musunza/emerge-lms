@@ -15,7 +15,7 @@ export const InstructorReviewsData = [
 		designation: 'Web Developer,UK',
 		image: Avatar1,
 		content:
-			'I started at stage zero. With EmergeLMS I was able to start learning online and eventually build up enough knowledge and skills to transition into a well-paying career.',
+			'I started at stage zero. With DaruurLMS I was able to start learning online and eventually build up enough knowledge and skills to transition into a well-paying career.',
 		rating: 5.0,
 		for: 'How to easily create a website with WordPress'
 	},

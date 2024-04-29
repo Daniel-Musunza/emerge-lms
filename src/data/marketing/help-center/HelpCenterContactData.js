@@ -8,7 +8,7 @@ export const HelpCenterContactData = [
 		title: 'Contact us',
 		link: '/marketing/pages/contact/',
 		description:
-			'EmergeLMS is here to help. We can provide you with the support you need. Just contact us and our team will reply quick to you.',
+			'DaruurLMS is here to help. We can provide you with the support you need. Just contact us and our team will reply quick to you.',
 		linkname: 'Contact us'
 	},
 	{

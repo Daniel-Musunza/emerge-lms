@@ -35,12 +35,14 @@ const Security = () => {
 		() => studentAction.getStudentData(token) // Fetch function
 	);
 
+
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
-		linkname: 'Create New Course',
-		link: '/marketing/instructor/add-new-course/'
+		linkname: 'Account Settings',
+		link: '/marketing/student/student-edit-profile/'
 	};
+
 	// if(isLoading){
 	// 	return <Spinner />
 	// }
@@ -59,7 +61,7 @@ const Security = () => {
 					<h4 className="mb-0">Email Address</h4>
 					<p>
 						Your current email address is{' '}
-						<span className="text-success">stellaflores@gmail.com</span>
+						<span className="text-success">{user?.data?.email}</span>
 					</p>
 					<Form>
 						<Row>
@@ -160,7 +162,7 @@ const Security = () => {
 								<Col lg={12} md={12} sm={12} className="mt-4">
 									<p className="mb-0">
 										Can't remember your current password?{' '}
-										<Link to="#">Reset your password via email</Link>
+										<Link to="/authentication/forget-password">Reset your password via email</Link>
 									</p>
 								</Col>
 							</Row>

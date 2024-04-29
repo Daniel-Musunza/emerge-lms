@@ -7,16 +7,16 @@ export const DashboardMenu = [
 	},
 	{
 		id: 2,
-		title: 'Billing Info',
-		link: '/marketing/student/student-billing-info/',
+		title: 'Certifications',
+		link: '/marketing/student/student-certifications/',
 		icon: 'book'
 	},
-	{
-		id: 3,
-		title: 'Payment',
-		link: '/marketing/student/student-payment/',
-		icon: 'star'
-	},
+	// {
+	// 	id: 3,
+	// 	title: 'Payment',
+	// 	link: '/marketing/student/student-payment/',
+	// 	icon: 'star'
+	// },
 	{
 		id: 4,
 		title: 'Invoice',
@@ -68,12 +68,12 @@ export const AccountSettingsMenu = [
 	// 	link: '/marketing/student/student-delete-profile/',
 	// 	icon: 'trash'
 	// },
-	{
-		id: 6,
-		title: 'Linked Accounts',
-		link: '/marketing/student/student-linked-accounts/',
-		icon: 'user'
-	},
+	// {
+	// 	id: 6,
+	// 	title: 'Linked Accounts',
+	// 	link: '/marketing/student/student-linked-accounts/',
+	// 	icon: 'user'
+	// },
 	
 ];
 

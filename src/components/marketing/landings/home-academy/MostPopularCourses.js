@@ -32,7 +32,7 @@ const MostPopularCourses = () => {
 							<div className="mb-6">
 								<h2 className="mb-1 h1">Most Popular Courses</h2>
 								<p>
-									These are the most popular courses among EmergeLMS Courses.
+									These are the most popular courses among DaruurLMS Courses.
 								</p>
 							</div>
 						</Col>

@@ -132,7 +132,7 @@ function TermsAndConditions() {
 										This is a H2's perfect for the titles.
 									</h2>
 									<p className="fs-4">
-										EmergeLMS ui takes the privacy of its users very seriously. For
+										DaruurLMS ui takes the privacy of its users very seriously. For
 										the current our Privacy Policy, please click{' '}
 										<Link to="#">here</Link>.
 									</p>
