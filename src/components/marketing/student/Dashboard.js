@@ -18,6 +18,8 @@ const StudentDashboard = () => {
         courseService.getCourses
     );
 
+    console.log(courses);
+
     const { user } = useSelector(state => state.auth);
 
     const token = user?.data?.accessToken;
@@ -187,7 +189,8 @@ const StudentDashboard = () => {
                                                         {paidIDs?.length > 0 ? (
                                                             <Row>
                                                                 {courses?.data?.courses
-                                                                    .filter((item) => paidIDs?.includes(item.id))
+                                                               .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108")||(item.id === "759b9889-6912-4087-9930-edf210f378ad"))
+                                                                    // .filter((item) => paidIDs?.includes(item.id))
                                                                     .map((item, index) => (
                                                                         <Col lg={3} md={6} sm={12} key={index}>
                                                                             <CourseCard item={item} showprogressbar />

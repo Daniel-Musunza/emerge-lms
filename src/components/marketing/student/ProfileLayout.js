@@ -165,7 +165,8 @@ const ProfileLayout = (props) => {
 												{paidIDs?.length > 0 ? (
 													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
 														{courses?.data.courses
-															.filter((item) => paidIDs?.includes(item.id))
+														.filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108")||(item.id === "759b9889-6912-4087-9930-edf210f378ad"))
+															// .filter((item) => paidIDs?.includes(item.id))
 															.map((x) => (
 																<Fragment key={x.id}>
 																	<li>{x.name}</li>

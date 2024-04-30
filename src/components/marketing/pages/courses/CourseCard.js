@@ -51,14 +51,14 @@ const CourseCard = ({
 
 		useEffect(() => {
 			const fetchData = async () => {
-			  if (token) {
-				const { data } = await studentAction.getStudentData(token);
-				studentId= data?.data?.id;
-			  }
+				if (token) {
+					const { data } = await studentAction.getStudentData(token);
+					studentId = data?.data?.id;
+				}
 			};
-		  
+
 			fetchData();
-		  }, [token]);
+		}, [token]);
 
 		const { data: bookmarkedCourses } = useQuery(
 			['bookmarkedCourses', token, studentId],
@@ -118,7 +118,9 @@ const CourseCard = ({
 
 		const handleNavigate = (e) => {
 			e.preventDefault();
-			navigate(`/marketing/courses/course-resume/${item.content.id}/${item.id}`);
+			if ((item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad")) {
+				navigate(`/marketing/courses/course-resume/${item.content.id}/${item.id}`);
+			}
 		}
 		return (
 
