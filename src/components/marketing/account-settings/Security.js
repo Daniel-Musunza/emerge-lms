@@ -30,10 +30,7 @@ const Security = () => {
 	);
 
 	const token = user?.data?.accessToken;
-	const { data: studentData } = useQuery(
-		['studentData', token], // Query key
-		() => studentAction.getStudentData(token) // Fetch function
-	);
+const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 
 	const dashboardData = {

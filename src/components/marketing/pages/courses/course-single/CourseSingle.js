@@ -55,7 +55,10 @@ const CourseSingle = () => {
 
 	const user = JSON.parse(localStorage.getItem('user'));
 
-	let studentId = null;
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
+
+	let studentId = studentData?.data?.id;
+
 	let bookmarkedIDs = [];
 
 	let paidIDs = [];
@@ -65,12 +68,6 @@ const CourseSingle = () => {
 	if (user) {
 		token = user?.data?.accessToken;
 
-		const { data: studentData } = useQuery(
-			['studentData', token],
-			() => studentAction.getStudentData(token)
-		);
-
-		studentId = studentData?.data?.id;
 
 		const { data: bookmarkedCourses } = useQuery(
 			['bookmarkedCourses', token, studentId],
@@ -87,8 +84,6 @@ const CourseSingle = () => {
 		paidIDs = paidCourses?.data?.map(course => course.course.id);
 		
 	}
-
-
 
 	const { data: courseModules } = useQuery(
 		['courseModules', id], // Include id and token in the query key

@@ -36,10 +36,7 @@ const EditProfile = () => {
 	const dispatch = useDispatch();
 	const token = user?.data?.accessToken;
 
-	let { data: studentData } = useQuery(
-		['studentData', token],
-		() => studentAction.getStudentData(token)
-	);
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 	const [firstName, setFirstName] = useState(studentData?.data?.firstName || '');
 	const [lastName, setLastName] = useState(studentData?.data?.lastName || '');

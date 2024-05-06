@@ -58,19 +58,15 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 		(state) => state.auth
 	);
 
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
+
 	let token = null;
-	let studentId = null;
+	let studentId = studentData?.data?.id;
 
 	if (user) {
 		token = user?.data.accessToken;
-
-		const { data: studentData } = useQuery(
-			['studentData', token],
-			() => studentAction.getStudentData(token)
-		);
-
-		studentId = studentData?.data?.id;
 	}
+	
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
 	);

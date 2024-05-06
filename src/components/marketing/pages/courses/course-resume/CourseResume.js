@@ -51,10 +51,7 @@ export const CourseResume = () => {
 
 	const token = user?.data.accessToken;
 
-	const { data: studentData } = useQuery(
-		['studentData', token], // Include id and token in the query key
-		() => studentAction.getStudentData(token) // Pass a function that returns the data
-	);
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 	const studentId = studentData?.data?.id;
 

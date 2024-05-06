@@ -35,6 +35,16 @@ const login = async (userData) => {
 
 	if (response.data) {
 		localStorage.setItem('user', JSON.stringify(response.data));
+
+		const config = {
+			headers: {
+				Authorization: `Bearer ${token}`
+			}
+		};
+
+		const stresponse = await axios.get(baseUrl + 'students/profile', config);
+
+		localStorage.setItem('studentData', JSON.stringify(stresponse.data));
 	}
 
 	return response.data;

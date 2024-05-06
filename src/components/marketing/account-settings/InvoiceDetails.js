@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment, useRef} from 'react';
+import React, { useState, useEffect, Fragment, useRef } from 'react';
 import { useQuery } from 'react-query';
 
 import { Link, useNavigate, useParams } from 'react-router-dom';
@@ -24,10 +24,9 @@ const InvoiceDetails = () => {
 	);
 
 	const token = user?.data?.accessToken;
-	const { data: studentData } = useQuery(
-		['studentData', token], // Query key
-		() => studentAction.getStudentData(token) // Fetch function
-	);
+
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
+
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,

@@ -19,7 +19,6 @@ import Ratings from 'components/marketing/common/ratings/Ratings';
 import LevelIcon from 'components/marketing/common/miscellaneous/LevelIcon';
 import GKTippy from 'components/elements/tooltips/GKTippy';
 import { bookmarkCourse } from '../../../dashboard/features/courses/courseSlice';
-import studentAction from 'store/studentAction';
 import courseService from '../../../dashboard/features/courses/courseService';
 // import utility file
 import { numberWithCommas } from 'helper/utils';
@@ -38,49 +37,41 @@ const CourseCard = ({
 		const navigate = useNavigate();
 		const dispatch = useDispatch();
 		const user = JSON.parse(localStorage.getItem('user'));
+		const studentData = JSON.parse(localStorage.getItem('studentData'));
 		const [loading, setLoading] = useState(null);
 
-		let studentId = null;
+		let studentId = studentData?.data?.id;
 		let bookmarkedIDs = [];
 		let paidIDs = [];
 		let token = null;
-
+		
 		if (user) {
 			token = user?.data?.accessToken;
+
+			// const { data: bookmarkedCourses } = useQuery(
+		// 	['bookmarkedCourses', token, studentId],
+		// 	() => courseService.getBookmarkedCourses(token, studentId),
+		// 	{
+		// 		enabled: !!studentId,
+		// 		onSuccess: (data) => {
+		// 			bookmarkedIDs = data?.data?.map(course => course.course.id);
+		// 		}
+		// 	}
+		// );
+
+		// const { data: paidCourses } = useQuery(
+		// 	['paidCourses', token, studentId],
+		// 	() => courseService.getPaidCourses(token, studentId),
+		// 	{
+		// 		enabled: !!studentId,
+		// 		onSuccess: (data) => {
+		// 			paidIDs = data?.data?.map(course => course.course.id);
+		// 		}
+		// 	}
+		// );
 		}
-
-		useEffect(() => {
-			const fetchData = async () => {
-				if (token) {
-					const { data } = await studentAction.getStudentData(token);
-					studentId = data?.data?.id;
-				}
-			};
-
-			fetchData();
-		}, [token]);
-
-		const { data: bookmarkedCourses } = useQuery(
-			['bookmarkedCourses', token, studentId],
-			() => courseService.getBookmarkedCourses(token, studentId),
-			{
-				enabled: !!studentId,
-				onSuccess: (data) => {
-					bookmarkedIDs = data?.data?.map(course => course.course.id);
-				}
-			}
-		);
-
-		const { data: paidCourses } = useQuery(
-			['paidCourses', token, studentId],
-			() => courseService.getPaidCourses(token, studentId),
-			{
-				enabled: !!studentId,
-				onSuccess: (data) => {
-					paidIDs = data?.data?.map(course => course.course.id);
-				}
-			}
-		);
+	
+		
 
 		const AddToBookmark = async (e, courseId) => {
 			e.preventDefault();
