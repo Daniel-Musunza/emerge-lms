@@ -13,20 +13,13 @@ const VerifyEmail = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { isLoading, isError, isSuccess, message } = useSelector(
-        (state) => state.auth
-    );
-
     const { code } = useParams();
 
     const handleVerification = async () => {
         try {
             await dispatch(verifyEmail({ confirmationCode: code }));
-            // toast.success("Verification Complete", {
-            //     onClose: () => {
-            //         navigate(`/authentication/sign-in`);
-            //     }
-            // });
+            toast.success("Verification Complete");
+            navigate(`/authentication/sign-in`);
         } catch (error) {
             // Handle error cases
             toast.error("Verification failed");
@@ -35,10 +28,6 @@ const VerifyEmail = () => {
     
 
     handleVerification();
-
-    if (isLoading) {
-        return <Spinner />;
-    }
 
     return (
         <Fragment>
