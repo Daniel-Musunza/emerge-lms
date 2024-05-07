@@ -39,7 +39,7 @@ const VerifyEmail = () => {
                                 <Link to="/">
                                     <Image src={Logo} className="mb-4" alt="" style={{ width: '100px', height: 'auto', objectFit: 'cover', borderRadius: '50%' }} />
                                 </Link>
-                                <h1 className="mb-1 fw-bold">Email Verification</h1>
+                                <h1 className="mb-1 fw-bold">Email Verification Going on ...</h1>
                             </div>
                             <Form >
 
