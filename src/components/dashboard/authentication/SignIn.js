@@ -32,14 +32,6 @@ const SignIn = () => {
 	const [password, setPassword] = useState('');
 	const [visiblePassword, setVisiblePassword] = useState(false);
 
-	useEffect(() => {
-
-
-		if (user) {
-			navigate('/marketing/student/dashboard/');
-		}
-
-	}, [user, navigate]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -50,6 +42,7 @@ const SignIn = () => {
 		};
 		try {
 			await dispatch(login(formData));
+			navigate('/marketing/student/dashboard/');
 			toast.success("Success...");
 		} catch (error) {
 			console.log(error);

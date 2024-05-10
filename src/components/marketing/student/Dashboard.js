@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import { Col, Row, Nav, Tab, Card, Container } from 'react-bootstrap';
 import CourseCard from 'components/marketing/pages/courses/CourseCard';
@@ -12,27 +12,21 @@ import { Link } from 'react-router-dom';
 import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 
 const StudentDashboard = () => {
+    const [generalProgress, setGeneralProgress] = useState(null);
 
     const { data: courses, isLoading: coursesLoading } = useQuery(
         ['courses'],
         courseService.getCourses
     );
 
-    console.log(courses);
-
     const { user } = useSelector(state => state.auth);
 
     const token = user?.data?.accessToken;
 
-    const { data: studentData, isLoading: studentDataLoading } = useQuery(
-        ['studentData', token],
-        () => studentAction.getStudentData(token),
-        {
-            enabled: !!token, // Only fetch data when token is available
-        }
-    );
+    const studentData = JSON.parse(localStorage.getItem('studentData'));
 
     const studentId = studentData?.data?.id;
+
 
     const { data: bookmarkedCourses } = useQuery(
         ['bookmarkedCourses', token, studentId],
@@ -46,11 +40,69 @@ const StudentDashboard = () => {
         () => courseService.getPaidCourses(token, studentId)
     );
 
+
     let paidIDs = paidCourses?.data?.map(course => course.course.id);
 
-    if (studentDataLoading || coursesLoading) {
+    const getProgress = () => {
+        if (generalProgress > 80) {
+            return {
+                text: "Excellent, keep going!",
+                value: generalProgress
+            };
+        } else if (generalProgress < 10) {
+            return {
+                text: "Good start!",
+                value: generalProgress
+            };
+        } else if (generalProgress > 50) {
+            return {
+                text: "You're making good progress!",
+                value: generalProgress
+            };
+        } else {
+            return {
+                text: "Keep up the effort!",
+                value: generalProgress
+            };
+        }
+    };
+    
+
+    useEffect(() => {
+        if (paidIDs?.length > 0) {
+            const fetchData = async () => {
+                let totalProgress = 0; // Initialize totalProgress here
+                const coursePercentages = [];
+                const queries = paidIDs.map(async (x) => {
+                    const courseData = {
+                        courseId: x,
+                        studentId
+                    };
+                    const { data: courseAnalytics } = await courseService.getCourseAnalytics(token, courseData);
+    
+                    coursePercentages.push(courseAnalytics.coursePercentage);
+                    // Do something with courseAnalytics here
+                    return courseAnalytics;
+                });
+                const results = await Promise.all(queries);
+    
+                coursePercentages.forEach(x => {
+                    const courseP = parseFloat(x);
+                    totalProgress += courseP; // Accumulate progress here
+                });
+   
+                const avProgress = totalProgress / paidIDs?.length;
+                setGeneralProgress(avProgress);
+            };
+            fetchData();
+        }
+    }, [studentId, paidIDs, token]);
+
+
+    if (coursesLoading) {
         return <Spinner />;
     }
+
 
     const dashboardData = {
         avatar: `${studentData?.data?.profilePicture}`,
@@ -70,25 +122,7 @@ const StudentDashboard = () => {
                     {/* User info */}
                     <ProfileCover dashboardData={dashboardData} />
                     <Row style={{ marginTop: '20px' }}>
-                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
-                            <StatRightBadge
-                                title="General Learning progress"
-                                subtitle="Recent course score"
-                                value="Good Start"
-                                badgeValue="0%"
-                                colorVariant="success"
-                            />
-                        </Col>
-                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
-                            <StatRightBadge
-                                title="Quizes Completed"
-                                subtitle="Quizes to attempt"
-                                value="0"
-                                badgeValue="0"
-                                colorVariant="info"
-                            />
-                        </Col>
-                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
+                    <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
                                 title="Courses Subscribed"
                                 value={courses?.data?.courses.filter((item) => paidIDs?.includes(item.id)).length}
@@ -96,6 +130,25 @@ const StudentDashboard = () => {
                                 colorVariant="warning"
                             />
                         </Col>
+                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
+                            <StatRightBadge
+                                title="General Learning progress"
+                                subtitle="Average progress"
+                                value={`${getProgress().text}`}
+                                badgeValue={`${getProgress().value}`}
+                                colorVariant="success"
+                            />
+                        </Col>
+                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
+                            <StatRightBadge
+                                title="Certifications"
+                                subtitle="Recent certification"
+                                value="0"
+                                badgeValue="none"
+                                colorVariant="info"
+                            />
+                        </Col>
+                       
                     </Row>
                     {/* Content */}
                     <Row className="mt-0 mt-md-4">
@@ -189,7 +242,7 @@ const StudentDashboard = () => {
                                                         {paidIDs?.length > 0 ? (
                                                             <Row>
                                                                 {courses?.data?.courses
-                                                               .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108")||(item.id === "759b9889-6912-4087-9930-edf210f378ad"))
+                                                                    .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
                                                                     // .filter((item) => paidIDs?.includes(item.id))
                                                                     .map((item, index) => (
                                                                         <Col lg={3} md={6} sm={12} key={index}>
