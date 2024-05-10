@@ -134,7 +134,7 @@ const StudentDashboard = () => {
                             <StatRightBadge
                                 title="General Learning progress"
                                 subtitle="Average progress"
-                                value={`${getProgress().text}`}
+                                value={`${getProgress().value ? getProgress().text : `No progress`}`}
                                 badgeValue={`${getProgress().value}%`}
                                 colorVariant="success"
                             />
