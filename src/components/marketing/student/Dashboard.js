@@ -135,7 +135,7 @@ const StudentDashboard = () => {
                                 title="General Learning progress"
                                 subtitle="Average progress"
                                 value={`${getProgress().text}`}
-                                badgeValue={`${getProgress().value}`}
+                                badgeValue={`${getProgress().value}%`}
                                 colorVariant="success"
                             />
                         </Col>
