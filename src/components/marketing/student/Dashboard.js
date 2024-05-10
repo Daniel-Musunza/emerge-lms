@@ -33,7 +33,7 @@ const StudentDashboard = () => {
         () => courseService.getBookmarkedCourses(token, studentId)
     );
 
-    let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
+    let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
 
     const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
         ['paidCourses', token, studentId],
@@ -41,7 +41,7 @@ const StudentDashboard = () => {
     );
 
 
-    let paidIDs = paidCourses?.data?.map(course => course.course.id);
+    let paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
 
     const getProgress = () => {
         if (generalProgress > 80) {
@@ -133,7 +133,7 @@ const StudentDashboard = () => {
                         <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
                                 title="General Learning progress"
-                                subtitle="Average progress"
+                                subtitle="progress percentage"
                                 value={`${getProgress().value ? getProgress().text : `No progress`}`}
                                 badgeValue={`${getProgress().value}%`}
                                 colorVariant="success"

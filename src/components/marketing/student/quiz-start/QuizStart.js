@@ -23,6 +23,7 @@ const QuizStart = () => {
     const { sectionId, quizId } = useParams();
     const [results, setResult] = useState(null);
 
+    const [calculatingResults, setCalculatingResults] = useState(null);
     const { user } = useSelector((state) => state.auth);
     const token = user?.data?.accessToken;
     const { data: studentData } = useQuery(['studentData', token], () =>
@@ -80,6 +81,7 @@ const QuizStart = () => {
     // Function to calculate quiz result
     const calculateScore = async () => {
 
+        setCalculatingResults(true);
         const corectAnswer = await quizService.getQuizAnswer(token, { quizId: quizId, studentId: studentData?.data?.id });
 
         const resultId = corectAnswer?.id;
@@ -98,65 +100,79 @@ const QuizStart = () => {
             navigate(`/marketing/student/quiz/result/${results.score}/${results.quiz.noOfQuestions}/${results.quiz.passMark}`);
 
         } catch (error) {
+            toast.error('Error calculating result!')
             console.error('Error calculating result:', error);
         }
+       setCalculatingResults(false);
     };
 
     // Handler for finish button click
     const handleFinishQuiz = () => {
+
         calculateScore(); // Call calculateScore function
         // Additional logic to navigate or perform other actions after finishing the quiz
     };
 
     return (
         <ProfileLayout dashboardData={dashboardData}>
-            <Card className="mb-4">
-                <Card.Body>
-                    {/* Question Title + Timer */}
-                    <div className="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
-                        <div className="d-flex align-items-center">
-                            {/* quiz img */}
-                            <Link to="#">
-                                {' '}
-                                <img src="noimage.jpg" alt="" className="rounded img-4by3-lg" />
-                            </Link>
-                            {/* quiz content */}
-                            <div className="ms-3">
-                                <h3 className="mb-0">
-                                    <Link to="#" className="text-inherit">
-                                        {quiz?.data.title}{' '}
-                                    </Link>
-                                </h3>
+            {calculatingResults?(
+                <Card className="mb-4">
+                    <Card.Body>
+                        <h3>Calculating Results ...</h3>
+                    </Card.Body>
+                </Card>
+            ):(
+                <>
+                <Card className="mb-4">
+                    <Card.Body>
+                        {/* Question Title + Timer */}
+                        <div className="d-flex justify-content-between align-items-center border-bottom pb-3 mb-3">
+                            <div className="d-flex align-items-center">
+                                {/* quiz img */}
+                                <Link to="#">
+                                    {' '}
+                                    <img src="noimage.jpg" alt="" className="rounded img-4by3-lg" />
+                                </Link>
+                                {/* quiz content */}
+                                <div className="ms-3">
+                                    <h3 className="mb-0">
+                                        <Link to="#" className="text-inherit">
+                                            {quiz?.data.title}{' '}
+                                        </Link>
+                                    </h3>
+                                </div>
                             </div>
+                            {/* Timer */}
+                            <QuizTimer hours={0} minutes={5} seconds={55} results={results} />
                         </div>
-                        {/* Timer */}
-                        <QuizTimer hours={0} minutes={5} seconds={55} results={results} />
-                    </div>
-                    {currentRecords && (
-                        <>
-                            {/* Progress */}
-                            <QuizProgress
-                                currentQuestion={indexOfFirstRecord + 1}
-                                totalQuestion={QuizData?.length}
-                            />
-                            {/* Question(s) */}
-                            <div className="mt-5">
-                                <span>Question {indexOfFirstRecord + 1}</span>
-                                <Question
-                                    item={currentRecords[0]}
-                                    recordAnswer={recordAnswer} // Pass recordAnswer function as prop
+                        {currentRecords && (
+                            <>
+                                {/* Progress */}
+                                <QuizProgress
+                                    currentQuestion={indexOfFirstRecord + 1}
+                                    totalQuestion={QuizData?.length}
                                 />
-                            </div>
-                        </>
-                    )}
-                </Card.Body>
-            </Card>
-            <QuizPagination
-                nPages={nPages}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-                handleFinishQuiz={handleFinishQuiz}
-            />
+                                {/* Question(s) */}
+                                <div className="mt-5">
+                                    <span>Question {indexOfFirstRecord + 1}</span>
+                                    <Question
+                                        item={currentRecords[0]}
+                                        recordAnswer={recordAnswer} // Pass recordAnswer function as prop
+                                    />
+                                </div>
+                            </>
+                        )}
+                    </Card.Body>
+                </Card>
+                <QuizPagination
+                    nPages={nPages}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    handleFinishQuiz={handleFinishQuiz}
+                />
+                </>
+            )}
+           
         </ProfileLayout>
     );
 };

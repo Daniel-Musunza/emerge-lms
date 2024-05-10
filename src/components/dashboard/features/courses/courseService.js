@@ -19,6 +19,7 @@ const getBookmarkedCourses = async (token, studentId) => {
 		return [];
 	} else {
 		const response = await axios.get(API_URL + 'course-manager/bookmarked/' + studentId, config);
+		
 		return response.data;
 	}
 };
@@ -34,6 +35,7 @@ const getPaidCourses = async (token, studentId) => {
     } else {
         try {
             const response = await axios.get(`${API_URL}course-manager/paid/${studentId}`, config);
+			
             return response.data;
         } catch (error) {
             console.error("Error fetching paid courses:", error);
@@ -72,7 +74,8 @@ const getCourseAnalytics = async (token, courseData) => {
 	
 	const response = await axios.get(API_URL + `course-manager/single/${courseData.courseId}/${courseData.studentId}`, config);
 
-	const managerId = response?.data.data.courseManager.id
+
+	const managerId = response?.data?.data?.id
 
 	const response2 = await axios.get(API_URL + `course-manager/progress/${managerId}`, config);
 

@@ -44,11 +44,12 @@ const ProfileLayout = (props) => {
 	);
 
 	const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
-		['paidCourses', token, studentId],
-		() => courseService.getPaidCourses(token, studentId)
-	);
+        ['paidCourses', token, studentId],
+        () => courseService.getPaidCourses(token, studentId)
+    );
 
-	let paidIDs = paidCourses?.data?.map(course => course.course.id);
+
+    let paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
 
 
 	const SignOut = () => {

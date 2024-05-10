@@ -74,15 +74,14 @@ const CourseSingle = () => {
 			() => courseService.getBookmarkedCourses(token, studentId)
 		);
 
-		bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
+		bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
 
 		const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
 			['paidCourses', token, studentId],
 			() => courseService.getPaidCourses(token, studentId)
 		);
 
-		paidIDs = paidCourses?.data?.map(course => course.course.id);
-		
+		paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
 	}
 
 	const { data: courseModules } = useQuery(
