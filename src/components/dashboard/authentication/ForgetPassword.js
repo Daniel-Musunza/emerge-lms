@@ -22,9 +22,14 @@ const ForgetPassword = () => {
 		const formData = {
 			email: email
 		};
-
-		dispatch(forgotpassword(formData));
-		navigate(`/authentication/sign-in/${email}`);
+		try {
+			await dispatch(forgotpassword(formData));
+			toast("Success... please check your email to continue.")
+			navigate(`/authentication/sign-in/${email}`);
+		} catch (error) {
+			console.log(error);
+			toast.error("Failed!! confirm your email");
+		}
 	};
 
 	return (
@@ -35,7 +40,7 @@ const ForgetPassword = () => {
 						<Card.Body className="p-6">
 							<div className="mb-4 top-form">
 								<Link to="/">
-									<Image src={Logo} style={{ width: '100px', height: 'auto',  objectFit: 'cover', borderRadius: '50%' }} className="mb-4" alt=""
+									<Image src={Logo} style={{ width: '100px', height: 'auto', objectFit: 'cover', borderRadius: '50%' }} className="mb-4" alt=""
 									/>
 								</Link>
 								<h1 className="mb-1 fw-bold">Forgot Password</h1>

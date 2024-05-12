@@ -42,8 +42,9 @@ const SignIn = () => {
 		};
 		try {
 			await dispatch(login(formData));
-			navigate('/marketing/student/dashboard/');
 			toast.success("Success...");
+			navigate('/marketing/student/dashboard/');
+		
 		} catch (error) {
 			console.log(error);
 			toast.error("Failed!! confirm your email or password");

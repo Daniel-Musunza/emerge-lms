@@ -5,17 +5,17 @@ import { baseUrl } from '../../../../api/base';
 
 // Register user
 const register = async (userData) => {
-	
+
 	const response = await axios.post(baseUrl + 'auth/signup', userData);
 
 	console.log(response.data);
-	
+
 	return response.data;
 };
 
 //update User
 
-const updateUser = async (token, userData ) => {
+const updateUser = async (token, userData) => {
 
 	const config = {
 		headers: {
@@ -52,10 +52,9 @@ const login = async (userData) => {
 
 const forgotpassword = async (userData) => {
 	const response = await axios.post(
-		baseUrl + 'password-reset-request',
+		baseUrl + 'auth/password-reset-request',
 		userData
 	);
-
 	return response.data;
 };
 
