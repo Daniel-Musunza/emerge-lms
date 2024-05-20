@@ -84,11 +84,26 @@ const getCourseAnalytics = async (token, courseData) => {
 
 };
 
+const getCoursePercentage = async (token, courseData) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+
+	const response = await axios.get(API_URL + `course-score/${courseData.courseId}/${courseData.studentId}`, config);
+
+
+	return response.data;
+
+};
+
 const courseService = {
 	getCourses,
 	bookmarkCourse,
 	getBookmarkedCourses,
 	getCourseAnalytics,
+	getCoursePercentage,
 	getPaidCourses,
 	payCourse
 };

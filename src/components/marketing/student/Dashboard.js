@@ -66,7 +66,7 @@ const StudentDashboard = () => {
             };
         }
     };
-    
+
 
     useEffect(() => {
         if (paidIDs?.length > 0) {
@@ -78,19 +78,19 @@ const StudentDashboard = () => {
                         courseId: x,
                         studentId
                     };
-                    const { data: courseAnalytics } = await courseService.getCourseAnalytics(token, courseData);
-    
-                    coursePercentages.push(courseAnalytics.coursePercentage);
+                    const { data: courseAnalytics } = await courseService.getCoursePercentage(token, courseData);
+
+                    coursePercentages.push(courseAnalytics.courseTotalPercentage);
                     // Do something with courseAnalytics here
                     return courseAnalytics;
                 });
                 const results = await Promise.all(queries);
-    
+
                 coursePercentages.forEach(x => {
                     const courseP = parseFloat(x);
                     totalProgress += courseP; // Accumulate progress here
                 });
-   
+
                 const avProgress = totalProgress / paidIDs?.length;
                 setGeneralProgress(avProgress);
             };
@@ -122,7 +122,7 @@ const StudentDashboard = () => {
                     {/* User info */}
                     <ProfileCover dashboardData={dashboardData} />
                     <Row style={{ marginTop: '20px' }}>
-                    <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
+                        <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
                                 title="Courses Subscribed"
                                 value={courses?.data?.courses.filter((item) => paidIDs?.includes(item.id)).length}
@@ -134,10 +134,11 @@ const StudentDashboard = () => {
                             <StatRightBadge
                                 title="General Learning progress"
                                 subtitle="progress percentage"
-                                value={`${getProgress().value ? getProgress().text : `No progress`}`}
-                                badgeValue={`${getProgress().value}%`}
+                                value={`${getProgress().value !== null && getProgress().value !== undefined ? getProgress().text : 'No progress'}`}
+                                badgeValue={`${getProgress().value !== null && getProgress().value !== undefined ? getProgress().value : 0}%`}
                                 colorVariant="success"
                             />
+
                         </Col>
                         <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
@@ -148,7 +149,7 @@ const StudentDashboard = () => {
                                 colorVariant="info"
                             />
                         </Col>
-                       
+
                     </Row>
                     {/* Content */}
                     <Row className="mt-0 mt-md-4">

@@ -51,8 +51,8 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 					</div> */}
 				</Card.Header>
 				<Card.Body>
-					{paidCourses?.data?.map((sub) =>
-						<div className="border-bottom pt-0 pb-5">
+					{paidCourses?.data?.courseManager?.map((sub, index) =>
+						<div className="border-bottom pt-0 pb-5" key={index}>
 							<Row className="mb-4">
 								<Col lg={8} md={9} sm={7} className="mb-2 mb-lg-0">
 									<span className="d-block">

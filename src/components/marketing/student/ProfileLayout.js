@@ -44,12 +44,12 @@ const ProfileLayout = (props) => {
 	);
 
 	const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
-        ['paidCourses', token, studentId],
-        () => courseService.getPaidCourses(token, studentId)
-    );
+		['paidCourses', token, studentId],
+		() => courseService.getPaidCourses(token, studentId)
+	);
 
 
-    let paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
+	let paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
 
 
 	const SignOut = () => {
@@ -72,12 +72,12 @@ const ProfileLayout = (props) => {
 			courseId,
 			studentId
 		}
-	
+
 		const { data: courseAnalytics } = useQuery(
 			['courseAnalytics', token, courseData],
 			() => courseService.getCourseAnalytics(token, courseData)
 		);
-	
+
 		const sectionProgress = courseAnalytics?.data?.progress || [];
 		return (
 			<ul>
@@ -166,12 +166,12 @@ const ProfileLayout = (props) => {
 												{paidIDs?.length > 0 ? (
 													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
 														{courses?.data.courses
-														.filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108")||(item.id === "759b9889-6912-4087-9930-edf210f378ad"))
+															.filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
 															// .filter((item) => paidIDs?.includes(item.id))
 															.map((x) => (
 																<Fragment key={x.id}>
 																	<li>{x.name}</li>
-																	<CourseModules courseId={x?.id} courseContentId={x?.content.id} studentId={studentId}/>
+																	<CourseModules courseId={x?.id} courseContentId={x?.content.id} studentId={studentId} />
 																</Fragment>
 															))}
 													</ul>
@@ -188,6 +188,26 @@ const ProfileLayout = (props) => {
 											</>
 
 										)}
+										<Nav.Item
+											as="li"
+											style={{ cursor: 'pointer' }}
+										>
+											<Link to='' className="nav-link" >
+												<i className={`fe fe-book nav-icon`}></i>
+												Assignments
+											</Link>
+										</Nav.Item>
+										<Nav.Item
+											as="li"
+											style={{ cursor: 'pointer' }}
+										>
+											<Link to="" className="nav-link">
+												<i className={`fe fe-bell nav-icon`}></i>
+												Chat
+											</Link>
+										</Nav.Item>
+
+
 
 
 										<Nav.Item className="navbar-header mt-4" as="li">
