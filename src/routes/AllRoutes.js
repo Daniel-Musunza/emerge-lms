@@ -123,6 +123,8 @@ import Certifications from 'components/marketing/account-settings/Certifications
 
 // Inside the route or navigation logic
 import Error404 from 'components/marketing/pages/specialty/Error404';
+import Assignments from 'components/marketing/account-settings/Assignments';
+import SingleAssignment from 'components/marketing/account-settings/SingleAssignment';
 
 const AllRoutes = () => {
 	return (
@@ -192,8 +194,13 @@ const AllRoutes = () => {
 				{/* </Route> */}
 
 				<Route
-					path="/marketing/courses/course-resume/:id/:courseId"
-					element={<CourseResume />}
+					path="/marketing/assignments/:id/:course"
+					element={<Assignments />}
+				/>
+
+				<Route
+					path="/marketing/assignments/single/:id:/:title"
+					element={<SingleAssignment />}
 				/>
 			</Route>
 
@@ -213,6 +220,7 @@ const AllRoutes = () => {
 				path="/marketing/courses/course-resume/:id/:courseId"
 				element={<CourseResume />}
 			/>
+
 			{/* Career */}
 			<Route path="/marketing/pages/career/career/Career" element={<Career />} />
 			<Route path="/marketing/pages/contact/" element={<Contact />} />

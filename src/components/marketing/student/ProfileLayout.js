@@ -36,6 +36,7 @@ const ProfileLayout = (props) => {
 
 	let studentId = studentData?.data?.id;
 
+	const [openAssignmentSections, toggleAssignments] = useState(false);
 	const [openQuizSections, toggleQuizSections] = useState(false);
 
 	const { data: courses, isLoading: coursesLoading } = useQuery(
@@ -59,6 +60,10 @@ const ProfileLayout = (props) => {
 
 	const DisplayModules = () => {
 		toggleQuizSections((prev) => !prev); // Use !== instead of ==
+	};
+
+	const DisplayAssignments = () => {
+		toggleAssignments((prev) => !prev); // Use !== instead of ==
 	};
 
 	const CourseModules = ({ courseId, courseContentId, studentId }) => {
@@ -153,6 +158,41 @@ const ProfileLayout = (props) => {
 										))}
 										<Nav.Item
 											as="li"
+											onClick={DisplayAssignments}
+											style={{ cursor: 'pointer' }}
+										>
+											<div className="nav-link" >
+												<i className={`fe fe-help-circle nav-icon`}></i>
+												My Assignments
+											</div>
+										</Nav.Item>
+										{openAssignmentSections && (
+											<>
+												{paidIDs?.length > 0 ? (
+													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+														{courses?.data.courses
+															.filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
+															// .filter((item) => paidIDs?.includes(item.id))
+															.map((x) => (
+																<Fragment key={x.id}>
+																	<li><Link to={`/marketing/assignments/${x.id}/${x.name}`}>{x.name}</Link></li>
+																</Fragment>
+															))}
+													</ul>
+												) : (
+													<>
+														{paidCoursesLoading ? (
+															<p style={{ textAlign: 'center' }}>Loading ...</p>
+														) : (
+															<p style={{ textAlign: 'center', color: 'red' }}>No courses subscribed</p>
+														)}
+													</>
+
+												)}
+											</>
+										)}
+										<Nav.Item
+											as="li"
 											onClick={DisplayModules}
 											style={{ cursor: 'pointer' }}
 										>
@@ -188,15 +228,8 @@ const ProfileLayout = (props) => {
 											</>
 
 										)}
-										<Nav.Item
-											as="li"
-											style={{ cursor: 'pointer' }}
-										>
-											<Link to='' className="nav-link" >
-												<i className={`fe fe-book nav-icon`}></i>
-												Assignments
-											</Link>
-										</Nav.Item>
+
+
 										<Nav.Item
 											as="li"
 											style={{ cursor: 'pointer' }}
