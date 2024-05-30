@@ -199,7 +199,7 @@ const AllRoutes = () => {
 				/>
 
 				<Route
-					path="/marketing/assignments/single/:id:/:title"
+					path="/marketing/assignments/single/:id/:title"
 					element={<SingleAssignment />}
 				/>
 			</Route>
