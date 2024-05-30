@@ -5,7 +5,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Card, ListGroup, Row, Col, Form } from 'react-bootstrap';
+import { Card, ListGroup, Row, Col, Form, Nav, Tab } from 'react-bootstrap';
 
 // import dashboard layout
 import ProfileLayout from 'components/marketing/student/ProfileLayout';
@@ -31,7 +31,6 @@ const Assignments = () => {
     );
 
 
-
     return (
         <ProfileLayout dashboardData={dashboardData}>
             <Card className="border-0">
@@ -45,51 +44,132 @@ const Assignments = () => {
                 </Card.Header>
 
                 <Card.Body>
-                    {/* List group */}
-                    {assignments?.data?.length > 0 ? (
-                        <ListGroup variant="flush" className="mb-4">
-                            {assignments?.data?.map((x) => {
-                                return (
-                                    <ListGroup.Item className="px-0 pt-0 pb-4" key={x.id}>
-                                        <Row>
-                                            <Col>
-                                                <Form.Check name="group1" type="radio" id={`inline-radio-${x.id}`}>
-                                                    <Form.Check.Input
-                                                        type="radio"
-                                                        name="address"
-                                                        defaultChecked
-                                                        className="me-1"
-                                                    />
-                                                    <Form.Check.Label>
-                                                        <span className="h4">{x.title}</span>
-                                                        <span className="d-block">
-                                                            {x.description}
-                                                        </span>
-                                                    </Form.Check.Label>
-                                                </Form.Check>
-                                            </Col>
-                                            <Col xs="auto">
-                                                <Link to={`/marketing/assignments/single/${x.id}/${x.title}`} className="btn btn-outline-secondary btn-sm">
-                                                    Attempt Assignment
-                                                </Link>
-                                            </Col>
-                                        </Row>
-                                    </ListGroup.Item>
-                                );
-                            })}
-                        </ListGroup>
 
-                    ) : (
-                        <div className="px-0 pt-0 pb-4 flex align-center justify-center">
-                            {isLoading ? (
-                                <h2>Loading ...</h2>
-                            ) : (
-                                <h2>No assignments available</h2>
-                            )}
+                    <Tab.Container defaultActiveKey="individual">
+                        <Card className="bg-transparent shadow-none ">
+                            <Card.Header className="border-0 p-0 bg-transparent">
+                                <Nav className="nav-lb-tab">
+                                    <Nav.Item>
+                                        <Nav.Link
+                                            eventKey="individual"
+                                            className="mb-sm-3 mb-md-0"
+                                        >
+                                            {assignments?.data?.filter((x)=>x.type==="individual").length}  Individual Assignments
+                                        </Nav.Link>
+                                    </Nav.Item>
+                                    <Nav.Item className="ms-0">
+                                        <Nav.Link
+                                            eventKey="group"
+                                            className="mb-sm-3 mb-md-0"
+                                        >
+                                            {assignments?.data?.filter((x)=>x.type==="group").length}  Group Assignments
+                                        </Nav.Link>
+                                    </Nav.Item>
+                                </Nav>
+                            </Card.Header>
+                            <Card.Body className="p-0">
+                                <Tab.Content>
+                                    <Tab.Pane
+                                        eventKey="individual"
+                                        className="pb-4 p-4 ps-0 pe-0"
+                                    >
+                                        {assignments?.data?.filter((x)=>x.type==="individual").length > 0 ? (
+                                            <ListGroup variant="flush" className="mb-4">
+                                                {assignments?.data?.filter((x)=>x.type==="individual").map((x) => {
+                                                    return (
+                                                        <ListGroup.Item className="px-0 pt-0 pb-4" key={x.id}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Form.Check name="group1" type="radio" id={`inline-radio-${x.id}`}>
+                                                                        <Form.Check.Input
+                                                                            type="radio"
+                                                                            name="address"
+                                                                            defaultChecked
+                                                                            className="me-1"
+                                                                        />
+                                                                        <Form.Check.Label>
+                                                                            <span className="h4">{x.title}</span>
+                                                                            <span className="d-block">
+                                                                                {x.description}
+                                                                            </span>
+                                                                        </Form.Check.Label>
+                                                                    </Form.Check>
+                                                                </Col>
+                                                                <Col xs="auto">
+                                                                    <Link to={`/marketing/assignments/single/${x.id}/${x.title}`} className="btn btn-outline-secondary btn-sm">
+                                                                    View More
+                                                                    </Link>
+                                                                </Col>
+                                                            </Row>
+                                                        </ListGroup.Item>
+                                                    );
+                                                })}
+                                            </ListGroup>
 
-                        </div>
-                    )}
+                                        ) : (
+                                            <div className="px-0 pt-0 pb-4 flex align-center justify-center">
+                                                {isLoading ? (
+                                                    <h2>Loading ...</h2>
+                                                ) : (
+                                                    <h2>No assignments available</h2>
+                                                )}
 
+                                            </div>
+                                        )}
+                                    </Tab.Pane>
+                                    <Tab.Pane
+                                        eventKey="group"
+                                        className="pb-4 p-4 ps-0 pe-0"
+                                    >
+                                        {assignments?.data?.filter((x)=>x.type==="group").length > 0 ? (
+                                            <ListGroup variant="flush" className="mb-4">
+                                                {assignments?.data?.filter((x)=>x.type==="group").map((x) => {
+                                                    return (
+                                                        <ListGroup.Item className="px-0 pt-0 pb-4" key={x.id}>
+                                                            <Row>
+                                                                <Col>
+                                                                    <Form.Check name="group1" type="radio" id={`inline-radio-${x.id}`}>
+                                                                        <Form.Check.Input
+                                                                            type="radio"
+                                                                            name="address"
+                                                                            defaultChecked
+                                                                            className="me-1"
+                                                                        />
+                                                                        <Form.Check.Label>
+                                                                            <span className="h4">{x.title}</span>
+                                                                            <span className="d-block">
+                                                                                {x.description}
+                                                                            </span>
+                                                                        </Form.Check.Label>
+                                                                    </Form.Check>
+                                                                </Col>
+                                                                <Col xs="auto">
+                                                                    <Link to={`/marketing/assignments/single/${x.id}/${x.title}`} className="btn btn-outline-secondary btn-sm">
+                                                                        View More
+                                                                    </Link>
+                                                                </Col>
+                                                            </Row>
+                                                        </ListGroup.Item>
+                                                    );
+                                                })}
+                                            </ListGroup>
+
+                                        ) : (
+                                            <div className="px-0 pt-0 pb-4 flex align-center justify-center">
+                                                {isLoading ? (
+                                                    <h2>Loading ...</h2>
+                                                ) : (
+                                                    <h2>No assignments available</h2>
+                                                )}
+
+                                            </div>
+                                        )}
+                                    </Tab.Pane>
+
+                                </Tab.Content>
+                            </Card.Body>
+                        </Card>
+                    </Tab.Container>
                 </Card.Body>
             </Card>
         </ProfileLayout>

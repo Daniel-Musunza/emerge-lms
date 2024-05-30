@@ -1,9 +1,10 @@
 // import node module libraries
-import React, { Fragment, useEffect, useState, useMemo } from 'react';
+import React, { Fragment, useContext, useState, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
-import { Row, Col, Container, Nav, Navbar, Spinner } from 'react-bootstrap';
+import { Row, Col, Container, Nav, Navbar, useAccordionButton, AccordionContext } from 'react-bootstrap';
+
 
 import { logout } from '../../dashboard/features/auth/authSlice';
 import courseService from '../../dashboard/features/courses/courseService';
@@ -101,6 +102,16 @@ const ProfileLayout = (props) => {
 	};
 
 
+	const [eventKey, setEventKey] = useState('');
+	const { activeEventKey } = useContext(AccordionContext);
+
+	const decoratedOnClick = useAccordionButton(
+		eventKey,
+		() => callback && callback(eventKey)
+	);
+
+	const isCurrentEventKey = activeEventKey === eventKey;
+
 	return (
 		<Fragment>
 			<section className="pt-5 pb-5">
@@ -161,9 +172,16 @@ const ProfileLayout = (props) => {
 											onClick={DisplayAssignments}
 											style={{ cursor: 'pointer' }}
 										>
-											<div className="nav-link" >
+											<div className="nav-link">
 												<i className={`fe fe-help-circle nav-icon`}></i>
 												My Assignments
+												<span className="chevron-arrow ms-4 mr-0">
+													{openAssignmentSections ? (
+														<i className="fe fe-chevron-up fs-4"></i>
+													) : (
+														<i className="fe fe-chevron-down fs-4"></i>
+													)}
+												</span>
 											</div>
 										</Nav.Item>
 										{openAssignmentSections && (
@@ -194,11 +212,18 @@ const ProfileLayout = (props) => {
 										<Nav.Item
 											as="li"
 											onClick={DisplayModules}
-											style={{ cursor: 'pointer' }}
+											style={{ cursor: 'pointer' , width: '100%'}}
 										>
 											<div className="nav-link" >
 												<i className={`fe fe-help-circle nav-icon`}></i>
 												My Quiz Attempt
+												<span className="chevron-arrow ms-4 mr-0">
+													{openQuizSections ? (
+														<i className="fe fe-chevron-up fs-4"></i>
+													) : (
+														<i className="fe fe-chevron-down fs-4"></i>
+													)}
+												</span>
 											</div>
 										</Nav.Item>
 										{openQuizSections && (

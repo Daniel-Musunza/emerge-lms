@@ -3,19 +3,23 @@ import React, { useState, useEffect, Fragment } from 'react';
 import { useQuery } from 'react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useSelector} from 'react-redux'
+import { useSelector } from 'react-redux'
 
-import { Card } from 'react-bootstrap';
+import { Card, Button, Form, Row, Col } from 'react-bootstrap';
 
 // import dashboard layout
 import ProfileLayout from 'components/marketing/student/ProfileLayout';
 import assignmentService from 'components/dashboard/features/assignments/assignmentService';
+import PDFViewer from '../pages/courses/course-resume/PDFViewer';
 
-const Assignments = () => {
+const SingleAssignment = () => {
+    const [file, setFile] = useState(null);
+
     const { user } = useSelector(
         (state) => state.auth
     );
-    let { id, title} = useParams();
+
+    let { id, title } = useParams();
     const token = user?.data?.accessToken;
     const studentData = JSON.parse(localStorage.getItem('studentData'));
 
@@ -31,26 +35,95 @@ const Assignments = () => {
         () => assignmentService.getAssignment(token, id) // Pass a function that returns the data
     );
 
-    console.log(assignment);
+    const { data: group } = useQuery(
+        ['group', id, token],
+        () => {
+            if (assignment?.data?.type === 'group') {
+                return assignmentService.getGroup(token, id);
+            }
+            return Promise.resolve(null);
+        },
+        {
+            enabled: assignment?.data?.type === 'group', // Only enable the query if the type is 'group'
+            staleTime: Infinity, // Optional: to prevent refetching if data is unlikely to change
+            cacheTime: Infinity, // Optional: to keep the data cached
+        }
+    );
+
+    console.log(group);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            let submissionData = null;
+
+            if (assignment?.data?.type === 'group') {
+                submissionData = {
+                    assignmentId: assignment?.data?.id,
+                    groupId: group?.data?.id,
+                    file: file
+                }
+            } else {
+                submissionData = {
+                    assignmentId: assignment?.data?.id,
+                    studentId: studentData?.data?.id,
+                    file: file
+                }
+            }
+
+            await assignmentService.submitAssignment(token, submissionData);
+
+        } catch (err) {
+
+            toast.error("Failed to submit. try again later")
+        }
+    }
+
+
+    function capitalizeWords(str) {
+        if (!str) {
+            return "loading ..."
+        }
+        return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+    }
 
     return (
         <ProfileLayout dashboardData={dashboardData}>
             <Card className="border-0">
                 <Card.Header>
                     <div className="mb-3 mb-lg-0">
+                        <h2 className="mb-0">{capitalizeWords(assignment?.data?.type)} Assignment</h2>
                         <h3 className="mb-0">{title} </h3>
+
+                        <PDFViewer pdfUrl={assignment?.data?.file} />
+
                         <p className="mb-0">
-                            
+                            {assignment?.data?.description}
+                        </p>
+                        <p className="mb-0">
+                            Maximum no of submissions :  {assignment?.data?.submission}
                         </p>
                     </div>
                 </Card.Header>
 
                 <Card.Body>
-                 
+                    <Row>
+                        <Col>
+                            <Form name="group1">
+                                <input type="file" onChange={(e) => { setFile(e.target.files[0]) }} />
+                            </Form>
+                        </Col>
+                        <Col xs="auto">
+                            <Button className="btn btn-outline-secondary text-white btn-sm" onClick={handleSubmit}>
+                                Submit
+                            </Button>
+                        </Col>
+                    </Row>
                 </Card.Body>
             </Card>
         </ProfileLayout>
     );
 };
 
-export default Assignments;
+export default SingleAssignment;

@@ -29,9 +29,45 @@ const getAssignment = async (token, assignmentId) => {
 
 	return response.data;
 };
+
+const getGroup = async (token, assignmentId) => {
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+
+	const response = await axios.get(API_URL + `groups/${assignmentId}`, config);
+
+	return response.data;
+};
+
+const submitAssignment = async (token, assignmentData) => {
+
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+
+	let response = null;
+	if (assignmentData.groupId) {
+		response = await axios.post(API_URL + `submit/group`, assignmentData, config);
+	} else {
+		response = await axios.post(API_URL + `submit/individual`, assignmentData, config);
+	}
+
+
+	return response.data;
+};
+
+
 const assignmentService = {
 	getCourseAssignments,
-	getAssignment
+	getAssignment,
+	submitAssignment,
+	getGroup
 };
 
 export default assignmentService;
