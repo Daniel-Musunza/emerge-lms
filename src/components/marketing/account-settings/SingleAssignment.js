@@ -56,26 +56,27 @@ const SingleAssignment = () => {
         e.preventDefault();
 
         try {
-            let submissionData = null;
+            let fileData = new FormData();
 
             if (assignment?.data?.type === 'group') {
-                submissionData = {
-                    assignmentId: assignment?.data?.id,
-                    groupId: group?.data?.id,
-                    file: file
-                }
+
+                fileData.append('file', file);
+                fileData.append('assignmentId', assignment?.data?.id);
+                fileData.append('groupId', group?.data?.id);
+
             } else {
-                submissionData = {
-                    assignmentId: assignment?.data?.id,
-                    studentId: studentData?.data?.id,
-                    file: file
-                }
+
+                fileData.append('file', file);
+                fileData.append('assignmentId', assignment?.data?.id);
+                fileData.append('studentId', studentData?.data?.id);
+
             }
 
-            await assignmentService.submitAssignment(token, submissionData);
+            await assignmentService.submitAssignment(token, fileData);
+
+            toast.success("Success. submited successfully...")
 
         } catch (err) {
-
             toast.error("Failed to submit. try again later")
         }
     }
