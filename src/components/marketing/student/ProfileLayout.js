@@ -259,7 +259,7 @@ const ProfileLayout = (props) => {
 											as="li"
 											style={{ cursor: 'pointer' }}
 										>
-											<Link to="" className="nav-link">
+											<Link to="/dashboard/chat" className="nav-link">
 												<i className={`fe fe-bell nav-icon`}></i>
 												Chat
 											</Link>

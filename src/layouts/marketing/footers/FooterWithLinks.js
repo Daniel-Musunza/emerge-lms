@@ -130,7 +130,7 @@ const FooterWithLinks = () => {
 							{/* contact info */}
 							<div className="mb-4">
 								<h3 className="fw-bold mb-3">Get in touch</h3>
-								<p>Dalal House, Sir Mbarak Hinawy Road - Fort Jesus, Mombasa, Kenya .</p>
+								<p> Dubai House, along Airstrip Road, Mandera Town. P.O Box 287-70300, Mandera, Kenya.</p>
 								<p className="mb-1">
 									Email: <Link to="#">support@daruurlms.com</Link>
 								</p>

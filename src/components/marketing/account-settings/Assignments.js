@@ -54,7 +54,7 @@ const Assignments = () => {
                                             eventKey="individual"
                                             className="mb-sm-3 mb-md-0"
                                         >
-                                            {assignments?.data?.filter((x)=>x.type==="individual").length}  Individual Assignments
+                                            {assignments?.data?.filter((x) => x.type === "individual").length}  Individual Assignments
                                         </Nav.Link>
                                     </Nav.Item>
                                     <Nav.Item className="ms-0">
@@ -62,7 +62,7 @@ const Assignments = () => {
                                             eventKey="group"
                                             className="mb-sm-3 mb-md-0"
                                         >
-                                            {assignments?.data?.filter((x)=>x.type==="group").length}  Group Assignments
+                                            {assignments?.data?.filter((x) => x.type === "group").length}  Group Assignments
                                         </Nav.Link>
                                     </Nav.Item>
                                 </Nav>
@@ -73,9 +73,9 @@ const Assignments = () => {
                                         eventKey="individual"
                                         className="pb-4 p-4 ps-0 pe-0"
                                     >
-                                        {assignments?.data?.filter((x)=>x.type==="individual").length > 0 ? (
+                                        {assignments?.data?.filter((x) => x.type === "individual").length > 0 ? (
                                             <ListGroup variant="flush" className="mb-4">
-                                                {assignments?.data?.filter((x)=>x.type==="individual").map((x) => {
+                                                {assignments?.data?.filter((x) => x.type === "individual").map((x) => {
                                                     return (
                                                         <ListGroup.Item className="px-0 pt-0 pb-4" key={x.id}>
                                                             <Row>
@@ -96,9 +96,14 @@ const Assignments = () => {
                                                                     </Form.Check>
                                                                 </Col>
                                                                 <Col xs="auto">
-                                                                    <Link to={`/marketing/assignments/single/${x.id}/${x.title}`} className="btn btn-outline-secondary btn-sm">
-                                                                    View More
+                                                                    <Link to={`/marketing/assignments/single/${x.id}/${x.title}`} className="btn btn-outline-secondary btn-sm  w-100 mb-4">
+                                                                        View More
                                                                     </Link>
+                                                                    <br></br>
+                                                                    <Link to={`/marketing/assignments/results/${x.id}`} className="btn btn-outline-secondary btn-sm  w-100 text-white bg-dark">
+                                                                        View Results
+                                                                    </Link>
+
                                                                 </Col>
                                                             </Row>
                                                         </ListGroup.Item>
@@ -121,11 +126,11 @@ const Assignments = () => {
                                         eventKey="group"
                                         className="pb-4 p-4 ps-0 pe-0"
                                     >
-                                        {assignments?.data?.filter((x)=>x.type==="group").length > 0 ? (
+                                        {assignments?.data?.filter((x) => x.type === "group").length > 0 ? (
                                             <ListGroup variant="flush" className="mb-4">
-                                                {assignments?.data?.filter((x)=>x.type==="group").map((x) => {
+                                                {assignments?.data?.filter((x) => x.type === "group").map((x) => {
                                                     return (
-                                                        <ListGroup.Item className="px-0 pt-0 pb-4" key={x.id}>
+                                                        <ListGroup.Item className="p-4" key={x.id}>
                                                             <Row>
                                                                 <Col>
                                                                     <Form.Check name="group1" type="radio" id={`inline-radio-${x.id}`}>
@@ -144,9 +149,14 @@ const Assignments = () => {
                                                                     </Form.Check>
                                                                 </Col>
                                                                 <Col xs="auto">
-                                                                    <Link to={`/marketing/assignments/single/${x.id}/${x.title}`} className="btn btn-outline-secondary btn-sm">
+                                                                    <Link to={`/marketing/assignments/single/${x.id}/${x.title}`} className="btn btn-outline-secondary btn-sm  w-100 mb-4">
                                                                         View More
                                                                     </Link>
+                                                                    <br></br>
+                                                                    <Link to={`/marketing/assignments/results/${x.id}`} className="btn btn-outline-secondary btn-sm  w-100 text-white bg-dark">
+                                                                        View Results
+                                                                    </Link>
+
                                                                 </Col>
                                                             </Row>
                                                         </ListGroup.Item>

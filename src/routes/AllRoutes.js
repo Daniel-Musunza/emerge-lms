@@ -125,7 +125,9 @@ import Certifications from 'components/marketing/account-settings/Certifications
 import Error404 from 'components/marketing/pages/specialty/Error404';
 import Assignments from 'components/marketing/account-settings/Assignments';
 import SingleAssignment from 'components/marketing/account-settings/SingleAssignment';
-
+import AssignmentResults from 'components/marketing/account-settings/AssignmentResults';
+import ChatLayout from './dashboard/ChatLayout'; 
+import Chat from 'components/dashboard/chat/Chat';
 const AllRoutes = () => {
 	return (
 
@@ -202,8 +204,14 @@ const AllRoutes = () => {
 					path="/marketing/assignments/single/:id/:title"
 					element={<SingleAssignment />}
 				/>
+				<Route
+					path="/marketing/assignments/results/:id"
+					element={<AssignmentResults />}
+				/>
 			</Route>
-
+			<Route element={<ChatLayout />}>
+				<Route path="/dashboard/chat" element={<Chat />} />
+			</Route>
 
 
 			<Route
