@@ -25,9 +25,7 @@ const StudentDashboard = () => {
 
     const studentData = JSON.parse(localStorage.getItem('studentData'));
 
-    const studentId = studentData?.data?.id;
-
-
+    const studentId = studentData?.data?.id
     const { data: bookmarkedCourses } = useQuery(
         ['bookmarkedCourses', token, studentId],
         () => courseService.getBookmarkedCourses(token, studentId)
@@ -168,6 +166,14 @@ const StudentDashboard = () => {
                                                             Subscribed {courses?.data?.courses.filter((item) => paidIDs?.includes(item.id)).length}
                                                         </Nav.Link>
                                                     </Nav.Item>
+                                                    <Nav.Item>
+                                                        <Nav.Link
+                                                            eventKey="active"
+                                                            className="mb-sm-3 mb-md-0"
+                                                        >
+                                                            48 hrs Active {courses?.data?.courses.filter((item) => item.active === true).length}
+                                                        </Nav.Link>
+                                                    </Nav.Item>
                                                     <Nav.Item className="ms-0">
                                                         <Nav.Link
                                                             eventKey="bookmarked"
@@ -243,8 +249,8 @@ const StudentDashboard = () => {
                                                         {paidIDs?.length > 0 ? (
                                                             <Row>
                                                                 {courses?.data?.courses
-                                                                    .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
-                                                                    // .filter((item) => paidIDs?.includes(item.id))
+                                                                    // .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
+                                                                    .filter((item) => paidIDs?.includes(item.id))
                                                                     .map((item, index) => (
                                                                         <Col lg={3} md={6} sm={12} key={index}>
                                                                             <CourseCard item={item} showprogressbar />
@@ -270,6 +276,25 @@ const StudentDashboard = () => {
 
 
                                                         {/* end of learning courses */}
+                                                    </Tab.Pane>
+                                                    <Tab.Pane
+                                                        eventKey="active"
+                                                        className="pb-4 p-4 ps-0 pe-0"
+                                                    >
+                                                        {courses?.data?.courses.filter((item) => item.active === true).length > 0 ? (
+                                                            <Row>
+                                                                {courses?.data?.courses
+                                                                    // .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
+                                                                    .filter((item) => item.active === true)
+                                                                    .map((item, index) => (
+                                                                        <Col lg={3} md={6} sm={12} key={index}>
+                                                                            <CourseCard item={item} showprogressbar />
+                                                                        </Col>
+                                                                    ))}
+                                                            </Row>
+                                                        ) : (
+                                                            <p style={{ textAlign: 'center' }}>no course active</p>
+                                                        )}
                                                     </Tab.Pane>
                                                 </Tab.Content>
                                             </Card.Body>

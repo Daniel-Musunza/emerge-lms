@@ -98,6 +98,16 @@ const getCoursePercentage = async (token, courseData) => {
 
 };
 
+const tryCourse = async (token, Data) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+	const response = await axios.post(API_URL + 'course-manager/trial/activate', Data, config);
+	return response.data;
+};
+
 const courseService = {
 	getCourses,
 	bookmarkCourse,
@@ -105,7 +115,8 @@ const courseService = {
 	getCourseAnalytics,
 	getCoursePercentage,
 	getPaidCourses,
-	payCourse
+	payCourse,
+	tryCourse
 };
 
 export default courseService;

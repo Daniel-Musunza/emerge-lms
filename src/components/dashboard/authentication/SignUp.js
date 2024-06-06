@@ -24,7 +24,16 @@ const SignUp = () => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
-
+	useEffect(() => {
+        if (isSuccess) {
+         	
+			toast.success("Success...");
+			navigate('/marketing/student/dashboard/');
+        }
+		if (isError) {
+			toast.error("Failed!! confirm your email or password");
+        }
+    }, [isSuccess, navigate]);
 
 	const handleRegister = async (e) => {
 		e.preventDefault();

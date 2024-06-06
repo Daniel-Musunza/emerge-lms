@@ -37,7 +37,7 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 				<Card.Body>
 					{/* List group */}
-					<ListGroup variant="flush" className="mb-4">
+					{/* <ListGroup variant="flush" className="mb-4">
 						<ListGroup.Item className="px-0 pt-0 pb-4">
 							<Row>
 								<Col>
@@ -87,7 +87,10 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 								</Col>
 							</Row>
 						</ListGroup.Item>
-					</ListGroup>
+					</ListGroup> */}
+					<div style={{display: 'flex', justifyContent: 'center'}}>
+					<h3 className="mb-0">No Certifications yet</h3>
+					</div>
 				</Card.Body>
 			</Card>
 		</ProfileLayout>

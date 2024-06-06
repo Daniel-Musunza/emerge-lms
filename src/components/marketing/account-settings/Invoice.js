@@ -40,7 +40,7 @@ const Invoice = () => {
 				</Card.Header>
 				<Card.Body className="p-0">
 					{/* Table */}
-					<div className="table-invoice border-0">
+					{/* <div className="table-invoice border-0">
 						<Table
 							hover
 							responsive
@@ -82,6 +82,9 @@ const Invoice = () => {
 								))}
 							</tbody>
 						</Table>
+					</div> */}
+					<div style={{display: 'flex', justifyContent: 'center'}}>
+					<h3 className="mb-0">No Invoices</h3>
 					</div>
 				</Card.Body>
 			</Card>

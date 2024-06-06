@@ -31,7 +31,8 @@ import Avatar1 from 'assets/images/avatar/avatar-1.jpg';
 
 import {
 	bookmarkCourse,
-	payCourse
+	payCourse,
+	tryCourse
 } from '../../../../dashboard/features/courses/courseSlice';
 
 import courseService from '../../../../dashboard/features/courses/courseService';
@@ -119,20 +120,51 @@ const CourseSingle = () => {
 	const addToBookmark = async (e) => {
 		e.preventDefault();
 		setLoading(true); // Set loading state to true before dispatching action
+		if (studentId) {
+			const bookmarkData = {
+				courseId: thisCourse?.id, // Assuming course ID is accessible from thisCourse
+				studentId: studentId // Assuming student ID is passed as props
+			};
 
-		const bookmarkData = {
-			courseId: thisCourse?.id, // Assuming course ID is accessible from thisCourse
-			studentId: studentId // Assuming student ID is passed as props
-		};
-
-		try {
-			// Dispatching action to bookmark the course
-			await dispatch(bookmarkCourse(bookmarkData));
-			toast.success("Course Added to Bookmarks"); // Display success message
-		} catch (error) {
-			console.error(error); // Log any errors
-			toast.error("Failed to add course to Bookmarks"); // Display error message
+			try {
+				// Dispatching action to bookmark the course
+				await dispatch(bookmarkCourse(bookmarkData));
+				toast.success("Course Added to Bookmarks"); // Display success message
+			} catch (error) {
+				console.error(error); // Log any errors
+				toast.error("Failed to add course to Bookmarks"); // Display error message
+			}
+		} else {
+			toast.error("Failed!! please login");
+			navigate('/authentication/sign-in')
 		}
+		setLoading(false); // Set loading state back to false after dispatching action
+	};
+
+	const HandleTryCourse = async (e) => {
+		e.preventDefault();
+		setLoading(true); // Set loading state to true before dispatching action
+		if (studentId) {
+			const tryCourseData = {
+				courseId: thisCourse?.id, // Assuming course ID is accessible from thisCourse
+				studentId: studentId // Assuming student ID is passed as props
+			};
+
+			console.log(tryCourseData);
+
+			try {
+				// Dispatching action to bookmark the course
+				await dispatch(tryCourse(tryCourseData));
+				toast.success("Course is now available for the next 48 hrs"); // Display success message
+			} catch (error) {
+				console.error(error); // Log any errors
+				toast.error("Failed to add course to trial"); // Display error message
+			}
+		} else {
+			toast.error("Failed!! please login");
+			navigate('/authentication/sign-in')
+		}
+
 
 		setLoading(false); // Set loading state back to false after dispatching action
 	};
@@ -141,24 +173,31 @@ const CourseSingle = () => {
 
 	const HandleCoursePayment = async (e) => {
 		e.preventDefault();
-		const paymentData = {
-			courseId: courseId,
-			mpesaPhone: mpesaPhone,
-			studentId: studentData?.data?.id
-		};
+		if (studentId) {
 
-		try {
-			const response = await dispatch(payCourse(paymentData));
-			// Assuming your action returns a response object with a success property
-			if (response.success) {
-				toast.success("Course Paid Successfully");
-			} else {
-				toast.error("Payment not successful...");
+			const paymentData = {
+				courseId: courseId,
+				mpesaPhone: mpesaPhone,
+				studentId: studentData?.data?.id
+			};
+
+			try {
+				const response = await dispatch(payCourse(paymentData));
+				// Assuming your action returns a response object with a success property
+				if (response.success) {
+					toast.success("Course Paid Successfully");
+				} else {
+					toast.error("Payment not successful...");
+				}
+			} catch (error) {
+				// Handle error from the action
+				console.error("Error occurred during payment:", error);
+				toast.error("An error occurred during payment.");
 			}
-		} catch (error) {
-			// Handle error from the action
-			console.error("Error occurred during payment:", error);
-			toast.error("An error occurred during payment.");
+
+		} else {
+			toast.error("Failed!! please login");
+			navigate('/authentication/sign-in')
 		}
 	};
 
@@ -378,9 +417,14 @@ const CourseSingle = () => {
 														</Link>
 													</>
 												) : (
-													<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
-														Get Full Access
-													</Link>
+													<>
+														<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
+															Get Full Access
+														</Link>
+														<div className="btn mb-2" style={{backgroundColor: '#475569', color: '#fff'}} onClick={HandleTryCourse}>
+															Try this course (48 hrs full access)
+														</div>
+													</>
 												)}
 											</>
 										)}

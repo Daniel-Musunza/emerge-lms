@@ -32,6 +32,13 @@ const SignIn = () => {
 	const [password, setPassword] = useState('');
 	const [visiblePassword, setVisiblePassword] = useState(false);
 
+	useEffect(() => {
+        if (isSuccess) {
+			toast.success("Success...");
+			navigate('/marketing/student/dashboard/');
+        }
+		
+    }, [isSuccess, navigate]);
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
@@ -43,12 +50,11 @@ const SignIn = () => {
 		
 		try {
 			await dispatch(login(formData));
-			toast.success("Success...");
-			navigate('/marketing/student/dashboard/');
+		
 		
 		} catch (error) {
 			console.log(error);
-			toast.error("Failed!! confirm your email or password");
+			toast.error("Failed"+ message);
 		}
 	};
 
