@@ -17,7 +17,7 @@ export const UsersList = [
 	{
 		id: 1,
 		name: 'Olivia Cooper',
-		image: Avatar2,
+		image: "",
 		locations: 'Los Angeles, CA',
 		joined: '7 July, 2020',
 		status: 'Online'

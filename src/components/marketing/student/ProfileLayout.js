@@ -39,6 +39,7 @@ const ProfileLayout = (props) => {
 
 	const [openAssignmentSections, toggleAssignments] = useState(false);
 	const [openQuizSections, toggleQuizSections] = useState(false);
+	const [openChatSections, toggleChatSections] = useState(false);
 
 	const { data: courses, isLoading: coursesLoading } = useQuery(
 		['courses'],
@@ -65,6 +66,10 @@ const ProfileLayout = (props) => {
 
 	const DisplayAssignments = () => {
 		toggleAssignments((prev) => !prev); // Use !== instead of ==
+	};
+
+	const DisplayChatCourses = () => {
+		toggleChatSections((prev) => !prev); // Use !== instead of ==
 	};
 
 	const CourseModules = ({ courseId, courseContentId, studentId }) => {
@@ -190,10 +195,10 @@ const ProfileLayout = (props) => {
 													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
 														{courses?.data.courses
 															// .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
-															.filter((item) => (paidIDs?.includes(item.id)) || item.active===true)
+															.filter((item) => (paidIDs?.includes(item.id)) || item.active === true)
 															.map((x) => (
 																<Fragment key={x.id}>
-																	<li><Link to={`/marketing/assignments/${x.id}/${x.name}`}>{x.name}</Link></li>
+																	<li><Link to={`/marketing/assignments/${x.id}/${x.name}`} className='text-decoration-none'>{x.name}</Link></li>
 																</Fragment>
 															))}
 													</ul>
@@ -212,7 +217,7 @@ const ProfileLayout = (props) => {
 										<Nav.Item
 											as="li"
 											onClick={DisplayModules}
-											style={{ cursor: 'pointer' , width: '100%'}}
+											style={{ cursor: 'pointer', width: '100%' }}
 										>
 											<div className="nav-link" >
 												<i className={`fe fe-help-circle nav-icon`}></i>
@@ -232,7 +237,7 @@ const ProfileLayout = (props) => {
 													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
 														{courses?.data.courses
 															// .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
-															.filter((item) => (paidIDs?.includes(item.id)) || item.active===true)
+															.filter((item) => (paidIDs?.includes(item.id)) || item.active === true)
 															.map((x) => (
 																<Fragment key={x.id}>
 																	<li>{x.name}</li>
@@ -258,14 +263,51 @@ const ProfileLayout = (props) => {
 										<Nav.Item
 											as="li"
 											style={{ cursor: 'pointer' }}
+											onClick={DisplayChatCourses}
 										>
-											<Link to="/dashboard/chat" className="nav-link">
-												<i className={`fe fe-bell nav-icon`}></i>
-												Chat
-											</Link>
+											<div className="nav-link w-full flex justify-space-between">
+													<i class="fe fe-message-square nav-icon"></i>
+													Course Chat
+												<span className="chevron-arrow ms-4 mr-0 pr-0">
+													{openChatSections ? (
+														<i className="fe fe-chevron-up fs-4"></i>
+													) : (
+														<i className="fe fe-chevron-down fs-4"></i>
+													)}
+												</span>
+											</div>
+
 										</Nav.Item>
 
+										{openChatSections && (
+											<>
+												{paidIDs?.length > 0 ? (
+													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
+														{courses?.data.courses
+															// .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
+															.filter((item) => (paidIDs?.includes(item.id)) || item.active === true)
+															.map((x) => (
+																<Link to={`/dashboard/chat/${x.id}/${x.name}`} className='text-decoration-none'>
+																	<Fragment key={x.id}>
+																		<li>{x.name}</li>
+																	</Fragment>
+																</Link>
 
+															))}
+													</ul>
+												) : (
+													<>
+														{paidCoursesLoading ? (
+															<p style={{ textAlign: 'center' }}>Loading ...</p>
+														) : (
+															<p style={{ textAlign: 'center', color: 'red' }}>No courses subscribed</p>
+														)}
+													</>
+
+												)}
+											</>
+
+										)}
 
 
 										<Nav.Item className="navbar-header mt-4" as="li">

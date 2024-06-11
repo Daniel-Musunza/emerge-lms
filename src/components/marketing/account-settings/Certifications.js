@@ -17,12 +17,14 @@ const Certifications = () => {
 
 	const token = user?.data?.accessToken;
 const studentData = JSON.parse(localStorage.getItem('studentData'));
+
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
 		linkname: 'Account Settings',
 		link: '/marketing/student/student-edit-profile/'
 	};
+	
 	return (
 		<ProfileLayout dashboardData={dashboardData}>
 			<Card className="border-0">

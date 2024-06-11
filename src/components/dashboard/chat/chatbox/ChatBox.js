@@ -38,7 +38,7 @@ const ChatBox = (props) => {
 				hideChatBox ? 'chat-body-visible' : ''
 			}`}
 		>
-			<ChatHeader hideChatBox={hideChatBox} setHideChatBox={setHideChatBox} />
+			<ChatHeader hideChatBox={hideChatBox} setHideChatBox={setHideChatBox} name={props.name} />
 			<SimpleBar className="vh-100" style={{ maxHeight: '70vh' }}>
 				<div className="px-4 py-4 h-100 messages-container">
 					{thread === 0
