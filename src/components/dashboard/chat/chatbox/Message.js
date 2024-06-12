@@ -2,13 +2,14 @@
 import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
-
+import { useQuery } from 'react-query';
+import { useSelector, useDispatch } from 'react-redux';
 // import custom components
 import { Avatar } from 'components/elements/bootstrap/Avatar';
 
 // import context file
 import { ChatContext } from 'context/Context';
-
+import studentAction from 'store/studentAction';
 // import hook file
 import useChatOperations from 'hooks/useChatOperations';
 
@@ -18,8 +19,17 @@ const Message = (props) => {
 		ChatState: { loggedInUserId }
 	} = useContext(ChatContext);
 	const { getUserDetailsById } = useChatOperations();
+	const { user } = useSelector(state => state.auth);
 
-	let user = getUserDetailsById(chatScript.userId);
+	const token = user?.data?.accessToken;
+
+	const { data: studentData, isLoading: studentDataLoading } = useQuery(
+		['studentData', token],
+		() => studentAction.getStudentData(token),
+		{
+			enabled: !!token, // Only fetch data when token is available
+		}
+	);
 
 	const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 		<Link
@@ -69,7 +79,7 @@ const Message = (props) => {
 
 	return (
 		<Fragment>
-			{chatScript.userId === loggedInUserId ? (
+			{chatScript.userId === user?.data?.id ? (
 				<div className="d-flex justify-content-end mb-4">
 					<div className="d-flex mw-lg-40">
 						<div className=" me-3 text-end">
@@ -93,29 +103,29 @@ const Message = (props) => {
 								</div>
 							</div>
 						</div>
-						<Avatar
+						{/* <Avatar
 							size="md"
 							className="rounded-circle chat-avatar-md"
-							type={user.image ? 'image' : 'initial'}
-							src={user.image}
-							alt={user.name}
-							name={user.name}
-						/>
+							type={user?.image ? 'image' : 'initial'}
+							src={user?.image}
+							alt={user?.name}
+							name={user?.name}
+						/> */}
 					</div>
 				</div>
 			) : (
 				<div className="d-flex w-lg-40 mb-4">
-					<Avatar
+					{/* <Avatar
 						size="md"
 						className="rounded-circle chat-avatar-md"
-						type={user.image ? 'image' : 'initial'}
-						src={user.image}
-						alt={user.name}
-						name={user.name}
-					/>
+						type={user?.image ? 'image' : 'initial'}
+						src={user?.image}
+						alt={user?.name}
+						name={user?.name}
+					/> */}
 					<div className=" ms-3">
 						<small>
-							{user.name}, {chatScript.date} {chatScript.time}{' '}
+							{chatScript.sender}, {chatScript.date} {chatScript.time}{' '}
 						</small>
 						<div className="d-flex">
 							<div className="card mt-2 rounded-top-md-left-0">

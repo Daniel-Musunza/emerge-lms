@@ -1,21 +1,38 @@
 // import node module libraries
 import React, { useState, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
-
+import { useQuery } from 'react-query';
 // import context file
 import { ChatContext } from 'context/Context';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { postMessage } from '../../features/chat/chatSlice';
+import studentAction from 'store/studentAction';
 // import utility file
 import { getDateValue, getTimeValue } from 'helper/utils';
 
-const SendMessage = () => {
+const SendMessage = (chatId) => {
+	const dispatch = useDispatch();
 	const [message, setMessage] = useState('Hi');
+	const { user } = useSelector(state => state.auth);
+
+	const token = user?.data?.accessToken;
+
+	const { data: studentData, isLoading: studentDataLoading } = useQuery(
+		['studentData', token],
+		() => studentAction.getStudentData(token),
+		{
+			enabled: !!token, // Only fetch data when token is available
+		}
+	);
+
+	let studentId = studentData?.data?.id;
+
 	const {
 		ChatState: { loggedInUserId, activeThread },
 		ChatDispatch
 	} = useContext(ChatContext);
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		const dummyMsg = [
 			'Hi',
 			'Hello !',
@@ -30,21 +47,14 @@ const SendMessage = () => {
 			'Where are you from?',
 			"What's Up!"
 		];
-		const date = new Date();
 		let newMessage = {
-			userId: loggedInUserId,
+			studentId: studentId,
 			message: `${message.replace(/(?:\r\n|\r|\n)/g, '<br>')}`,
-			date: getDateValue(date),
-			time: getTimeValue(date)
+			chatId: chatId.chatId.chatId
 		};
+
 		if (message) {
-			ChatDispatch({
-				type: 'SEND_MESSAGE',
-				payload: {
-					id: activeThread.messagesId,
-					newMessage: newMessage
-				}
-			});
+			await dispatch(postMessage(newMessage))
 		}
 		setMessage(dummyMsg[Math.floor(Math.random() * dummyMsg.length)]);
 	};

@@ -15,7 +15,7 @@ const Chat = () => {
 				<Sidebar hideChatBox={hideChatBox} setHideChatBox={setHideChatBox} />
 			</Col> */}
 			<Col xl={12} lg={12} md={12} xs={12}>
-				<ChatBox hideChatBox={hideChatBox} setHideChatBox={setHideChatBox}  name={name}/>
+				<ChatBox hideChatBox={hideChatBox} setHideChatBox={setHideChatBox}  name={name} courseId={id}/>
 			</Col>
 		</Row>
 	);

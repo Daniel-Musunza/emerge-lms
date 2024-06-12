@@ -5,6 +5,7 @@ import courseReducer from '../features/courses/courseSlice';
 import courseModuleReducer from '../features/courseModules/courseModuleSlice';
 import courseContentReducer from '../features/courseContents/courseContentSlice';
 import studentReducer from '../../../store/studentSlices';
+import chatReducer from '../features/chat/chatSlice';
 
 export const store = configureStore({
 	reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
 		students: studentReducer,
 		courses: courseReducer,
 		courseModules: courseModuleReducer,
-		courseContents: courseContentReducer
+		courseContents: courseContentReducer,
+		chat: chatReducer
 	}
 });
