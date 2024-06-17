@@ -129,10 +129,10 @@ const CourseSingle = () => {
 			try {
 				// Dispatching action to bookmark the course
 				await dispatch(bookmarkCourse(bookmarkData));
-				toast.success("Course Added to Bookmarks"); // Display success message
+				toast.success("Success!! Course Started"); // Display success message
 			} catch (error) {
 				console.error(error); // Log any errors
-				toast.error("Failed to add course to Bookmarks"); // Display error message
+				toast.error("Failed to start a course"); // Display error message
 			}
 		} else {
 			toast.error("Failed!! please login");
@@ -229,20 +229,20 @@ const CourseSingle = () => {
 								<div className="d-flex align-items-center">
 									{bookmarkedIDs && bookmarkedIDs.includes(thisCourse?.id) ? (
 										<div style={{ color: '#fff' }}>
-											Bookmarked
+											Course in progress
 										</div>
 									) : user ? (
 										<>
 											{loading ? (
-												<h4>Bookmarking...</h4>
+												<h4>Starting Course...</h4>
 											) : (
-												<GKTippy content="Add to Bookmarks" >
+												<GKTippy content="Start Course" >
 													<div
 														className="bookmark text-white text-decoration-none"
 														onClick={addToBookmark} // Call addToBookmark function on click
 													>
 														<i className="fe fe-bookmark text-white-50 me-2"></i>
-														Bookmark
+														Start Course
 													</div>
 												</GKTippy>
 											)}
@@ -386,47 +386,15 @@ const CourseSingle = () => {
 									</div>
 
 									<div className="d-grid">
-										{paidIDs?.includes(thisCourse.id) ? (
-											<>
-												<Link to="#" className="btn mb-2 ">
-													Course fully Paid
-												</Link>
-											</>
+										{bookmarkedIDs?.includes(thisCourse.id) ? (
+											<Link to="#" className="btn mb-2 ">
+												Course Started
+											</Link>
 										) : (
-											<>
-												{paymentSection ? (
-													<>
-														<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
-															See Less
-														</Link>
-														<input
-															type='number'
-															min="0"
-															placeholder='Mpesa Number'
-															style={{ marginTop: '10px', marginBottom: '10px', height: '30px', borderRadius: '3px' }}
+											<Link to="#" className="btn btn-primary mb-2 " onClick={addToBookmark}>
+												Get Full Access
+											</Link>
 
-															value={mpesaPhone}
-															onChange={(e) => setMpesaPhone(e.target.value)} // Corrected the syntax
-														/>
-														<Link
-															to=""
-															className="btn btn-outline-primary"
-															onClick={HandleCoursePayment}
-														>
-															Pay for this course
-														</Link>
-													</>
-												) : (
-													<>
-														<Link to="#" className="btn btn-primary mb-2 " onClick={DisplayPaymentForm}>
-															Get Full Access
-														</Link>
-														<div className="btn mb-2" style={{backgroundColor: '#475569', color: '#fff'}} onClick={HandleTryCourse}>
-															Try this course (48 hrs full access)
-														</div>
-													</>
-												)}
-											</>
 										)}
 
 

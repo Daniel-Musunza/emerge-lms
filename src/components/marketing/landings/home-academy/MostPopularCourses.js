@@ -14,13 +14,13 @@ const MostPopularCourses = () => {
 	const tabs = ['Development', 'Design', 'Marketing', 'Business', 'Health'];
 
 	let min, max = 0;
-    const { data: courses, isLoading } = useQuery('courses', courseService.getCourses);
+	const { data: courses, isLoading } = useQuery('courses', courseService.getCourses);
 
-    if (isLoading) {
-        return <Spinner />;
-    }
+	// if (isLoading) {
+	//     return <Spinner />;
+	// }
 
-    const AllCoursesData = courses || []; // Setting a default value if courses is undefined
+	const AllCoursesData = courses || [{}, {}, {}, {}]; // Setting a default value if courses is undefined
 
 
 	return (
@@ -37,11 +37,46 @@ const MostPopularCourses = () => {
 							</div>
 						</Col>
 						<Col md={6} xs={12} className="text-md-end mt-4 mt-md-0">
-								<Link to="/marketing/allcourses/" className="btn btn-primary">
-									View More
-								</Link>
-							</Col>
+							<Link to="/marketing/allcourses/" className="btn btn-primary">
+								View More
+							</Link>
+						</Col>
 					</Row>
+					{isLoading && (
+						<Row>
+							<Col md={12}>
+								<Tab.Container defaultActiveKey="Development">
+
+									<Tab.Content>
+										{tabs.map((tab, index) => {
+											min = Math.floor(Math.random() * 16);
+											max = min + 8;
+											return (
+												<Tab.Pane
+													eventKey={tab}
+													className="pb-4 p-4 ps-0 pe-0"
+													key={index}
+												>
+													<h3 style={{textAlign: 'center'}}>Courses Loading ...</h3>
+													<Row>
+														{AllCoursesData.map((item, index) => (
+															<Col lg={3} md={6} sm={12} key={index}>
+																<div style={{ width: '100%', height: '400px', border: '1px solid grey', borderRadius: '10px' }}>
+																	{/* Add your content here */}
+																</div>
+															</Col>
+														))}
+
+													</Row>
+												</Tab.Pane>
+											);
+										})}
+									</Tab.Content>
+								</Tab.Container>
+							</Col>
+						</Row>
+					)}
+
 					<Row>
 						<Col md={12}>
 							<Tab.Container defaultActiveKey="Development">
@@ -63,7 +98,7 @@ const MostPopularCourses = () => {
 														.slice(0, 8)
 														.map((item, index) => (
 															<Col lg={3} md={6} sm={12} key={index}>
-																	<CourseCard item={item} />
+																<CourseCard item={item} />
 															</Col>
 														))}
 												</Row>
@@ -74,6 +109,7 @@ const MostPopularCourses = () => {
 							</Tab.Container>
 						</Col>
 					</Row>
+
 				</Container>
 			</section>
 		</Fragment>

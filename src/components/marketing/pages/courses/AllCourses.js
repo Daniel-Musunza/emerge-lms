@@ -27,7 +27,7 @@ const AllCourses = () => {
 		(state) => state.courses
 	);
 
-	const AllCoursesData = courses;
+	const AllCoursesData = courses || [{},{},{},{}];
 
 	useEffect(() => {
 
@@ -35,9 +35,9 @@ const AllCourses = () => {
 
 	}, [dispatch, userStore, navigate]);
 
-	if (isLoading) {
-		return <Spinner />
-	}
+	// if (isLoading) {
+	// 	return <Spinner />
+	// }
 	return (
 		<Fragment>
             <NavbarMegaMenu />
@@ -54,6 +54,40 @@ const AllCourses = () => {
 						</Col>
 						
 					</Row>
+					{isLoading && (
+						<Row>
+							<Col md={12}>
+								<Tab.Container defaultActiveKey="Development">
+
+									<Tab.Content>
+										{tabs.map((tab, index) => {
+											min = Math.floor(Math.random() * 16);
+											max = min + 8;
+											return (
+												<Tab.Pane
+													eventKey={tab}
+													className="pb-4 p-4 ps-0 pe-0"
+													key={index}
+												>
+													<h3 style={{textAlign: 'center'}}>Courses Loading ...</h3>
+													<Row>
+														{AllCoursesData.map((item, index) => (
+															<Col lg={3} md={6} sm={12} key={index}>
+																<div style={{ width: '100%', height: '400px', border: '1px solid grey', borderRadius: '10px' }}>
+																	{/* Add your content here */}
+																</div>
+															</Col>
+														))}
+
+													</Row>
+												</Tab.Pane>
+											);
+										})}
+									</Tab.Content>
+								</Tab.Container>
+							</Col>
+						</Row>
+					)}
 					<Row>
 						<Col md={12}>
 							<Tab.Container defaultActiveKey="Development">

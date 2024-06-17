@@ -55,14 +55,6 @@ export const CourseResume = () => {
 
 	const studentId = studentData?.data?.id;
 
-
-	const { data: bookmarkedCourses } = useQuery(
-		['bookmarkedCourses', token, studentId],
-		() => courseService.getBookmarkedCourses(token, studentId)
-	);
-
-	let bookmarkedIDs = bookmarkedCourses?.data?.map(course => course.course.id);
-
 	const queryKey = useMemo(() => ['courseModules', id], [id]);
 
 	// Use useQuery hook
@@ -104,20 +96,6 @@ export const CourseResume = () => {
 			setYouTubeURL(newURL);
 		}
 
-	};
-
-	const AddToBookmark = async (e) => {
-		e.preventDefault();
-		try {
-			const bookmarkData = {
-				courseId: courseId,
-				studentId: studentData?.data?.id
-			}
-			await dispatch(bookmarkCourse(bookmarkData));
-			toast.success("Course Added to Bookmarks");
-		} catch (err) {
-			toast("Failed to Bookmark");
-		}
 	};
 
 	const [read, setRead] = useState(localStorage.getItem(selectedContent?.id) || false); // Initialize read as false initially

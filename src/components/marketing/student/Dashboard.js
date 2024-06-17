@@ -158,28 +158,12 @@ const StudentDashboard = () => {
                                         <Card className="bg-transparent shadow-none ">
                                             <Card.Header className="border-0 p-0 bg-transparent">
                                                 <Nav className="nav-lb-tab">
-                                                    <Nav.Item>
+                                                    <Nav.Item className="ms-0">
                                                         <Nav.Link
                                                             eventKey="subscribed"
                                                             className="mb-sm-3 mb-md-0"
                                                         >
-                                                            Subscribed {courses?.data?.courses.filter((item) => paidIDs?.includes(item.id)).length}
-                                                        </Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item>
-                                                        <Nav.Link
-                                                            eventKey="active"
-                                                            className="mb-sm-3 mb-md-0"
-                                                        >
-                                                            48 hrs Active {courses?.data?.courses.filter((item) => item.active === true).length}
-                                                        </Nav.Link>
-                                                    </Nav.Item>
-                                                    <Nav.Item className="ms-0">
-                                                        <Nav.Link
-                                                            eventKey="bookmarked"
-                                                            className="mb-sm-3 mb-md-0"
-                                                        >
-                                                            Bookmarked  {courses?.data?.courses.filter((item) => bookmarkedIDs?.includes(item.id)).length}
+                                                           Subscribed {courses?.data?.courses.filter((item) => bookmarkedIDs?.includes(item.id)).length}
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     <Nav.Item className="ms-0">
@@ -213,7 +197,7 @@ const StudentDashboard = () => {
                                                         {/* end of bookmarked */}
                                                     </Tab.Pane>
                                                     <Tab.Pane
-                                                        eventKey="bookmarked"
+                                                        eventKey="subscribed"
                                                         className="pb-4 p-4 ps-0 pe-0"
                                                     >
                                                         {/* bookmarked started */}
@@ -230,72 +214,18 @@ const StudentDashboard = () => {
                                                             </Row>
                                                         ) : (
 
-                                                            <p style={{ textAlign: 'center' }}>you have zero bookmarked courses
+                                                            <p style={{ textAlign: 'center' }}>you have not started any course
                                                                 <Nav.Link
                                                                     eventKey="all"
                                                                     className="mb-sm-3 mb-md-0"
                                                                 >
-                                                                    add one to bookmarks
+                                                                   start one
                                                                 </Nav.Link></p>
 
                                                         )}
                                                         {/* end of bookmarked */}
                                                     </Tab.Pane>
-                                                    <Tab.Pane
-                                                        eventKey="subscribed"
-                                                        className="pb-4 p-4 ps-0 pe-0"
-                                                    >
-                                                        {/* learning courses started */}
-                                                        {paidIDs?.length > 0 ? (
-                                                            <Row>
-                                                                {courses?.data?.courses
-                                                                    // .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
-                                                                    .filter((item) => paidIDs?.includes(item.id))
-                                                                    .map((item, index) => (
-                                                                        <Col lg={3} md={6} sm={12} key={index}>
-                                                                            <CourseCard item={item} showprogressbar />
-                                                                        </Col>
-                                                                    ))}
-                                                            </Row>
-                                                        ) : (
-                                                            <>
-                                                                {paidCoursesLoading ? (
-                                                                    <p style={{ textAlign: 'center' }}>Loading ...</p>
-                                                                ) : (
-                                                                    <p style={{ textAlign: 'center' }}>you have not subscribed to any course
-                                                                        <Nav.Link
-                                                                            eventKey="bookmarked"
-                                                                            className="mb-sm-3 mb-md-0"
-                                                                        >
-                                                                            Subscribe to one
-                                                                        </Nav.Link></p>
-                                                                )}
-                                                            </>
-
-                                                        )}
-
-
-                                                        {/* end of learning courses */}
-                                                    </Tab.Pane>
-                                                    <Tab.Pane
-                                                        eventKey="active"
-                                                        className="pb-4 p-4 ps-0 pe-0"
-                                                    >
-                                                        {courses?.data?.courses.filter((item) => item.active === true).length > 0 ? (
-                                                            <Row>
-                                                                {courses?.data?.courses
-                                                                    // .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
-                                                                    .filter((item) => item.active === true)
-                                                                    .map((item, index) => (
-                                                                        <Col lg={3} md={6} sm={12} key={index}>
-                                                                            <CourseCard item={item} showprogressbar />
-                                                                        </Col>
-                                                                    ))}
-                                                            </Row>
-                                                        ) : (
-                                                            <p style={{ textAlign: 'center' }}>no course active</p>
-                                                        )}
-                                                    </Tab.Pane>
+                                                   
                                                 </Tab.Content>
                                             </Card.Body>
                                         </Card>

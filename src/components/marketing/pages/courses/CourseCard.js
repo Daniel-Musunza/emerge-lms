@@ -44,34 +44,34 @@ const CourseCard = ({
 		let bookmarkedIDs = [];
 		let paidIDs = [];
 		let token = null;
-		
+
 		if (user) {
 			token = user?.data?.accessToken;
 
 			// const { data: bookmarkedCourses } = useQuery(
-		// 	['bookmarkedCourses', token, studentId],
-		// 	() => courseService.getBookmarkedCourses(token, studentId),
-		// 	{
-		// 		enabled: !!studentId,
-		// 		onSuccess: (data) => {
-		// 			bookmarkedIDs = data?.data?.map(course => course.course.id);
-		// 		}
-		// 	}
-		// );
+			// 	['bookmarkedCourses', token, studentId],
+			// 	() => courseService.getBookmarkedCourses(token, studentId),
+			// 	{
+			// 		enabled: !!studentId,
+			// 		onSuccess: (data) => {
+			// 			bookmarkedIDs = data?.data?.map(course => course.course.id);
+			// 		}
+			// 	}
+			// );
 
-		// const { data: paidCourses } = useQuery(
-		// 	['paidCourses', token, studentId],
-		// 	() => courseService.getPaidCourses(token, studentId),
-		// 	{
-		// 		enabled: !!studentId,
-		// 		onSuccess: (data) => {
-		// 			paidIDs = data?.data?.map(course => course.course.id);
-		// 		}
-		// 	}
-		// );
+			// const { data: paidCourses } = useQuery(
+			// 	['paidCourses', token, studentId],
+			// 	() => courseService.getPaidCourses(token, studentId),
+			// 	{
+			// 		enabled: !!studentId,
+			// 		onSuccess: (data) => {
+			// 			paidIDs = data?.data?.map(course => course.course.id);
+			// 		}
+			// 	}
+			// );
 		}
-	
-		
+
+
 
 		const AddToBookmark = async (e, courseId) => {
 			e.preventDefault();
@@ -109,149 +109,60 @@ const CourseCard = ({
 
 		const handleNavigate = (e) => {
 			e.preventDefault();
-			if ( item.active === true || paidIDs?.includes(item.id)) {
+			if (item.active === true || paidIDs?.includes(item.id)) {
 				navigate(`/marketing/courses/course-resume/${item.content.id}/${item.id}`);
 			}
 		}
 		return (
 
 			<Card className={`mb-4 card-hover ${extraclass}`}>
-				{/* {paidIDs?.includes(item.id) ? (
-					<Link to={user ? courseURL1 : '#'} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-						<>
-							{item.image ? (
-								<Image
-									src={item.image}
-									alt=""
-									className="card-img-top rounded-top-md"
-									style={{ height: '200px' }}
-								/>
-							) : (
-								<Image
-									src="noimage.jpg"
-									alt=""
-									className="card-img-top rounded-top-md"
-								/>
-							)}
-
-							<Card.Body>
-								<h3 className="h4 mb-2 text-truncate-line-2 ">
-									<Link to={link} className="text-inherit">
-										{item.name}
-									</Link>
-								</h3>
-								<ListGroup as="ul" bsPrefix="list-inline" className="mb-3">
-					
-									<ListGroup.Item as="li" bsPrefix="list-inline-item">
-								
-										<div style={{ height: '50px', display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
-
-									</ListGroup.Item>
-								</ListGroup>
-								<div className={`lh-1 d-flex align-items-center`}>
-									<div className="description">
-										{item.description.length > 35 ? item.description.slice(0, 35) : item.description}
-									</div>
-
-							
-								</div>
-								<div
-									className={`lh-1 mt-3 ${free ||
-										item.price === undefined ||
-										item.price <= 0 ||
-										item.discount === undefined
-										? 'd-none'
-										: ''
-										}`}
-								>
-									<span className="text-dark fw-bold">
-										${item.price - item.discount}
-									</span>{' '}
-									<del className="fs-6 text-muted">Price: ${item.price}</del>
-								</div>
-							</Card.Body>
-						</>
-					</Link>
-				) : (
-					<Link to="" style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-						<>
-							{item.image ? (
-								<Image
-									src={item.image}
-									alt=""
-									className="card-img-top rounded-top-md"
-									style={{ height: '200px' }}
-								/>
-							) : (
-								<Image
-									src="noimage.jpg"
-									alt=""
-									className="card-img-top rounded-top-md"
-								/>
-							)}
-
-							<Card.Body>
-								<h3 className="h4 mb-2 text-truncate-line-2 ">
-									<Link to={link} className="text-inherit">
-										{item.name}
-									</Link>
-								</h3>
-								<ListGroup as="ul" bsPrefix="list-inline" className="mb-3">
-								
-									<ListGroup.Item as="li" bsPrefix="list-inline-item">
-								
-										<div style={{ height: '50px', display: 'flex' }}><h5 style={{ color: 'purple' }}>Category: </h5> <span style={{ paddingLeft: '10px' }}>{item.category}</span></div>
-
-									</ListGroup.Item>
-								</ListGroup>
-								<div className={`lh-1 d-flex align-items-center`}>
-									<div className="description">
-										{item.description.length > 35 ? item.description.slice(0, 35) : item.description}
-									</div>
-
-								</div>
-								<div
-									className={`lh-1 mt-3 ${free ||
-										item.price === undefined ||
-										item.price <= 0 ||
-										item.discount === undefined
-										? 'd-none'
-										: ''
-										}`}
-								>
-									<span className="text-dark fw-bold">
-										${item.price - item.discount}
-									</span>{' '}
-									<del className="fs-6 text-muted">Price: ${item.price}</del>
-								</div>
-							</Card.Body>
-						</>
-					</Link>
-				)} */}
-
+			
 				<Link
 					to="#"
 					onClick={handleNavigate}
-					style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-
-					{item.image ? (
-						<Image
-							src={item.image}
-							alt=""
-							className="card-img-top rounded-top-md"
-							style={{ height: '200px' }}
-						/>
-					) : (
-						<Image
-							src="noimage.jpg"
-							alt=""
-							className="card-img-top rounded-top-md"
-						/>
-					)}
+					style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer', display: 'block' }}
+				>
+					<div
+						className="card-img-container"
+						style={{
+							height: '200px',
+							overflow: 'hidden',
+							position: 'relative',
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'flex-start',
+						}}
+					>
+						{item.image ? (
+							<Image
+								src={item.image}
+								alt=""
+								className="card-img-top rounded-top-md"
+								style={{
+									objectFit: 'cover',
+									width: '100%',
+									height: '100%',
+									objectPosition: 'top',
+								}}
+							/>
+						) : (
+							<Image
+								src="noimage.jpg"
+								alt=""
+								className="card-img-top rounded-top-md"
+								style={{
+									objectFit: 'cover',
+									width: '100%',
+									height: '100%',
+									objectPosition: 'top',
+								}}
+							/>
+						)}
+					</div>
 
 					{/* Card body  */}
 					<Card.Body>
-						<h3 className="h4 mb-2 text-truncate-line-2 ">
+						<h3 className="h4 mb-2 text-truncate-line-2 " style={{ height: '50px', display: 'flex' }}>
 							<Link to={link} className="text-inherit">
 								{item.name}
 							</Link>
