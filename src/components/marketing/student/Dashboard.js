@@ -113,6 +113,7 @@ const StudentDashboard = () => {
         level: 'Beginner'
     };
 
+    console.log(courses)
     return (
         <Fragment>
             <section className="pt-5 pb-5">

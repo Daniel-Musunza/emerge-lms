@@ -75,7 +75,7 @@ export const CourseResume = () => {
 	const extractVideoId = (url) => {
 		// Regular expression to match the YouTube video ID
 		const regex = /(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([^&?]+)/;
-		const match = url.match(regex);
+		const match = url?.match(regex);
 
 		if (match && match[1]) {
 			return match[1];
@@ -87,15 +87,17 @@ export const CourseResume = () => {
 	const selectContent = async (content, e) => {
 		e.preventDefault();
 
+		if (content) {
+			const newURL = await extractVideoId(content?.video);
 
-		const newURL = await extractVideoId(content.video);
+			setSelectedContent(content);
 
-		setSelectedContent(content);
-
-		if (newURL) {
-			setYouTubeURL(newURL);
+			if (newURL) {
+				setYouTubeURL(newURL);
+			}
+		} else {
+			toast("No video present");
 		}
-
 	};
 
 	const [read, setRead] = useState(localStorage.getItem(selectedContent?.id) || false); // Initialize read as false initially
@@ -146,11 +148,11 @@ export const CourseResume = () => {
 		<Fragment>
 			<NavbarDefault dashboardData={dashboardData} />
 			{fullScreen && (
-				
+
 				<div className="pdf-full-screen" style={{ width: '100%', height: '100%', zIndex: '9999', position: 'absolute' }}>
-					
-					<div  className="close-full-screen" onClick={closeScreen}>
-						<button style={{backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px', width: '100px', height: '30px'}}>Close</button>
+
+					<div className="close-full-screen" onClick={closeScreen}>
+						<button style={{ backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px', width: '100px', height: '30px' }}>Close</button>
 					</div>
 					<PDFViewer pdfUrl={pdfUrl} />
 				</div>
@@ -183,7 +185,7 @@ export const CourseResume = () => {
 												{pdfUrl ? (
 													<div className='flex flex-col'>
 														<div onClick={closePdf}>
-														<button style={{backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px', width: '150px', height: '40px'}}>Close PDF</button>
+															<button style={{ backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px', width: '150px', height: '40px' }}>Close PDF</button>
 
 														</div>
 
