@@ -9,7 +9,7 @@ import SendMessage from './SendMessage';
 // import bootstrap icons
 import { EmojiSmile, Paperclip, Mic } from 'react-bootstrap-icons';
 
-const ChatFooter = (chatId) => {
+const ChatFooter = (props) => {
 	const ToggleActions = React.forwardRef(({ children, onClick }, ref) => (
 		<Link
 			to="#"
@@ -26,7 +26,7 @@ const ChatFooter = (chatId) => {
 
 	return (
 		<div className="bg-light px-4 py-3 chat-footer">
-			<SendMessage chatId={chatId} />
+			<SendMessage chatId={props.chatId} setMessages={props.setMessages}/>
 			<div className="mt-3 d-flex">
 				<div>
 					<Link to="#" className="text-link me-2">

@@ -1,15 +1,16 @@
 // import node module libraries
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useEffect, useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useQuery } from 'react-query';
+import moment from 'moment';
 import chatService from '../../features/chat/chatService';
 
 // import sub custom components
 import ChatHeader from './ChatHeader';
 import Message from './Message';
 import ChatFooter from './ChatFooter';
-import moment from 'moment'
+
 // import context file
 import { ChatContext } from 'context/Context';
 
@@ -18,6 +19,8 @@ import useChatOperations from 'hooks/useChatOperations';
 
 const ChatBox = (props) => {
 	const { hideChatBox, setHideChatBox } = props;
+	const [messages, setMessages] = useState([]);
+
 	const {
 		ChatState: { activeThread }
 	} = useContext(ChatContext);
@@ -42,27 +45,31 @@ const ChatBox = (props) => {
 		['groupChat', token, courseId],
 		() => chatService.getGroupChat(token, courseId)
 	);
+	
+	const chatId = chat?.data?.id;
 
-	const chatId = chat?.data.id
-
-
-	const { data: messages, isLoading: messagesLoading } = useQuery(
-		['groupChat', token, chatId],
-		() => chatService.getChatMessages(token, chatId)
+	const { data: defaultMessages, isLoading: messagesLoading, refetch: refetchMessages } = useQuery(
+		['groupChatMessages', token, chatId],
+		() => chatService.getChatMessages(token, chatId),
+		{
+			enabled: !!token && !!chatId, // Fetch only if token and chatId are available
+			onSuccess: (data) => {
+				setMessages(data?.data || []);
+			}
+		}
 	);
 
 	const getDate = (timestamp) => {
-		return moment(timestamp).format("MMMM DD, yyyy");
+		return moment(timestamp).format('MMMM DD, yyyy');
 	};
 
 	const getTime = (timestamp) => {
-		return moment(timestamp).format('hh:mm a')
+		return moment(timestamp).format('hh:mm a');
 	};
 
-
-	const chatMessages = messages?.data.flatMap(innerArray => {
+	const chatMessages = messages.flatMap(innerArray => {
 		if (Array.isArray(innerArray)) {
-			return innerArray.map(x => {// Log each message object
+			return innerArray.map(x => {
 				return {
 					date: getDate(x.createdAt),
 					message: x.message,
@@ -72,31 +79,33 @@ const ChatBox = (props) => {
 					id: x.id
 				};
 			});
-		} else { // Log non-array items for debugging
-			return []; // Return an empty array for non-array items
+		} else {
+			return [];
 		}
 	});
 
-	useEffect(scrollToBottom);
+	useEffect(() => {
+		scrollToBottom();
+	}, [chatMessages]);
 
 	return (
 		<div
-			className={`chat-body w-100 vh-100 ${hideChatBox ? 'chat-body-visible' : ''
-				}`}
+			className={`chat-body w-100 vh-100 ${hideChatBox ? 'chat-body-visible' : ''}`}
 		>
 			<ChatHeader hideChatBox={hideChatBox} setHideChatBox={setHideChatBox} name={props.name} />
 			<SimpleBar className="vh-100" style={{ maxHeight: '70vh' }}>
 				<div className="px-4 py-4 h-100 messages-container">
-					{chatMessages?.length === 0
+					{chatMessages.length === 0
 						? null
-						: chatMessages?.map((item, index) => {
+						: chatMessages.map((item, index) => {
 							return <Message chatScript={item} key={index} />;
 						})}
 				</div>
 				<div ref={messagesEndRef} />
 			</SimpleBar>
-			<ChatFooter chatId={chatId} />
+			<ChatFooter chatId={chatId} setMessages={setMessages} />
 		</div>
 	);
 };
+
 export default ChatBox;

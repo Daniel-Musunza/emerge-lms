@@ -2,19 +2,21 @@
 import React, { useState, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { useQuery } from 'react-query';
-// import context file
-import { ChatContext } from 'context/Context';
 import { useSelector, useDispatch } from 'react-redux';
 import { postMessage } from '../../features/chat/chatSlice';
 import studentAction from 'store/studentAction';
+import chatService from '../../features/chat/chatService';
+// import context file
+import { ChatContext } from 'context/Context';
 // import utility file
 import { getDateValue, getTimeValue } from 'helper/utils';
+import { toast } from 'react-toastify';
 
-const SendMessage = (chatId) => {
+const SendMessage = (props) => {
 	const dispatch = useDispatch();
-	const [message, setMessage] = useState('Hi');
+	const [message, setMessage] = useState('');
+	const [sendingMessage, setSendingMessage] = useState(false);
 	const { user } = useSelector(state => state.auth);
-
 	const token = user?.data?.accessToken;
 
 	const { data: studentData, isLoading: studentDataLoading } = useQuery(
@@ -25,39 +27,46 @@ const SendMessage = (chatId) => {
 		}
 	);
 
-	let studentId = studentData?.data?.id;
+	const studentId = studentData?.data?.id;
 
 	const {
 		ChatState: { loggedInUserId, activeThread },
 		ChatDispatch
 	} = useContext(ChatContext);
 
-	const handleSubmit = async () => {
-		const dummyMsg = [
-			'Hi',
-			'Hello !',
-			'Hey :)',
-			'How do you do?',
-			'Are you there?',
-			'I am doing good :)',
-			'Hi can we meet today?',
-			'How are you?',
-			'May I know your good name?',
-			'I am from codescandy',
-			'Where are you from?',
-			"What's Up!"
-		];
-		let newMessage = {
-			studentId: studentId,
-			message: `${message.replace(/(?:\r\n|\r|\n)/g, '<br>')}`,
-			chatId: chatId.chatId.chatId
-		};
+	const chatId = props?.chatId;
 
-		if (message) {
-			await dispatch(postMessage(newMessage))
+	const { data: messages, refetch: refetchMessages } = useQuery(
+		['groupChatMessages', token, chatId],
+		() => chatService.getChatMessages(token, chatId),
+		{
+			enabled: !!token && !!chatId, // Fetch only if token and chatId are available
 		}
-		setMessage(dummyMsg[Math.floor(Math.random() * dummyMsg.length)]);
+	);
+
+	const handleSubmit = async () => {
+		setSendingMessage(true)
+		try {
+			let newMessage = {
+				studentId: studentId,
+				message: `${message.replace(/(?:\r\n|\r|\n)/g, '<br>')}`,
+				chatId: chatId
+			};
+
+			if (message) {
+				await dispatch(postMessage(newMessage));
+				await refetchMessages(); // Refetch the messages to update the chat
+				
+				props?.setMessages(messages?.data); // Update the messages state in parent component
+			}
+		} catch (error) {
+			toast.error(error.message)
+		}
+		setSendingMessage(false)
+		setMessage('');
+
 	};
+
 	return (
 		<div className="bg-white p-2 rounded-3 shadow-sm">
 			<div className="position-relative">
@@ -72,17 +81,23 @@ const SendMessage = (chatId) => {
 				/>
 			</div>
 			<div className="position-absolute end-0 mt-n7 me-4">
-				<Button
-					variant="none"
-					bsPrefix="btn"
-					type="submit"
-					className="fs-3 text-primary btn-focus-none"
-					onClick={handleSubmit}
-				>
-					<i className="fe fe-send"></i>
-				</Button>
+				{sendingMessage ? (
+					<span className="fs-3 text-primary "> sending ...</span>
+				) : (
+					<Button
+						variant="none"
+						bsPrefix="btn"
+						type="submit"
+						className="fs-3 text-primary btn-focus-none"
+						onClick={handleSubmit}
+					>
+						<i className="fe fe-send"></i>
+					</Button>
+				)}
+
 			</div>
 		</div>
 	);
 };
+
 export default SendMessage;

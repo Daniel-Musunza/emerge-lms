@@ -46,13 +46,13 @@ const ProfileLayout = (props) => {
 		courseService.getCourses
 	);
 
-	const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
-		['paidCourses', token, studentId],
-		() => courseService.getPaidCourses(token, studentId)
+	const { data: bookmarkedCourses, isLoading: bookmarkedCoursesLoading } = useQuery(
+		['bookmarkedCourses', token, studentId],
+		() => courseService.getBookmarkedCourses(token, studentId)
 	);
 
 
-	let paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
+	let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
 
 
 	const SignOut = () => {
@@ -191,11 +191,10 @@ const ProfileLayout = (props) => {
 										</Nav.Item>
 										{openAssignmentSections && (
 											<>
-												{paidIDs?.length > 0 ? (
+												{bookmarkedIDs?.length > 0 ? (
 													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
 														{courses?.data.courses
-															// .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
-															.filter((item) => (paidIDs?.includes(item.id)) || item.active === true)
+															.filter((item) => (bookmarkedIDs?.includes(item.id)))
 															.map((x) => (
 																<Fragment key={x.id}>
 																	<li><Link to={`/marketing/assignments/${x.id}/${x.name}`} className='text-decoration-none'>{x.name}</Link></li>
@@ -204,7 +203,7 @@ const ProfileLayout = (props) => {
 													</ul>
 												) : (
 													<>
-														{paidCoursesLoading ? (
+														{bookmarkedCoursesLoading ? (
 															<p style={{ textAlign: 'center' }}>Loading ...</p>
 														) : (
 															<p style={{ textAlign: 'center', color: 'red' }}>No courses subscribed</p>
@@ -233,11 +232,10 @@ const ProfileLayout = (props) => {
 										</Nav.Item>
 										{openQuizSections && (
 											<>
-												{paidIDs?.length > 0 ? (
+												{bookmarkedIDs?.length > 0 ? (
 													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
 														{courses?.data.courses
-															// .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
-															.filter((item) => (paidIDs?.includes(item.id)) || item.active === true)
+															.filter((item) => (bookmarkedIDs?.includes(item.id)))
 															.map((x) => (
 																<Fragment key={x.id}>
 																	<li>{x.name}</li>
@@ -247,7 +245,7 @@ const ProfileLayout = (props) => {
 													</ul>
 												) : (
 													<>
-														{paidCoursesLoading ? (
+														{bookmarkedCoursesLoading ? (
 															<p style={{ textAlign: 'center' }}>Loading ...</p>
 														) : (
 															<p style={{ textAlign: 'center', color: 'red' }}>No courses subscribed</p>
@@ -281,11 +279,10 @@ const ProfileLayout = (props) => {
 
 										{openChatSections && (
 											<>
-												{paidIDs?.length > 0 ? (
+												{bookmarkedIDs?.length > 0 ? (
 													<ul style={{ maxHeight: '400px', overflowY: 'scroll' }}>
 														{courses?.data.courses
-															// .filter((item) => (item.id === "f8514c08-9cda-4a8a-8bbd-27e699cc1108") || (item.id === "759b9889-6912-4087-9930-edf210f378ad"))
-															.filter((item) => (paidIDs?.includes(item.id)) || item.active === true)
+															.filter((item) => (bookmarkedIDs?.includes(item.id)))
 															.map((x) => (
 																<Link to={`/dashboard/chat/${x.id}/${x.name}`} className='text-decoration-none'>
 																	<Fragment key={x.id}>
@@ -297,7 +294,7 @@ const ProfileLayout = (props) => {
 													</ul>
 												) : (
 													<>
-														{paidCoursesLoading ? (
+														{bookmarkedCoursesLoading ? (
 															<p style={{ textAlign: 'center' }}>Loading ...</p>
 														) : (
 															<p style={{ textAlign: 'center', color: 'red' }}>No courses subscribed</p>
