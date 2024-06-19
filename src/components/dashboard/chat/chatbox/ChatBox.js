@@ -20,7 +20,6 @@ import useChatOperations from 'hooks/useChatOperations';
 const ChatBox = (props) => {
 	const { hideChatBox, setHideChatBox } = props;
 	const [messages, setMessages] = useState([]);
-	const [recentMessage, setRecentMessage] = useState(null);
 
 	const {
 		ChatState: { activeThread }
@@ -90,9 +89,7 @@ const ChatBox = (props) => {
 	}, [chatMessages]);
 
 
-	if(recentMessage){
-		chatMessages = [...chatMessages, recentMessage];
-	}
+	
 	
 	return (
 		<div
@@ -109,7 +106,7 @@ const ChatBox = (props) => {
 				</div>
 				<div ref={messagesEndRef} />
 			</SimpleBar>
-			<ChatFooter chatId={chatId} setMessages={setMessages} setRecentMessage={setRecentMessage}/>
+			<ChatFooter chatId={chatId} setMessages={setMessages} />
 		</div>
 	);
 };

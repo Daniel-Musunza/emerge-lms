@@ -45,14 +45,7 @@ const SendMessage = (props) => {
 	);
 
 	const handleSubmit = async () => {
-		props.setRecentMessage({
-			date: "today",
-			message: message,
-			time: "now",
-			userId: user?.data?.id,
-			sender: "",
-			id: "now-id"
-		});
+		
 		setSendingMessage(true);
 		try {
 			let newMessage = {
