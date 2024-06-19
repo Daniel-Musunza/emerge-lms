@@ -20,6 +20,7 @@ import useChatOperations from 'hooks/useChatOperations';
 const ChatBox = (props) => {
 	const { hideChatBox, setHideChatBox } = props;
 	const [messages, setMessages] = useState([]);
+	const [recentMessage, setRecentMessage] = useState(null);
 
 	const {
 		ChatState: { activeThread }
@@ -67,7 +68,7 @@ const ChatBox = (props) => {
 		return moment(timestamp).format('hh:mm a');
 	};
 
-	const chatMessages = messages.flatMap(innerArray => {
+	let chatMessages = messages.flatMap(innerArray => {
 		if (Array.isArray(innerArray)) {
 			return innerArray.map(x => {
 				return {
@@ -88,6 +89,11 @@ const ChatBox = (props) => {
 		scrollToBottom();
 	}, [chatMessages]);
 
+
+	if(recentMessage){
+		chatMessages = [...chatMessages, recentMessage];
+	}
+	
 	return (
 		<div
 			className={`chat-body w-100 vh-100 ${hideChatBox ? 'chat-body-visible' : ''}`}
@@ -103,7 +109,7 @@ const ChatBox = (props) => {
 				</div>
 				<div ref={messagesEndRef} />
 			</SimpleBar>
-			<ChatFooter chatId={chatId} setMessages={setMessages} />
+			<ChatFooter chatId={chatId} setMessages={setMessages} setRecentMessage={setRecentMessage}/>
 		</div>
 	);
 };

@@ -169,37 +169,7 @@ const CourseSingle = () => {
 		setLoading(false); // Set loading state back to false after dispatching action
 	};
 
-	const [mpesaPhone, setMpesaPhone] = useState(null); // Use parentheses instead of square brackets
-
-	const HandleCoursePayment = async (e) => {
-		e.preventDefault();
-		if (studentId) {
-
-			const paymentData = {
-				courseId: courseId,
-				mpesaPhone: mpesaPhone,
-				studentId: studentData?.data?.id
-			};
-
-			try {
-				const response = await dispatch(payCourse(paymentData));
-				// Assuming your action returns a response object with a success property
-				if (response.success) {
-					toast.success("Course Paid Successfully");
-				} else {
-					toast.error("Payment not successful...");
-				}
-			} catch (error) {
-				// Handle error from the action
-				console.error("Error occurred during payment:", error);
-				toast.error("An error occurred during payment.");
-			}
-
-		} else {
-			toast.error("Failed!! please login");
-			navigate('/authentication/sign-in')
-		}
-	};
+	
 
 	const DisplayPaymentForm = () => {
 		togglePaymentSection((prev) => !prev); // Use !== instead of ==
@@ -238,10 +208,10 @@ const CourseSingle = () => {
 											) : (
 												<GKTippy content="Start Course" >
 													<div
-														className="bookmark text-white text-decoration-none"
+														className="bookmark text-grey text-decoration-none"
 														onClick={addToBookmark} // Call addToBookmark function on click
 													>
-														<i className="fe fe-bookmark text-white-50 me-2"></i>
+														<i className="fe fe-bookmark text-grey-50 me-2"></i>
 														Start Course
 													</div>
 												</GKTippy>

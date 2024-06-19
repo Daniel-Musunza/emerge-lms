@@ -45,26 +45,39 @@ const SendMessage = (props) => {
 	);
 
 	const handleSubmit = async () => {
-		setSendingMessage(true)
+		props.setRecentMessage({
+			date: "today",
+			message: message,
+			time: "now",
+			userId: user?.data?.id,
+			sender: "",
+			id: "now-id"
+		});
+		setSendingMessage(true);
 		try {
 			let newMessage = {
 				studentId: studentId,
 				message: `${message.replace(/(?:\r\n|\r|\n)/g, '<br>')}`,
 				chatId: chatId
 			};
-
 			if (message) {
 				await dispatch(postMessage(newMessage));
 				await refetchMessages(); // Refetch the messages to update the chat
+
+				// Ensure the messages are updated after refetch
+				refetchMessages().then((newData) => {
+					
+					props.setMessages(newData?.data?.data); // Assuming your API returns the messages in `data`
+				});
+
 				
-				props?.setMessages(messages?.data); // Update the messages state in parent component
+				// Update the messages state in parent component
 			}
 		} catch (error) {
-			toast.error(error.message)
+			toast.error(error.message);
 		}
-		setSendingMessage(false)
+		setSendingMessage(false);
 		setMessage('');
-
 	};
 
 	return (

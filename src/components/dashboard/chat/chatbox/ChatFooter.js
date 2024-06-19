@@ -26,7 +26,7 @@ const ChatFooter = (props) => {
 
 	return (
 		<div className="bg-light px-4 py-3 chat-footer">
-			<SendMessage chatId={props.chatId} setMessages={props.setMessages}/>
+			<SendMessage chatId={props.chatId} setMessages={props.setMessages} setRecentMessage={props.setRecentMessage}/>
 			<div className="mt-3 d-flex">
 				<div>
 					<Link to="#" className="text-link me-2">

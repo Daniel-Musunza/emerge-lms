@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useQuery } from 'react-query';
 
 import { Card, Badge, Form, Row, Col } from 'react-bootstrap';
-
+import GKTippy from 'components/elements/tooltips/GKTippy';
 // import profile layout wrapper
 import ProfileLayout from 'components/marketing/student/ProfileLayout';
 import courseService from '../../dashboard/features/courses/courseService';
@@ -18,19 +18,76 @@ const Subscriptions = () => {
 	);
 
 	const token = user?.data?.accessToken;
-const studentData = JSON.parse(localStorage.getItem('studentData'));
+
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
+
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
 		name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
 		linkname: 'Account Settings',
 		link: '/marketing/student/student-edit-profile/'
 	};
+
 	const studentId = studentData?.data?.id;
 
-	const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
+	const { data: bookmarkedCourses, isLoading: bookmarkedCoursesLoading } = useQuery(
 		['paidCourses', token, studentId],
-		() => courseService.getPaidCourses(token, studentId)
+		() => courseService.getBookmarkedCourses(token, studentId)
 	);
+
+	const [visiblePaymentSections, setVisiblePaymentSections] = useState({});
+
+	const [paymentProgress, setPaymentProgress] = useState(false);
+
+	const togglePaymentSection = (courseId) => {
+		setVisiblePaymentSections(prevState => ({
+			...prevState,
+			[courseId]: !prevState[courseId]
+		}));
+	};
+
+	const setMpesaPhone = (courseId, phoneNumber) => {
+		setVisiblePaymentSections(prevState => ({
+			...prevState,
+			[courseId]: {
+				...prevState[courseId],
+				phoneNumber
+			}
+		}));
+	};
+
+	const HandleCoursePayment = async (e, courseId) => {
+		e.preventDefault();
+		setPaymentProgress(true)
+		if (studentId) {
+			const paymentData = {
+				courseId: courseId,
+				mpesaPhone: visiblePaymentSections[courseId]?.phoneNumber || '',
+				studentId: studentId
+			};
+
+			try {
+				const response = await dispatch(payCourse(paymentData));
+				// Assuming your action returns a response object with a success property
+				if (response.success) {
+					toast.success("Course Paid Successfully");
+				} else {
+					toast.error("Payment not successful...");
+				}
+			} catch (error) {
+				// Handle error from the action
+				console.error("Error occurred during payment:", error);
+				toast.error("An error occurred during payment.");
+			}
+			setPaymentProgress(false)
+		} else {
+			setPaymentProgress(false)
+			toast.error("Failed!! please login");
+			navigate('/authentication/sign-in');
+		}
+	};
+
+
 	return (
 		<ProfileLayout dashboardData={dashboardData}>
 			<Card className="border-0">
@@ -51,8 +108,8 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 					</div> */}
 				</Card.Header>
 				<Card.Body>
-					{paidCourses?.data?.courseManager?.map((sub, index) =>
-						<div className="border-bottom pt-0 pb-5" key={index}>
+					{bookmarkedCourses?.data?.courseManager?.map((sub, index) => (
+						<div className="border-bottom pt-5" key={index}>
 							<Row className="mb-4">
 								<Col lg={8} md={9} sm={7} className="mb-2 mb-lg-0">
 									<span className="d-block">
@@ -64,25 +121,52 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 									<p className="mb-0 fs-6">Subscription ID: {sub.id}</p>
 								</Col>
 								<Col lg={4} md={3} sm={5} className="mb-2 mb-lg-0">
-									{/* Custom Switch */}
-									<span>Auto Renewal</span>
-									<Form>
-										<Form.Check
-											name="radios"
-											type="checkbox"
-											className=" form-switch"
-											checked={AutoRenewalState}
-											onChange={() =>
-												setAutoRenewalState(
-													(AutoRenewalState) => !AutoRenewalState
-												)
-											}
-										/>
-									</Form>
+									{visiblePaymentSections[sub.id] ? (
+										<>
+											<button
+												style={{ padding: '5px 10px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', width: 'fit-content' }}
+												onClick={() => togglePaymentSection(sub.id)}
+											>
+												See less
+											</button>
+											<form onSubmit={(e) => HandleCoursePayment(e, sub.id)} style={{ marginTop: '20px', width: '200px' }}>
+												<input
+													name="number"
+													type="number"
+													placeholder='Mpesa Number'
+													onChange={(e) => setMpesaPhone(sub.id, e.target.value)}
+													style={{ padding: '5px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', width: '100%' }}
+												/>
+												{paymentProgress ? (
+													<div
+														style={{ backgroundColor: '#4CAF50', color: 'white', textDecoration: 'none', padding: '5px 10px', borderRadius: '10px', textAlign: 'center', cursor: 'pointer' }}
+
+													>
+														Paying ...
+													</div>
+												) : (
+													<div
+														className="bookmark"
+														style={{ backgroundColor: '#4CAF50', color: 'white', textDecoration: 'none', padding: '5px 10px', borderRadius: '10px', textAlign: 'center', cursor: 'pointer' }}
+														onClick={(e) => HandleCoursePayment(e, sub.id)}
+													>
+														Pay Course
+													</div>
+												)}
+
+
+											</form>
+										</>
+									) : (
+										<button
+											style={{ padding: '5px 10px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', width: '200px' }}
+											onClick={() => togglePaymentSection(sub.id)}
+										>
+											Pay to be certified
+										</button>
+									)}
 								</Col>
-								
 							</Row>
-							{/* Pricing data */}
 							<Row>
 								<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
 									<span className="fs-6">Started On</span>
@@ -94,56 +178,18 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 										}
 									</h6>
 								</Col>
-
 								<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
 									<span className="fs-6">Price</span>
 									<h6 className="mb-0">{sub.course.price}</h6>
 								</Col>
 								<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
 									<span className="fs-6">Access</span>
-									<h6 className="mb-0">Access All Courses</h6>
+									<h6 className="mb-0">All course content</h6>
 								</Col>
-								
 							</Row>
 						</div>
-					)}
+					))}
 
-					{/* <div className="pt-5">
-						<Row className="mb-4">
-							<Col className="mb-2 mb-lg-0">
-								<span className="d-block">
-									<span className="h4">Free Plan</span>{' '}
-									<Badge bg="danger" className="ms-2">
-										Expired
-									</Badge>
-								</span>
-								<p className="mb-0 fs-6">Subscription ID: #100010001</p>
-							</Col>
-							<Col xs="auto">
-								<Link to="#" className="btn btn-light btn-sm disabled">
-									Disabled
-								</Link>
-							</Col>
-						</Row>
-						<Row>
-							<Col lg={3} md={3} sm={6} className="mb-2 mb-lg-0">
-								<span className="fs-6">Started On</span>
-								<h6 className="mb-0">Sept 1, 2020</h6>
-							</Col>
-							<Col lg={3} md={3} sm={6} className="mb-2 mb-lg-0">
-								<span className="fs-6">Price</span>
-								<h6 className="mb-0">Free - Trial a Month</h6>
-							</Col>
-							<Col lg={3} md={3} sm={6} className="mb-2 mb-lg-0">
-								<span className="fs-6">Access</span>
-								<h6 className="mb-0">Access All Courses</h6>
-							</Col>
-							<Col lg={3} md={3} sm={6} className="mb-2 mb-lg-0">
-								<span className="fs-6">Billing Date</span>
-								<h6 className="mb-0">Next Billing on Oct 1, 2020</h6>
-							</Col>
-						</Row>
-					</div> */}
 				</Card.Body>
 			</Card>
 		</ProfileLayout>
