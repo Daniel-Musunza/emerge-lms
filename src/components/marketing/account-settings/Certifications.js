@@ -51,7 +51,7 @@ const Certifications = () => {
 
 				<Card.Body>
 					{/* List group */}
-					<ListGroup variant="flush" className="mb-4">
+					{/* <ListGroup variant="flush" className="mb-4">
 						<ListGroup.Item className="px-0 pt-0 pb-4">
 							<Row>
 								<Col>
@@ -101,10 +101,10 @@ const Certifications = () => {
 								</Col>
 							</Row>
 						</ListGroup.Item>
-					</ListGroup>
-					{/* <div style={{ display: 'flex', justifyContent: 'center' }}>
+					</ListGroup> */}
+					<div style={{ display: 'flex', justifyContent: 'center' }}>
 						<h3 className="mb-0">No Certifications yet</h3>
-					</div> */}
+					</div>
 				</Card.Body>
 			</Card>
 		</ProfileLayout>
