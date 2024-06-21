@@ -108,6 +108,21 @@ const tryCourse = async (token, Data) => {
 	return response.data;
 };
 
+const getCertificates = async (token) => {
+	const response = await axios.post(API_URL + 'certificate/verify/' + token );
+	return response.data;
+}
+
+const getCertificate = async (token, certificateId) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+	const response = await axios.post(API_URL + 'certificate/' + certificateId, config );
+	return response.data;
+}
+
 const courseService = {
 	getCourses,
 	bookmarkCourse,
@@ -116,7 +131,9 @@ const courseService = {
 	getCoursePercentage,
 	getPaidCourses,
 	payCourse,
-	tryCourse
+	tryCourse,
+	getCertificates,
+	getCertificate
 };
 
 export default courseService;

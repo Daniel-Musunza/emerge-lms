@@ -9,6 +9,7 @@ import { Card, ListGroup, Row, Col, Form } from 'react-bootstrap';
 
 // import dashboard layout
 import ProfileLayout from 'components/marketing/student/ProfileLayout';
+import courseService from '../../dashboard/features/courses/courseService';
 
 const Certifications = () => {
 	const { user } = useSelector(
@@ -16,7 +17,7 @@ const Certifications = () => {
 	);
 
 	const token = user?.data?.accessToken;
-const studentData = JSON.parse(localStorage.getItem('studentData'));
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 	const dashboardData = {
 		avatar: `${studentData?.data?.profilePicture}`,
@@ -24,7 +25,18 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 		linkname: 'Account Settings',
 		link: '/marketing/student/student-edit-profile/'
 	};
-	
+
+	const { data: certificates } = useQuery(
+		['certificates', token],
+		() => courseService.getCertificates(token)
+	);
+
+	let certificateId = '';
+
+	const { data: certificate } = useQuery(
+		['certificate', token, certificateId],
+		() => courseService.getCertificate(token, certificateId)
+	);
 	return (
 		<ProfileLayout dashboardData={dashboardData}>
 			<Card className="border-0">
@@ -39,7 +51,7 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 				<Card.Body>
 					{/* List group */}
-					{/* <ListGroup variant="flush" className="mb-4">
+					<ListGroup variant="flush" className="mb-4">
 						<ListGroup.Item className="px-0 pt-0 pb-4">
 							<Row>
 								<Col>
@@ -89,10 +101,10 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 								</Col>
 							</Row>
 						</ListGroup.Item>
-					</ListGroup> */}
-					<div style={{display: 'flex', justifyContent: 'center'}}>
-					<h3 className="mb-0">No Certifications yet</h3>
-					</div>
+					</ListGroup>
+					{/* <div style={{ display: 'flex', justifyContent: 'center' }}>
+						<h3 className="mb-0">No Certifications yet</h3>
+					</div> */}
 				</Card.Body>
 			</Card>
 		</ProfileLayout>
