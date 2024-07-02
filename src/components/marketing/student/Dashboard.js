@@ -1,17 +1,21 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useContext, useState } from 'react';
 import { useQuery } from 'react-query';
-import { Col, Row, Nav, Tab, Card, Container } from 'react-bootstrap';
+import { Col, Row, Nav, Tab, Card, Container, Navbar, useAccordionButton, AccordionContext } from 'react-bootstrap';
 import CourseCard from 'components/marketing/pages/courses/CourseCard';
 import ProfileCover from 'components/marketing/common/headers/ProfileCover';
 import studentAction from 'store/studentAction';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import courseService from '../../dashboard/features/courses/courseService';
 import Spinner from '../../Spinner';
 import StatRightBadge from '../common/stats/StatRightBadge';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
+import { logout } from '../../dashboard/features/auth/authSlice';
 
 const StudentDashboard = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [generalProgress, setGeneralProgress] = useState(null);
 
     const { data: courses, isLoading: coursesLoading } = useQuery(
@@ -94,24 +98,41 @@ const StudentDashboard = () => {
             };
             fetchData();
         }
+        console.log(courses)
+
     }, [studentId, paidIDs, token]);
 
+    const [eventKey, setEventKey] = useState('');
+    const { activeEventKey } = useContext(AccordionContext);
 
-    if (coursesLoading) {
-        return <Spinner />;
-    }
+    const decoratedOnClick = useAccordionButton(
+        eventKey,
+        () => callback && callback(eventKey)
+    );
+
+    const isCurrentEventKey = activeEventKey === eventKey;
+
+
+    const SignOut = () => {
+        dispatch(logout());
+        navigate('/');
+    };
 
 
     const dashboardData = {
         avatar: `${studentData?.data?.profilePicture}`,
         name: `${studentData?.data?.firstName} ${studentData?.data?.lastName}`,
         contact: `${studentData?.data?.contactNumber}`,
-        linkname: 'Account Setting',
+        linkname: 'Account Settings',
         link: '/marketing/student/student-edit-profile/',
         verified: false,
         outlinebutton: false,
         level: 'Beginner'
     };
+
+    if (coursesLoading) {
+        return <Spinner />;
+    }
 
     return (
         <Fragment>
@@ -119,7 +140,72 @@ const StudentDashboard = () => {
                 <Container>
                     {/* User info */}
                     <ProfileCover dashboardData={dashboardData} />
-                    <Row style={{ marginTop: '20px' }}>
+                    <Row className="mt-0 mt-md-4 links2" >
+                        <Col lg={3} md={4} sm={12}>
+                            <Navbar
+                                expand="lg"
+                                className="navbar navbar-expand-md navbar-light shadow-sm mb-4 mb-lg-0 sidenav"
+                            >
+                                <Link
+                                    className="d-xl-none d-lg-none d-md-none text-inherit fw-bold fs-5 float-start py-1"
+                                    to="#"
+                                >
+                                    Menu
+                                </Link>
+                                <Navbar.Toggle
+                                    aria-controls="basic-navbar-nav"
+                                    className="p-0 focus-none border-0"
+                                    label="Responsive Menu"
+                                >
+                                    <span
+                                        className="navbar-toggler d-md-none icon-shape icon-sm rounded bg-primary p-0 text-white float-end"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#sidenav"
+                                        aria-controls="sidenav"
+                                        aria-expanded="false"
+                                        aria-label="Toggle navigation"
+                                    >
+                                        <span className="fe fe-menu"></span>
+                                    </span>
+                                </Navbar.Toggle>
+
+                                <Navbar.Collapse id="basic-navbar-nav">
+                                    <Nav className="me-auto flex-column" as="ul" activeKey="0">
+                                        <Nav.Item
+                                            as="li"
+                                            className={`${dashboardData.link === location.pathname ? 'active' : ''
+                                                }`}
+                                        >
+                                            <Link
+                                                to={dashboardData.link}
+                                                className='nav-link'
+                                            >
+                                                <i className={`fe fe-settings nav-icon`}></i>
+                                                Account Settings
+
+                                            </Link>
+                                        </Nav.Item>
+                                        <Nav.Item
+                                            as="li"
+                                            onClick={SignOut}
+                                        >
+                                            <Link
+                                                to=""
+                                                className='nav-link'
+                                            >
+                                                <i className={`fe fe-power nav-icon`}></i>
+                                                Logout
+
+                                            </Link>
+                                        </Nav.Item>
+                                    </Nav>
+
+                                </Navbar.Collapse>
+                            </Navbar>
+                        </Col>
+
+                    </Row>
+                    <Row >
                         <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
                                 title="Courses Subscribed"
@@ -163,7 +249,7 @@ const StudentDashboard = () => {
                                                             eventKey="subscribed"
                                                             className="mb-sm-3 mb-md-0"
                                                         >
-                                                           Subscribed {courses?.data?.courses.filter((item) => bookmarkedIDs?.includes(item.id)).length}
+                                                            Subscribed {courses?.data?.courses.filter((item) => bookmarkedIDs?.includes(item.id)).length}
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     <Nav.Item className="ms-0">
@@ -219,13 +305,13 @@ const StudentDashboard = () => {
                                                                     eventKey="all"
                                                                     className="mb-sm-3 mb-md-0"
                                                                 >
-                                                                   start one
+                                                                    start one
                                                                 </Nav.Link></p>
 
                                                         )}
                                                         {/* end of bookmarked */}
                                                     </Tab.Pane>
-                                                   
+
                                                 </Tab.Content>
                                             </Card.Body>
                                         </Card>

@@ -156,6 +156,20 @@ const ProfileLayout = (props) => {
 
 								<Navbar.Collapse id="basic-navbar-nav">
 									<Nav className="me-auto flex-column" as="ul" activeKey="0">
+										<Nav.Item
+											as="li"
+											className={`${"/marketing/student/dashboard/" === location.pathname ? 'active' : ''
+												}`}
+										>
+											<Link
+												to="/marketing/student/dashboard/"
+												className='nav-link'
+											>
+												<i className={`fe fe-book nav-icon`}></i>
+												Dashboard Courses
+
+											</Link>
+										</Nav.Item>
 										<Nav.Item className="navbar-header" as="li">
 											SUBSCRIPTION
 										</Nav.Item>
@@ -264,8 +278,8 @@ const ProfileLayout = (props) => {
 											onClick={DisplayChatCourses}
 										>
 											<div className="nav-link w-full flex justify-space-between">
-													<i class="fe fe-message-square nav-icon"></i>
-													Course Chat
+												<i class="fe fe-message-square nav-icon"></i>
+												Course Chat
 												<span className="chevron-arrow ms-4 mr-0 pr-0">
 													{openChatSections ? (
 														<i className="fe fe-chevron-up fs-4"></i>
