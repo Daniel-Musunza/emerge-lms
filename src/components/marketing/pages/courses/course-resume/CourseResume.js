@@ -42,18 +42,32 @@ export const CourseResume = () => {
 		(state) => state.auth
 	);
 
-	useEffect(() => {
-		if (!user) {
-			navigate('/authentication/sign-in');
-		}
-
-	}, [user, navigate]);
-
 	const token = user?.data.accessToken;
 
 	const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 	const studentId = studentData?.data?.id;
+	
+	const { data: bookmarkedCourses } = useQuery(
+        ['bookmarkedCourses', token, studentId],
+        () => courseService.getBookmarkedCourses(token, studentId)
+    );
+
+    let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
+
+	useEffect(() => {
+		if (!user) {
+			navigate('/authentication/sign-in');
+		}
+
+		if (!bookmarkedIDs?.includes(id)){
+			toast.error("Please start the course first!"); 
+			navigate(`/marketing/courses/course-single/${id}/${courseId}`)
+		}
+
+	}, [user, navigate]);
+
+	
 
 	const queryKey = useMemo(() => ['courseModules', id], [id]);
 

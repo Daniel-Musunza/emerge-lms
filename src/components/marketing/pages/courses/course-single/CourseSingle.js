@@ -130,6 +130,7 @@ const CourseSingle = () => {
 				// Dispatching action to bookmark the course
 				await dispatch(bookmarkCourse(bookmarkData));
 				toast.success("Success!! Course Started"); // Display success message
+				navigate(`/marketing/courses/course-resume/${id}/${courseId}`)
 			} catch (error) {
 				console.error(error); // Log any errors
 				toast.error("Failed to start a course"); // Display error message

@@ -1,6 +1,7 @@
 // import node module libraries
-import { Fragment } from 'react';
-
+import { Fragment, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 // import sub components
 import HeroAcademy from './HeroAcademy';
 import AcademyStats from './AcademyStats';
@@ -9,6 +10,15 @@ import BecomeAnInstructor from './BecomeAnInstructor';
 import WhatCustomersSay from './WhatCustomersSay';
 
 const HomeAcademy = () => {
+	const navigate = useNavigate();
+	const { user } = useSelector(state => state.auth);
+	
+	useEffect(() => {
+       if(user)(
+		navigate('/marketing/student/dashboard/')
+	   )
+    }, [user, navigate]);
+
 	return (
 		<Fragment>
 			{/* Hero Academy banner section */}

@@ -140,7 +140,7 @@ const StudentDashboard = () => {
                 <Container>
                     {/* User info */}
                     <ProfileCover dashboardData={dashboardData} />
-                    <Row className="mt-0 mt-md-4 links2" >
+                    <Row className="mt-0 links2" >
                         <Col lg={3} md={4} sm={12}>
                             <Navbar
                                 expand="lg"
@@ -205,7 +205,7 @@ const StudentDashboard = () => {
                         </Col>
 
                     </Row>
-                    <Row >
+                    <Row  className="mt-4"  >
                         <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
                                 title="Courses Subscribed"
