@@ -1,9 +1,10 @@
 // import node module libraries
 import { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-import { Image, Navbar, Nav, Container, Form } from 'react-bootstrap';
+import { Image, Navbar, Nav, Container, Form, Row, Col } from 'react-bootstrap';
 import { useMediaQuery } from 'react-responsive';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 // import sub layout components
 import NavDropdownMain from 'layouts/marketing/navbars/NavDropdownMain';
@@ -18,7 +19,8 @@ import Logo from 'assets/images/brand/logo/logo.png';
 import NavbarDefaultRoutes from 'routes/marketing/NavbarDefault';
 
 const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
-
+	const dispatch = useDispatch();
+    const navigate = useNavigate();
 	const isDesktop = useMediaQuery({
 		query: '(min-width: 1224px)'
 	});
@@ -28,6 +30,11 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 	});
 
 	const [expandedMenu, setExpandedMenu] = useState(false);
+
+    const SignOut = () => {
+        dispatch(logout());
+        navigate('/');
+    };
 
 	return (
 		<Fragment>
@@ -70,7 +77,7 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 							</h2>
 							<p className="mb-0 d-block">student</p>
 						</div>
-						<div className="links2">
+						{/* <div className="links2">
 							<Link
 								to={dashboardData.link}
 								style={{ fontSize: '10px', margin: '2px', position: 'relative', marginRight: '10px' }}
@@ -88,9 +95,87 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 								<button style={{ backgroundColor: '#6343D8', color: '#fff', border: '1px #6343D8', borderRadius: '5px' }}>Courses</button>
 
 							</Link>
-						</div>
+						</div> */}
 					</div>
+					<Row className="links2" style={{width: '100%'}} >
+						<Col lg={3} md={4} sm={12}>
+							<Navbar
+								expand="lg"
+								className="navbar navbar-expand-md navbar-light shadow-sm mb-4 mb-lg-0 sidenav"
+							>
+								<Link
+									className="d-xl-none d-lg-none d-md-none text-inherit fw-bold fs-5 float-start py-1"
+									to="#"
+								>
+									Menu
+								</Link>
+								<Navbar.Toggle
+									aria-controls="basic-navbar-nav"
+									className="p-0 focus-none border-0"
+									label="Responsive Menu"
+								>
+									<span
+										className="navbar-toggler d-md-none icon-shape icon-sm rounded bg-primary p-0 text-white float-end"
+										data-bs-toggle="collapse"
+										data-bs-target="#sidenav"
+										aria-controls="sidenav"
+										aria-expanded="false"
+										aria-label="Toggle navigation"
+									>
+										<span className="fe fe-menu"></span>
+									</span>
+								</Navbar.Toggle>
 
+								<Navbar.Collapse id="basic-navbar-nav">
+									<Nav className="me-auto flex-column" as="ul" activeKey="0">
+										<Nav.Item
+											as="li"
+											className={`${dashboardData.link === location.pathname ? 'active' : ''
+												}`}
+										>
+											<Link
+												to="/marketing/student/dashboard/"
+												className='nav-link'
+											>
+												<i className={`fe fe-book nav-icon`}></i>
+												Dashboard 
+
+											</Link>
+										</Nav.Item>
+										<Nav.Item
+											as="li"
+											className={`${dashboardData.link === location.pathname ? 'active' : ''
+												}`}
+										>
+											<Link
+												to={dashboardData.link}
+												className='nav-link'
+											>
+												<i className={`fe fe-settings nav-icon`}></i>
+												Account Settings
+
+											</Link>
+										</Nav.Item>
+										<Nav.Item
+											as="li"
+											onClick={SignOut}
+										>
+											<Link
+												to=""
+												className='nav-link'
+											>
+												<i className={`fe fe-power nav-icon`}></i>
+												Logout
+
+											</Link>
+										</Nav.Item>
+									</Nav>
+
+								</Navbar.Collapse>
+							</Navbar>
+						</Col>
+
+					</Row>
 					<Navbar.Collapse id="basic-navbar-nav">
 
 						<Nav className="navbar-nav navbar-right-wrap ms-auto d-flex nav-top-wrap">

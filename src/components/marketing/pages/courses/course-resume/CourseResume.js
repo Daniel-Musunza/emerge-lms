@@ -47,27 +47,26 @@ export const CourseResume = () => {
 	const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 	const studentId = studentData?.data?.id;
-	
-	const { data: bookmarkedCourses } = useQuery(
-        ['bookmarkedCourses', token, studentId],
-        () => courseService.getBookmarkedCourses(token, studentId)
-    );
 
-    let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
+	const { data: bookmarkedCourses } = useQuery(
+		['bookmarkedCourses', token, studentId],
+		() => courseService.getBookmarkedCourses(token, studentId),
+		{
+			enabled: !!token && !!studentId, // Ensure query only runs when token and studentId are defined
+		}
+	);
+
+	const bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
 
 	useEffect(() => {
 		if (!user) {
 			navigate('/authentication/sign-in');
+		} else if (bookmarkedIDs && !bookmarkedIDs.includes(courseId)) {
+			toast.error("Please start the course first!");
+			navigate(`/marketing/courses/course-single/${id}/${courseId}`);
 		}
+	}, [user, bookmarkedIDs, id, courseId, navigate]);
 
-		if (!bookmarkedIDs?.includes(id)){
-			toast.error("Please start the course first!"); 
-			navigate(`/marketing/courses/course-single/${id}/${courseId}`)
-		}
-
-	}, [user, navigate]);
-
-	
 
 	const queryKey = useMemo(() => ['courseModules', id], [id]);
 
@@ -275,6 +274,23 @@ export const CourseResume = () => {
 										</Row>
 									</Container>
 								</section> */}
+								<div className="d-flex gap-1">
+									<Link to={`/marketing/student/dashboard/`} className="btn btn-primary mb-2 ">
+										Dashboard
+									</Link>
+									<div className='mt-2'>
+										<i className="fe fe-chevron-right text-grey-50"></i>
+									</div>
+									<Link to={`/marketing/student/dashboard/`} className="btn btn-primary mb-2 " >
+										Course
+									</Link>
+									<div className='mt-2'>
+										<i className="fe fe-chevron-right text-grey-50"></i>
+									</div>
+									<div className="btn btn-primary mb-2 ">
+										Content
+									</div>
+								</div>
 								<h4 className="mb-0">Table of Content</h4>
 							</Card.Header>
 							{/* Course Index Accordion */}

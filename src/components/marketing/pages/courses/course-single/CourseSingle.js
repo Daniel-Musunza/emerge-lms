@@ -170,7 +170,7 @@ const CourseSingle = () => {
 		setLoading(false); // Set loading state back to false after dispatching action
 	};
 
-	
+
 
 	const DisplayPaymentForm = () => {
 		togglePaymentSection((prev) => !prev); // Use !== instead of ==
@@ -188,8 +188,26 @@ const CourseSingle = () => {
 			<section className="pt-lg-8 pb-lg-16 pt-8 pb-12 bg-primary">
 				<Container>
 
-					<Row className="align-items-center">
+					<Row className="">
+						<div className="d-flex mb-4 -mt-12 gap-2">
+							<Link to={`/marketing/student/dashboard/`} className="btn bg-white mb-2 " >
+								Dashboard
+							</Link>
+							<div className='mt-2'>
+								<i className="fe fe-chevron-right text-white-50"></i>
+							</div>
+							<Link to={`/marketing/student/dashboard/`} className="btn bg-white mb-2 " >
+								Course
+							</Link>
+							<div className='mt-2'>
+								<i className="fe fe-chevron-right text-white-50"></i>
+							</div>
+							<div className="btn bg-white mb-2 ">
+								Course single
+							</div>
+						</div>
 						<Col xl={7} lg={7} md={12} sm={12}>
+
 							<div>
 								<h1 className="text-white display-4 fw-semi-bold">
 									Getting Started with {thisCourse?.name}
@@ -269,6 +287,7 @@ const CourseSingle = () => {
 								);
 							</div>
 						</Col>
+
 					</Row>
 				</Container>
 			</section>
@@ -358,9 +377,15 @@ const CourseSingle = () => {
 
 									<div className="d-grid">
 										{bookmarkedIDs?.includes(thisCourse.id) ? (
-											<Link to="#" className="btn mb-2 ">
-												Course Started
-											</Link>
+											<>
+												<Link to="#" className="btn mb-2 ">
+													Course Started
+												</Link>
+												<Link to={`/marketing/courses/course-resume/${id}/${courseId}`} className="btn btn-primary mb-2 " >
+													View Content
+												</Link>
+											</>
+
 										) : (
 											<Link to="#" className="btn btn-primary mb-2 " onClick={addToBookmark}>
 												Get Full Access
