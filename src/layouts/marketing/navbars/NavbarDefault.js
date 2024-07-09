@@ -31,8 +31,8 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 
 	const [expandedMenu, setExpandedMenu] = useState(false);
 
-    const SignOut = () => {
-        dispatch(logout());
+    const SignOut = async() => {
+        await dispatch(logout());
         navigate('/');
     };
 

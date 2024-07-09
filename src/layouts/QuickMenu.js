@@ -93,7 +93,7 @@ const QuickMenu = () => {
 	const handleLogout = async (e) => {
 		e.preventDefault();
 	
-		dispatch(logout());
+		await dispatch(logout());
 		dispatch(reset());
 		navigate('/');
 	  };

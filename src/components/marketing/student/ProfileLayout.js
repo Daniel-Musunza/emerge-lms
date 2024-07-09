@@ -55,8 +55,8 @@ const ProfileLayout = (props) => {
 	let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
 
 
-	const SignOut = () => {
-		dispatch(logout());
+	const SignOut = async() => {
+		await dispatch(logout());
 		navigate('/');
 	};
 
