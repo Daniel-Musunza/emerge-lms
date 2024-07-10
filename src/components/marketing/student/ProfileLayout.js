@@ -73,10 +73,10 @@ const ProfileLayout = (props) => {
 	};
 
 	const CourseModules = ({ courseId, courseContentId, studentId }) => {
-		const queryKey = useMemo(() => ['courseModules', courseContentId], [courseContentId]);
+		const queryKey = useMemo(() => ['courseModules', token, courseContentId], [token, courseContentId]);
 		const { data: courseModules } = useQuery(
 			queryKey,
-			() => courseModuleService.getcourseModules(courseContentId)
+			() => courseModuleService.getcourseModules(token, courseContentId)
 		);
 
 		const courseData = {

@@ -3,9 +3,15 @@ import { baseUrl } from '../../../../api/base';
 
 const API_URL = `${baseUrl}course-section/`;
 // Get user courseContents
-const getcourseModules = async (id) => {
+const getcourseModules = async (token, id) => {
 	
-	const response = await axios.get(API_URL + 'student/' + id);
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+
+	const response = await axios.get(API_URL + 'student/' + id, config);
 
 	return response?.data;
 };
