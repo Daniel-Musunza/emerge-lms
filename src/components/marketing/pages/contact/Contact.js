@@ -54,8 +54,9 @@ const Contact = () => {
 										hello@daruurlms.com
 									</p>
 									<p className="fs-4 ">
-										<GeoAlt size={17} className="text-primary me-2" /> 2652
-										Kooter Lane Charlotte, NC 28263
+										<GeoAlt size={17} className="text-primary me-2" /> Dubai House, along Airstrip Road, Mandera Town. P.O Box 287-70300, Mandera, Kenya.
+
+
 									</p>
 								</div>
 

@@ -5,18 +5,15 @@ import { Image, Navbar, Nav, Container, Button } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 // import sub components
-import DocumentMenu from '../DocumentMenu';
 import NavMegaDropdown from './NavMegaDropdown';
 import MegaMenu from './MegaMenu';
-import CategoriesDropDown from './CategoriesDropDown';
 import DarkLightMode from 'layouts/DarkLightMode';
 
 // import media files
 import Logo from 'assets/images/brand/logo/logo.png';
 import Logo2 from 'assets/images/brand/logo/emerge-logo.png';
 // import data files
-import NavbarDefaultRoutes from 'routes/marketing/NavbarDefault';
-import LogoList2 from 'data/marketing/clientlogos/LogoList2';
+
 
 import { logout } from '../../../../components/dashboard/features/auth/authSlice';
 
@@ -46,7 +43,6 @@ const NavbarMegaMenu = () => {
 								<Image src={Logo} alt="Logo" style={{ width: '60px', height: '80px', marginLeft: '10px' }} />
 							</div>
 						</Navbar.Brand>
-						<CategoriesDropDown />
 					</div>
 					<Navbar.Toggle aria-controls="basic-navbar-nav">
 						<span className="icon-bar top-bar mt-0"></span>
@@ -54,28 +50,7 @@ const NavbarMegaMenu = () => {
 						<span className="icon-bar bottom-bar"></span>
 					</Navbar.Toggle>
 					<Navbar.Collapse id="basic-navbar-nav">
-						<Nav className="ms-auto">
-							{NavbarDefaultRoutes.slice(1, 100).map((item, index) => {
-								if (item.children === undefined) {
-									return (
-										<Nav.Link key={index} as={Link} to={item.link}>
-											{item.menuitem}
-										</Nav.Link>
-									);
-								} else {
-									return (
-										<NavMegaDropdown
-											item={item}
-											key={index}
-											onClick={(value) => setExpandedMenu(value)}
-										/>
-									);
-								}
-							})}
-							<MegaMenu />
-							<DocumentMenu />
-						</Nav>
-
+						
 						{/* Right side quick / shortcut menu  */}
 						<div className="ms-auto mt-3 mt-lg-0">
 							<div className="d-flex align-items-center">

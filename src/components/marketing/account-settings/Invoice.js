@@ -1,14 +1,8 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
-import { useQuery } from 'react-query';
-
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
 import { Card, Table, Badge } from 'react-bootstrap';
 
-// import data files
-import InvoiceData from 'data/marketing/InvoiceData';
 
 // import profile layout wrapper
 import ProfileLayout from 'components/marketing/student/ProfileLayout';

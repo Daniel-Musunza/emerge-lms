@@ -4,10 +4,10 @@ import { Col, Row, Container } from 'react-bootstrap';
 // import custom components
 import FeatureTopIconWithLink from 'components/marketing/common/features/FeatureTopIconWithLink';
 
-// import data files
-import HelpCenterContactData from 'data/marketing/help-center/HelpCenterContactData';
-
 const ContactSupportSection = () => {
+
+	const HelpCenterContactData = []
+
 	return (
 		<section className="pb-lg-16 pb-10">
 			<Container>

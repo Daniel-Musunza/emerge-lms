@@ -35,8 +35,8 @@ const GKAccordionBox = ({ accordionItems, itemClass }) => {
 
 	return (
 		<Fragment>
-			<Accordion defaultActiveKey={accordionItems[0].id} flush>
-				{accordionItems.map((item, index) => (
+			<Accordion defaultActiveKey={accordionItems[0]?.id} flush>
+				{accordionItems?.map((item, index) => (
 					<Fragment key={index}>
 						<div className="border p-3 rounded-3 mb-2">
 							<h3 className="mb-0 fs-4">

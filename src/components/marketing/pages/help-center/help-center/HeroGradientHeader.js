@@ -8,10 +8,9 @@ import FeatureTopIconWithLink from 'components/marketing/common/features/Feature
 // import media files
 import ThreeDGirlSeeting from 'assets/images/svg/3d-girl-seeting.svg';
 
-// import data files
-import HelpCenterFeaturesData from 'data/marketing/help-center/HelpCenterFeaturesData';
 
 const HeroGradientHeader = () => {
+	const HelpCenterFeaturesData = [];
 	return (
 		<Fragment>
 			<section className="py-lg-15 py-10 bg-light">

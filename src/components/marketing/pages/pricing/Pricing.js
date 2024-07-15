@@ -1,31 +1,19 @@
 // import node module libraries
 import React, { Fragment } from 'react';
-import { Link } from 'react-router-dom';
 import { Col, Row, Container, Form, Card } from 'react-bootstrap';
 
 // import hooks
 import useToggle from 'hooks/useToggle';
 
-// import custom components
-import LogosTopHeading2 from 'components/marketing/common/clientlogos/LogosTopHeading2';
 
-// import sub components
-import PricingCard from './PricingCard';
-
-// import data files
-import {
-	starter,
-	individual,
-	team
-} from 'data/marketing/pricing/PricingPlansData';
-import LogoList1 from 'data/marketing/clientlogos/LogoList1';
-import FAQsData from 'data/marketing/pricing/FAQsData';
 import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
 import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 
 const Pricing = () => {
 	const [Pricing, togglePricing] = useToggle(true);
 
+	const FAQsData = [];
+	
 	return (
 		<Fragment>
 			<NavbarMegaMenu />

@@ -1,8 +1,7 @@
 // import node module libraries
 import { Fragment } from 'react';
 
-// import sub components
-import Collage from './Collage';
+
 import CareerAtGeeks from './CareerAtGeeks';
 import TeamMemberAtGeeks from './TeamMemberAtGeeks';
 import GeeksCulture from './GeeksCulture';

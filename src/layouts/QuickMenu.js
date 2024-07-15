@@ -17,19 +17,16 @@ import DotBadge from 'components/elements/bootstrap/DotBadge';
 import DarkLightMode from 'layouts/DarkLightMode';
 import GKTippy from 'components/elements/tooltips/GKTippy';
 
-// import media files
-import Avatar1 from 'assets/images/avatar/avatar-1.jpg';
 
-// import data files
-import NotificationList from 'data/Notification';
 
 const QuickMenu = () => {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+	const NotificationList = [];
 
 	const { user, isLoading, isError, isSuccess, message } = useSelector(
 		(state) => state.auth
-	  )
+	)
 
 	const isDesktop = useMediaQuery({
 		query: '(min-width: 1224px)'
@@ -87,18 +84,18 @@ const QuickMenu = () => {
 	useEffect(() => {
 		if (isError) {
 			//toast.error(message);
-		  }
-		
+		}
+
 	}, [user, isError, isSuccess, message, navigate, dispatch]);
 	const handleLogout = async (e) => {
 		e.preventDefault();
-	
+
 		await dispatch(logout());
 		dispatch(reset());
 		navigate('/');
-	  };
+	};
 	return (
-		
+
 		<Fragment>
 			<DarkLightMode />
 			<ListGroup
@@ -150,7 +147,7 @@ const QuickMenu = () => {
 					>
 						<div className="avatar avatar-md avatar-indicators avatar-online">
 							{/* <Image alt="avatar" src={Avatar1} className="rounded-circle" /> */}
-							<h3 className="rounded-circle" style={{backgroundColorolor: 'purple'}}>ADM</h3>
+							<h3 className="rounded-circle" style={{ backgroundColorolor: 'purple' }}>ADM</h3>
 						</div>
 					</Dropdown.Toggle>
 					<Dropdown.Menu
@@ -167,7 +164,7 @@ const QuickMenu = () => {
 										src={Avatar1}
 										className="rounded-circle"
 									/> */}
-									
+
 								</div>
 								<div className="ms-3 lh-1">
 									{user && user.data && user.data && user.data.email ? (

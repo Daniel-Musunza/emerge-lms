@@ -10,8 +10,7 @@ import SignIn from 'components/dashboard/authentication/SignIn';
 import SignUp from 'components/dashboard/authentication/SignUp';
 import ForgetPassword from 'components/dashboard/authentication/ForgetPassword';
 
-// IMPORTS FOR HELP CENTER PAGES ( v1.3.0 )
-import About from 'components/marketing/pages/about/About';
+
 import Pricing from 'components/marketing/pages/pricing/Pricing';
 import Contact from 'components/marketing/pages/contact/Contact'; // new v1.1.0
 
@@ -138,7 +137,6 @@ const AllRoutes = () => {
 				element={<CourseSingle />}
 			/>
 
-			<Route path="/marketing/pages/about/" element={<About />} />
 			<Route
 				path="/marketing/courses/course-resume/:id/:courseId"
 				element={<CourseResume />}

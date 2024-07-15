@@ -4,14 +4,13 @@ import { Col, Row, Container } from 'react-bootstrap';
 // import custom components
 import GKAccordionBox from 'components/marketing/common/accordions/GKAccordionBox';
 
-// import data files
-import {
-	MostAskedFAQs,
-	GeneralInquiriesFAQs,
-	SupportFAQs
-} from 'data/marketing/help-center/HelpCenterFAQsData';
+
 
 const AllFAQsList = () => {
+	const  MostAskedFAQs=[]
+	const  GeneralInquiriesFAQs=[]
+	const SupportFAQs=[]
+
 	return (
 		<section className="py-10">
 			<Container>

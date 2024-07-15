@@ -6,8 +6,6 @@ import { Row, Col, Container } from 'react-bootstrap';
 import HeaderBreadcrumb from '../HeaderBreadcrumb';
 import ArticlesCategoryCard from './ArticlesCategoryCard';
 
-// import data files
-import GuidesResourcesData from 'data/marketing/help-center/GuidesResourcesData';
 
 const HelpCenterGuide = () => {
 	const breadcrumb = [
@@ -21,6 +19,7 @@ const HelpCenterGuide = () => {
 		}
 	];
 
+	const GuidesResourcesData = [];
 	return (
 		<Fragment>
 			{/* header and breadcrumb */}

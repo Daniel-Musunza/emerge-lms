@@ -6,17 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-// import sub layout components
-import NavDropdownMain from 'layouts/marketing/navbars/NavDropdownMain';
 import QuickMenu from 'layouts/QuickMenu';
-import DocumentMenu from 'layouts/marketing/navbars/DocumentMenu';
-import DarkLightMode from 'layouts/DarkLightMode';
-
-// import media files
-import Logo from 'assets/images/brand/logo/logo.png';
-
-// import data files
-import NavbarDefaultRoutes from 'routes/marketing/NavbarDefault';
 
 const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 	const dispatch = useDispatch();

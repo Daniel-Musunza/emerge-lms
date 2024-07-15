@@ -3,10 +3,6 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Row, Container, Form, Card } from 'react-bootstrap';
 
-// import hooks
-import useToggle from 'hooks/useToggle';
-
-
 import AppStore from 'assets/images/svg/appstore.svg';
 import PlayStore from 'assets/images/svg/playstore.svg';
 

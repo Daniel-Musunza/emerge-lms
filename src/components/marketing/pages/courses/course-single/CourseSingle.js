@@ -18,30 +18,17 @@ import GKTippy from 'components/elements/tooltips/GKTippy';
 // import sub components
 import CourseCard from '../CourseCard';
 
-// import sub components tabs
-import ReviewsTab from './ReviewsTab';
-import DescriptionTab from './DescriptionTab';
-import TranscriptTab from './TranscriptTab';
-import FAQTab from './FAQTab';
-
 // import media files
 import CheckedMark from 'assets/images/svg/checked-mark.svg';
-import CourseJavascript from 'assets/images/course/course-javascript.jpg';
-import Avatar1 from 'assets/images/avatar/avatar-1.jpg';
-
 import {
 	bookmarkCourse,
-	payCourse,
 	tryCourse
 } from '../../../../dashboard/features/courses/courseSlice';
 
 import courseService from '../../../../dashboard/features/courses/courseService';
 import courseModuleService from '../../../../dashboard/features/courseModules/courseModuleService';
-import studentAction from 'store/studentAction';
 
 import Spinner from '../../../../Spinner';
-// import data files
-import { CourseIndex } from 'data/marketing/CourseIndexData';
 import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
 import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 

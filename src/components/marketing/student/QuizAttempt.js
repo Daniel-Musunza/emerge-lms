@@ -10,14 +10,13 @@ import { Card, Table, Badge } from 'react-bootstrap';
 // import profile layout wrapper
 import ProfileLayout from './ProfileLayout';
 
-// import data files
-import QuizAttemptsData from 'data/marketing/quiz/QuizAttemptsData';
 
 const QuizAttempt = () => {
 	const { user } = useSelector(
 		(state) => state.auth
 	);
 
+	const  QuizAttemptsData = [];
 	const token = user?.data?.accessToken;
 const studentData = JSON.parse(localStorage.getItem('studentData'));
 

@@ -5,9 +5,7 @@ import { Dropdown } from 'react-bootstrap';
 import { useQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 // import custom components
-import { Avatar } from 'components/elements/bootstrap/Avatar';
 
-// import context file
 import { ChatContext } from 'context/Context';
 import studentAction from 'store/studentAction';
 // import hook file
@@ -18,10 +16,8 @@ const Message = (props) => {
 	const {
 		ChatState: { loggedInUserId }
 	} = useContext(ChatContext);
-	const { getUserDetailsById } = useChatOperations();
-	const { user } = useSelector(state => state.auth);
 
-	const token = user?.data?.accessToken;
+	const { user } = useSelector(state => state.auth);
 
 	const { data: studentData, isLoading: studentDataLoading } = useQuery(
 		['studentData', token],

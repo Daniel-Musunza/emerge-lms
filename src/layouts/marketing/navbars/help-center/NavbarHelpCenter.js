@@ -14,7 +14,6 @@ import {
 import PropTypes from 'prop-types';
 
 // import sub component
-import HelpCenterDropDown from './HelpCenterDropDown';
 import DarkLightMode from '../../../DarkLightMode';
 
 // import media files
@@ -59,7 +58,6 @@ const NavbarHelpCenter = ({ className }) => {
 								style={{ height: '20px', marginTop: '13px' }}
 								className={`vr bg-dark bg-opacity-25`}
 							></div>
-							<HelpCenterDropDown />
 						</div>
 					</div>
 					<div className="ms-auto d-flex align-items-center">

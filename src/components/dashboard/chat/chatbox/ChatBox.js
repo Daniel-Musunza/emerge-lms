@@ -11,21 +11,10 @@ import ChatHeader from './ChatHeader';
 import Message from './Message';
 import ChatFooter from './ChatFooter';
 
-// import context file
-import { ChatContext } from 'context/Context';
-
-// import hook file
-import useChatOperations from 'hooks/useChatOperations';
 
 const ChatBox = (props) => {
 	const { hideChatBox, setHideChatBox } = props;
 	const [messages, setMessages] = useState([]);
-
-	const {
-		ChatState: { activeThread }
-	} = useContext(ChatContext);
-	const { getThreadMessages } = useChatOperations();
-	const thread = getThreadMessages(activeThread.messagesId);
 
 	// Auto scroll to bottom when the new chat has been added.
 	const messagesEndRef = useRef(null);

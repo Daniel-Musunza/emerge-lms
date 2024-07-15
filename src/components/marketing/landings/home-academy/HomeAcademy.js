@@ -7,7 +7,6 @@ import HeroAcademy from './HeroAcademy';
 import AcademyStats from './AcademyStats';
 import MostPopularCourses from './MostPopularCourses';
 import BecomeAnInstructor from './BecomeAnInstructor';
-import WhatCustomersSay from './WhatCustomersSay';
 
 const HomeAcademy = () => {
 	const navigate = useNavigate();
@@ -32,9 +31,6 @@ const HomeAcademy = () => {
 
 			{/* Become an instructor */}
 			<BecomeAnInstructor />
-
-			{/* What our customers say */}
-			<WhatCustomersSay />
 		</Fragment>
 	);
 };

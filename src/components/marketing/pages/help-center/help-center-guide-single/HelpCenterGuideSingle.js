@@ -10,13 +10,12 @@ import { mdiArrowRight } from '@mdi/js';
 // import custom components
 import GKBreadcrumb from 'components/marketing/common/breadcrumb/GKBreadcrumb';
 
-// import data files
-import GuidesResourcesData from 'data/marketing/help-center/GuidesResourcesData';
-
 const HelpCenterGuideSingle = () => {
 	const guideInfo = useParams();
 	const categoryslug = guideInfo.categoryslug;
 	const articleslug = guideInfo.articleslug;
+
+	const GuidesResourcesData = [];
 
 	return (
 		<Fragment>

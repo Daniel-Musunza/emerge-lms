@@ -6,10 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { postMessage } from '../../features/chat/chatSlice';
 import studentAction from 'store/studentAction';
 import chatService from '../../features/chat/chatService';
-// import context file
-import { ChatContext } from 'context/Context';
-// import utility file
-import { getDateValue, getTimeValue } from 'helper/utils';
 import { toast } from 'react-toastify';
 
 const SendMessage = (props) => {
@@ -28,11 +24,6 @@ const SendMessage = (props) => {
 	);
 
 	const studentId = studentData?.data?.id;
-
-	const {
-		ChatState: { loggedInUserId, activeThread },
-		ChatDispatch
-	} = useContext(ChatContext);
 
 	const chatId = props?.chatId;
 

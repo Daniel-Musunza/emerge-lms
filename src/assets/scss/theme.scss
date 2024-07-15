@@ -37,17 +37,19 @@
 @import "user";
 
 
-  .top-form{
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-  }
-.navbar-brand img,
-.logo-inverse{
-  width: 100px!important;
+.top-form {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
-.links2{
+
+.navbar-brand img,
+.logo-inverse {
+  width: 100px !important;
+}
+
+.links2 {
   display: flex;
 }
 
@@ -62,80 +64,101 @@
   justify-content: flex-end;
 }
 
+.hlogo {
+  width: 100px;
+  height: auto;
+}
+
 @media (max-width: 778px) {
+  .hlogo {
+    width: 40px;
+  }
+
   .close-full-screen {
     margin-top: 10px;
     padding-right: 10px;
   }
-.small-screen-t-pdf{
- font-size: 10px;
- 
+
+  .small-screen-t-pdf {
+    font-size: 10px;
+
+  }
+
+  .view-pdf {
+    width: 100px,
+  }
+
+  .v-code {
+    font-size: 20px;
+  }
+
+  .patners-bgs {
+    display: none;
+  }
+
+  .patners-sms {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
 }
-.view-pdf{
-  width: 100px,
+
+@media (min-width: 778px) {
+  .patners-sms {
+    display: none;
+  }
 }
-.v-code{
-  font-size: 20px;
+
+@media (min-width: 992px) {
+  .small-screen-t-pdf {
+    font-size: 20px;
+
+  }
+
+  .v-code {
+    font-size: 40px,
+  }
+
+  .view-pdf {
+    width: 200px,
+  }
+
+  .links2 {
+    display: none;
+  }
+
 }
-.patners-bgs{
-  display: none;
-}
-.patners-sms{
+
+.loadingSpinnerContainer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 5000;
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
 
+.loadingSpinner {
+  width: 64px;
+  height: 64px;
+  border: 8px solid;
+  border-color: #000 transparent #555 transparent;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
 }
-@media (min-width: 778px) {
-  .patners-sms{
-    display: none;
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
   }
 }
-@media (min-width: 992px) {
-  .small-screen-t-pdf{
-    font-size: 20px;
-    
-   }
-   .v-code{
-    font-size: 40px,
-  }
-   .view-pdf{
-    width: 200px,
-   }
-  .links2{
-    display: none;
-  }
-  
-}
-.loadingSpinnerContainer {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 5000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .loadingSpinner {
-    width: 64px;
-    height: 64px;
-    border: 8px solid;
-    border-color: #000 transparent #555 transparent;
-    border-radius: 50%;
-    animation: spin 1.2s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
