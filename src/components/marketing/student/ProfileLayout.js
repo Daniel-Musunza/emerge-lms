@@ -51,9 +51,7 @@ const ProfileLayout = (props) => {
 		() => courseService.getBookmarkedCourses(token, studentId)
 	);
 
-
 	let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
-
 
 	const SignOut = async() => {
 		await dispatch(logout());
@@ -105,7 +103,6 @@ const ProfileLayout = (props) => {
 			</ul>
 		);
 	};
-
 
 	const [eventKey, setEventKey] = useState('');
 	const { activeEventKey } = useContext(AccordionContext);

@@ -29,21 +29,14 @@ const StudentDashboard = () => {
 
     const studentData = JSON.parse(localStorage.getItem('studentData'));
 
-    const studentId = studentData?.data?.id
+    const studentId = studentData?.data?.id;
+
     const { data: bookmarkedCourses } = useQuery(
         ['bookmarkedCourses', token, studentId],
         () => courseService.getBookmarkedCourses(token, studentId)
     );
 
     let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
-
-    const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
-        ['paidCourses', token, studentId],
-        () => courseService.getPaidCourses(token, studentId)
-    );
-
-
-    let paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
 
     const getProgress = () => {
         if (generalProgress > 80) {
@@ -69,55 +62,40 @@ const StudentDashboard = () => {
         }
     };
 
-
     useEffect(() => {
-        if (paidIDs?.length > 0) {
+        if (bookmarkedIDs?.length > 0) {
             const fetchData = async () => {
                 let totalProgress = 0; // Initialize totalProgress here
-                const coursePercentages = [];
-                const queries = paidIDs.map(async (x) => {
-                    const courseData = {
-                        courseId: x,
-                        studentId
-                    };
-                    const { data: courseAnalytics } = await courseService.getCoursePercentage(token, courseData);
+                // const coursePercentages = [];
+                // const queries = bookmarkedIDs.map(async (x) => {
+                //     const courseData = {
+                //         courseId: x,
+                //         studentId
+                //     };
+                //     const { data: courseAnalytics } = await courseService.getCoursePercentage(token, courseData);
 
-                    coursePercentages.push(courseAnalytics.courseTotalPercentage);
-                    // Do something with courseAnalytics here
-                    return courseAnalytics;
-                });
-                const results = await Promise.all(queries);
+                //     coursePercentages.push(courseAnalytics.courseTotalPercentage);
+                //     // Do something with courseAnalytics here
+                //     return courseAnalytics;
+                // });
+                // const results = await Promise.all(queries);
 
-                coursePercentages.forEach(x => {
-                    const courseP = parseFloat(x);
-                    totalProgress += courseP; // Accumulate progress here
-                });
+                // coursePercentages.forEach(x => {
+                //     const courseP = parseFloat(x);
+                //     totalProgress += courseP; // Accumulate progress here
+                // });
 
-                const avProgress = totalProgress / paidIDs?.length;
+                const avProgress = totalProgress / bookmarkedIDs?.length || 1;
                 setGeneralProgress(avProgress);
             };
             fetchData();
         }
-       
-
-    }, [studentId, paidIDs, token]);
-
-    const [eventKey, setEventKey] = useState('');
-    const { activeEventKey } = useContext(AccordionContext);
-
-    const decoratedOnClick = useAccordionButton(
-        eventKey,
-        () => callback && callback(eventKey)
-    );
-
-    const isCurrentEventKey = activeEventKey === eventKey;
-
+    }, [studentId, bookmarkedIDs, token]);
 
     const SignOut = async () => {
         await dispatch(logout());
         navigate('/');
     };
-
 
     const dashboardData = {
         avatar: `${studentData?.data?.profilePicture}`,
@@ -209,7 +187,7 @@ const StudentDashboard = () => {
                         <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
                                 title="Courses Subscribed"
-                                value={courses?.data?.courses.filter((item) => paidIDs?.includes(item.id)).length}
+                                value={courses?.data?.courses.filter((item) => bookmarkedIDs?.includes(item.id)).length}
                                 badgeValue="learning"
                                 colorVariant="warning"
                             />

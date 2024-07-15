@@ -41,38 +41,15 @@ const CourseCard = ({
 		const [loading, setLoading] = useState(null);
 
 		let studentId = studentData?.data?.id;
-		let bookmarkedIDs = [];
-		let paidIDs = [];
-		let token = null;
+		let token = user?.data?.accessToken;
 
-		if (user) {
-			token = user?.data?.accessToken;
-
-			// const { data: bookmarkedCourses } = useQuery(
-			// 	['bookmarkedCourses', token, studentId],
-			// 	() => courseService.getBookmarkedCourses(token, studentId),
-			// 	{
-			// 		enabled: !!studentId,
-			// 		onSuccess: (data) => {
-			// 			bookmarkedIDs = data?.data?.map(course => course.course.id);
-			// 		}
-			// 	}
-			// );
-
-			// const { data: paidCourses } = useQuery(
-			// 	['paidCourses', token, studentId],
-			// 	() => courseService.getPaidCourses(token, studentId),
-			// 	{
-			// 		enabled: !!studentId,
-			// 		onSuccess: (data) => {
-			// 			paidIDs = data?.data?.map(course => course.course.id);
-			// 		}
-			// 	}
-			// );
-		}
-
-
-
+		const { data: bookmarkedCourses } = useQuery(
+			['bookmarkedCourses', token, studentId],
+			() => courseService.getBookmarkedCourses(token, studentId)
+		);
+	
+		let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
+	
 		const AddToBookmark = async (e, courseId) => {
 			e.preventDefault();
 			setLoading(true);
@@ -102,21 +79,20 @@ const CourseCard = ({
 			['courseAnalytics', token, courseData],
 			() => courseService.getCourseAnalytics(token, courseData),
 			{
-				enabled: !!token && paidIDs?.includes(item.id)
+				enabled: !!token && bookmarkedIDs?.includes(item.id)
 			}
 		);
 
-
 		const handleNavigate = (e) => {
 			e.preventDefault();
-			if (item.active === true || paidIDs?.includes(item.id)) {
+			if (bookmarkedIDs?.includes(item.id)) {
 				navigate(`/marketing/courses/course-resume/${item.content.id}/${item.id}`);
 			}
 		}
 		return (
 
 			<Card className={`mb-4 card-hover ${extraclass}`}>
-			
+
 				<Link
 					to="#"
 					onClick={handleNavigate}
