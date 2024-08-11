@@ -1,7 +1,7 @@
 // import node module libraries
 import React, { useState, useEffect } from 'react';
 import { Row, Col, Image, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 // import custom components
 import LevelIconWithTooltip from 'components/marketing/common/miscellaneous/LevelIconWithTooltip';
@@ -9,8 +9,17 @@ import LevelIconWithTooltip from 'components/marketing/common/miscellaneous/Leve
 // import media files
 import CheckedMark from 'assets/images/svg/checked-mark.svg';
 import ProfileBackground from 'assets/images/background/profile-bg.jpg';
-const ProfileCover = ({ dashboardData}) => {
 
+import { logout } from '../../../dashboard/features/auth/authSlice';
+
+const ProfileCover = ({ dashboardData }) => {
+	const dispatch = useDispatch();
+	const navigate = useNavigate();
+	
+	const SignOut = async () => {
+		await dispatch(logout());
+		navigate('/');
+	};
 	return (
 		<Row className="align-items-center">
 			<Col xl={12} lg={12} md={12} sm={12}>
@@ -52,12 +61,12 @@ const ProfileCover = ({ dashboardData}) => {
 								{dashboardData.name == "undefined undefined" ? (
 									<h2 className="mb-0">
 										{'Loading... '}
-										<LevelIconWithTooltip level={dashboardData.level} />{' '}
+										{/* <LevelIconWithTooltip level={dashboardData.level} />{' '} */}
 									</h2>
 								) : (
 									<h2 className="mb-0">
 										{dashboardData.name}{' '}
-										<LevelIconWithTooltip level={dashboardData.level} />{' '}
+										{/* <LevelIconWithTooltip level={dashboardData.level} />{' '} */}
 									</h2>
 								)}
 
@@ -98,10 +107,22 @@ const ProfileCover = ({ dashboardData}) => {
 									to="/marketing/student/dashboard/"
 									className={`btn btn${dashboardData.outlinebutton ? '-outline' : ''
 										}-primary btn-sm d-none d-md-block`}
+									style={{ marginRight: '10px' }}
 								>
 									Courses
 
 								</Link>
+								<div
+									className={`btn btn-primary btn-sm d-none d-md-block`}
+								>
+									<div className="nav-link"
+										onClick={SignOut}
+										style={{ cursor: 'pointer' }}
+									>
+										<i className={`fe fe-power nav-icon`} style={{ marginRight: '10px' }}></i>
+										Sign Out
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

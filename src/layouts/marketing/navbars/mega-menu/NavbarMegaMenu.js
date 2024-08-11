@@ -59,7 +59,7 @@ const NavbarMegaMenu = () => {
 									<Button
 										as="li"
 										onClick={SignOut}
-										style={{ cursor: 'pointer' }}
+										style={{ cursor: 'pointer', marginLeft:'10px' }}
 									>
 										<div className="nav-link" >
 											<i className={`fe fe-power nav-icon`} style={{marginRight: '10px'}}></i>

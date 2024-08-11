@@ -19,6 +19,8 @@ const Message = (props) => {
 
 	const { user } = useSelector(state => state.auth);
 
+	const token = user?.data?.accessToken;
+	
 	const { data: studentData, isLoading: studentDataLoading } = useQuery(
 		['studentData', token],
 		() => studentAction.getStudentData(token),

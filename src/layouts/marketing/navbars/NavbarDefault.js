@@ -10,7 +10,7 @@ import QuickMenu from 'layouts/QuickMenu';
 
 const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 	const dispatch = useDispatch();
-    const navigate = useNavigate();
+	const navigate = useNavigate();
 	const isDesktop = useMediaQuery({
 		query: '(min-width: 1224px)'
 	});
@@ -21,10 +21,10 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 
 	const [expandedMenu, setExpandedMenu] = useState(false);
 
-    const SignOut = async() => {
-        await dispatch(logout());
-        navigate('/');
-    };
+	const SignOut = async () => {
+		await dispatch(logout());
+		navigate('/');
+	};
 
 	return (
 		<Fragment>
@@ -87,7 +87,7 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 							</Link>
 						</div> */}
 					</div>
-					<Row className="links2" style={{width: '100%'}} >
+					<Row className="links2" style={{ width: '100%' }} >
 						<Col lg={3} md={4} sm={12}>
 							<Navbar
 								expand="lg"
@@ -128,7 +128,7 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 												className='nav-link'
 											>
 												<i className={`fe fe-book nav-icon`}></i>
-												Dashboard 
+												Dashboard
 
 											</Link>
 										</Nav.Item>
@@ -175,7 +175,7 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 									as={Link}
 									to="/marketing/student/dashboard/"
 									bsPrefix="btn"
-									className="btn btn-white shadow-sm me-2"
+									className="btn btn-white shadow-sm me-2  btn-sm "
 								>
 									Courses
 								</Nav.Link>
@@ -183,10 +183,18 @@ const NavbarDefault = ({ headerstyle, login, dashboardData }) => {
 									as={Link}
 									to="/marketing/student/student-edit-profile/"
 									bsPrefix="btn"
-									className="btn btn-primary shadow-sm"
+									className="btn btn-primary  btn-sm  shadow-sm me-2"
 								>
 									Account Settings
 								</Nav.Link>
+								<Nav.Item
+									as="li"
+									onClick={SignOut}
+									className="btn btn-primary  btn-sm  shadow-sm"
+								>
+										<i className={`fe fe-power nav-icon`} style={{ marginRight: '10px' }}></i>
+										sign out
+								</Nav.Item>
 							</span>
 
 							<span

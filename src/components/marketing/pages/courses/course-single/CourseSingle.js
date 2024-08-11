@@ -177,19 +177,19 @@ const CourseSingle = () => {
 
 					<Row className="">
 						<div className="d-flex mb-4 -mt-12 gap-2">
-							<Link to={`/marketing/student/dashboard/`} className="btn bg-white mb-2 " >
+							<Link to={`/marketing/student/dashboard/`} className="btn bg-white btn-sm  mb-2 " >
 								Dashboard
 							</Link>
 							<div className='mt-2'>
 								<i className="fe fe-chevron-right text-white-50"></i>
 							</div>
-							<Link to={`/marketing/student/dashboard/`} className="btn bg-white mb-2 " >
+							<Link to={`/marketing/student/dashboard/`} className="btn bg-white btn-sm  mb-2 " >
 								Course
 							</Link>
 							<div className='mt-2'>
 								<i className="fe fe-chevron-right text-white-50"></i>
 							</div>
-							<div className="btn bg-white mb-2 ">
+							<div className="btn bg-white mb-2 btn-sm  ">
 								Course single
 							</div>
 						</div>

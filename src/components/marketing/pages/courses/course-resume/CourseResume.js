@@ -275,19 +275,19 @@ export const CourseResume = () => {
 									</Container>
 								</section> */}
 								<div className="d-flex gap-1">
-									<Link to={`/marketing/student/dashboard/`} className="btn btn-primary mb-2 ">
+									<Link to={`/marketing/student/dashboard/`} className="btn btn-primary mb-2  btn-sm">
 										Dashboard
 									</Link>
 									<div className='mt-2'>
 										<i className="fe fe-chevron-right text-grey-50"></i>
 									</div>
-									<Link to={`/marketing/student/dashboard/`} className="btn btn-primary mb-2 " >
+									<Link to={`/marketing/student/dashboard/`} className="btn btn-primary mb-2  btn-sm  " >
 										Course
 									</Link>
 									<div className='mt-2'>
 										<i className="fe fe-chevron-right text-grey-50"></i>
 									</div>
-									<div className="btn btn-primary mb-2 ">
+									<div className="btn btn-primary mb-2 btn-sm ">
 										Content
 									</div>
 								</div>
