@@ -31,12 +31,6 @@ const Certifications = () => {
 		() => courseService.getCertificates(token)
 	);
 
-	let certificateId = '';
-
-	const { data: certificate } = useQuery(
-		['certificate', token, certificateId],
-		() => courseService.getCertificate(token, certificateId)
-	);
 	return (
 		<ProfileLayout dashboardData={dashboardData}>
 			<Card className="border-0">
@@ -51,7 +45,7 @@ const Certifications = () => {
 
 				<Card.Body>
 					{/* List group */}
-					{/* <ListGroup variant="flush" className="mb-4">
+					 <ListGroup variant="flush" className="mb-4">
 						<ListGroup.Item className="px-0 pt-0 pb-4">
 							<Row>
 								<Col>
@@ -71,9 +65,9 @@ const Certifications = () => {
 									</Form.Check>
 								</Col>
 								<Col xs="auto">
-									<a href="#" className="btn btn-outline-secondary btn-sm">
-										Download
-									</a>
+								<Link to="/certificate/Daniel-Musunza/123" className="btn btn-outline-secondary btn-sm">
+										View Certificate
+								</Link>
 								</Col>
 							</Row>
 						</ListGroup.Item>
@@ -95,16 +89,16 @@ const Certifications = () => {
 									</Form.Check>
 								</Col>
 								<Col xs="auto">
-								<a href="#" className="btn btn-outline-secondary btn-sm">
-										Download
-									</a>
+								<Link to="/certificate/Daniel-Musunza/123" className="btn btn-outline-secondary btn-sm">
+										View Certificate
+								</Link>
 								</Col>
 							</Row>
 						</ListGroup.Item>
-					</ListGroup> */}
-					<div style={{ display: 'flex', justifyContent: 'center' }}>
+					</ListGroup> 
+					{/* <div style={{ display: 'flex', justifyContent: 'center' }}>
 						<h3 className="mb-0">No Certifications yet</h3>
-					</div>
+					</div> */}
 				</Card.Body>
 			</Card>
 		</ProfileLayout>

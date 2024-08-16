@@ -64,6 +64,7 @@ import SingleAssignment from 'components/marketing/account-settings/SingleAssign
 import AssignmentResults from 'components/marketing/account-settings/AssignmentResults';
 import ChatLayout from './dashboard/ChatLayout';
 import Chat from 'components/dashboard/chat/Chat';
+import Certificate from 'components/marketing/account-settings/Certificate';
 const AllRoutes = () => {
 	return (
 
@@ -127,7 +128,10 @@ const AllRoutes = () => {
 					<Route path="/dashboard/chat/:id/:name" element={<Chat />} />
 				</Route>
 			</Route>
-
+			<Route
+					path="/certificate/:student/:certificateId"
+					element={<Certificate />}
+				/>
 			<Route
 				path="/marketing/allcourses/"
 				element={<AllCourses />}
