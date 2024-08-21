@@ -171,19 +171,51 @@
 }
 .certificate{
   position: relative;
-width: 60%;
-min-height: fit-content;
+  width: fit-content;
+  height: 80vh;
+display: flex;
+justify-content: center;
+
 
 }
+.certification-date{
+  position: absolute;
+  right: 200px;
+  top: 80px;
+  display: flex;
+}
+.certification-date p{
+  font-size: 14px;
+  margin-left: 5px;
+  font-weight: 700;
+
+}
+.certified-name{
+  position: fixed;
+  margin: 190px;
+
+}
+.certification{
+  position: absolute;
+  top: 260px;
+}
+
+.certified-name h2,
+.certification h2{
+  font-weight: 700;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
 .qr-code {
   position: absolute;
-  bottom: 60px;
-  left: 100px;
+  bottom: 90px;
+  left: 80px;
 }
 .verify-link {
 
   position: absolute;
-  bottom: 40px;
+  bottom: 100px;
 width: 100%;
 display: flex;
 justify-content: center;
@@ -191,7 +223,7 @@ justify-content: center;
 }
 .verify-link a{
   color: #000;
-  font-size: 12px;
+  font-size: 10px;
   text-decoration: none;
   text-align: center;
 }
