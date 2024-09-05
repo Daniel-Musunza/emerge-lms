@@ -19,11 +19,13 @@ const Certificate = () => {
   const studentData = JSON.parse(localStorage.getItem('studentData'));
 
   const certificateDetails = {
+	id: "123",
     name: 'Test Student',
     certificationDate: 'July 2, 2024',
-    certificationTitle: 'Business Management- Startups',
-    verificationLink: 'https://emergelms.vercel.app/certificate/Daniel-Musunza/123',
+    certificationTitle: 'Business Management- Startups'
   };
+
+  const  verificationLink= `https://emergelms.vercel.app/certificate/${certificateDetails.name}/${certificateDetails.id}`;
 
   return (
     <Fragment>
@@ -45,12 +47,12 @@ const Certificate = () => {
           </div>
 
           <div className='qr-code'>
-            <QRCodeCanvas value={certificateDetails.verificationLink} size={80} />
+            <QRCodeCanvas value={verificationLink} size={80} />
           </div>
 
           <div className='verify-link'>
-            <a href={certificateDetails.verificationLink}>
-              Verify this certification at {certificateDetails.verificationLink}
+            <a href={verificationLink}>
+              Verify this certification at {verificationLink}
             </a>
           </div>
         </div>
