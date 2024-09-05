@@ -162,6 +162,12 @@
     transform: rotate(360deg);
   }
 }
+.download{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
 .certificate-container{
   position: absolute;
   width: 100%;
