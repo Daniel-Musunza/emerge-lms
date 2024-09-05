@@ -163,7 +163,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 									</Accordion>
 								)}
 
-								{/* {sectionProgress.some(x=> x.section?.id === item.id && x.sectionPercentage > 80) ? (
+								{sectionProgress.some(x=> x.section?.id === item.id && x.sectionPercentage > 80) ? (
 									<>
 
 										<Link to={`/marketing/student/quiz/${item.id}`}>
@@ -182,12 +182,12 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 										<span style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</span>
 									</button>
 
-								)} */}
+								)}
 
-
+{/* 
 								<Link to={`/marketing/student/quiz/${item.id}`}>
 									<button key={index} style={{ border: 'none', borderRadius: '5px', textDecoration: 'none', color: 'inherit', backgroundColor: '754FFE' }}>Attempt Quiz</button>
-								</Link>
+								</Link> */}
 
 							</ListGroup.Item>
 

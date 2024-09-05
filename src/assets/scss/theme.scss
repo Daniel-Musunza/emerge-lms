@@ -170,9 +170,9 @@
   justify-content: center;
 }
 .certificate{
-  position: relative;
-  width: fit-content;
-  height: 80vh;
+  position: absolute;
+  width: auto;
+  height: 550px;
 display: flex;
 justify-content: center;
 
@@ -191,13 +191,14 @@ justify-content: center;
 
 }
 .certified-name{
-  position: fixed;
-  margin: 190px;
+  position: absolute;
+  // margin: 190px;
+  top: 190px;
 
 }
 .certification{
   position: absolute;
-  top: 260px;
+  top: 250px;
 }
 
 .certified-name h2,
