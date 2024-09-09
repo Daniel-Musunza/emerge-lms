@@ -108,7 +108,17 @@ const tryCourse = async (token, Data) => {
 	return response.data;
 };
 
-const getCertificates = async (token) => {
+const getCertificates = async (studentId, token) => {
+	const config = {
+		headers: {
+			Authorization: `Bearer ${token}`
+		}
+	};
+	const response = await axios.get(API_URL + 'certificate/student/' + studentId, config );
+	
+	return response.data;
+}
+const verifyCertificate = async (token) => {
 	const response = await axios.post(API_URL + 'certificate/verify/' + token );
 	return response.data;
 }
@@ -133,6 +143,7 @@ const courseService = {
 	payCourse,
 	tryCourse,
 	getCertificates,
+	verifyCertificate,
 	getCertificate
 };
 
