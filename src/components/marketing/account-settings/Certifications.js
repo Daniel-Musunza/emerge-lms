@@ -65,7 +65,7 @@ const Certifications = () => {
 												<Form.Check.Label>
 													<span className="h4">Course #{index + 1}</span>
 													<span className="d-block">
-														{ c.coursename}
+														{ c.manager.course.name}
 													</span>
 												</Form.Check.Label>
 											</Form.Check>
