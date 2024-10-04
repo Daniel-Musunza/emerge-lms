@@ -4,7 +4,6 @@ import { baseUrl } from '../../../../api/base';
 const API_URL = `${baseUrl}`;
 const getCourses = async () => {
 	const response = await axios.get(API_URL + 'course');
-
 	return response.data;
 };
 const getBookmarkedCourses = async (token, studentId) => {
@@ -56,14 +55,26 @@ const bookmarkCourse = async (token, Data) => {
 };
 
 const payCourse = async (token, Data) => {
-	const config = {
+	try {
+	  const config = {
 		headers: {
-			Authorization: `Bearer ${token}`
+		  Authorization: `Bearer ${token}`
 		}
-	};
-	const response = await axios.post(API_URL + 'course-manager/pay', Data, config);
-	return response.data;
-};
+	  };
+
+	  console.log(Data);
+  
+	  const response = await axios.post(API_URL + 'course-manager/pay', Data, config);
+  
+	
+	  
+	  return response.data;
+	} catch (error) {
+	  console.error("Error during course payment:", error.message);
+	  return { success: false, message: error.message };
+	}
+  };
+  
 
 const getCourseAnalytics = async (token, courseData) => {
 	const config = {

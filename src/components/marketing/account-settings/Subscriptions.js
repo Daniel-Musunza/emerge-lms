@@ -11,7 +11,11 @@ import GKTippy from 'components/elements/tooltips/GKTippy';
 import ProfileLayout from 'components/marketing/student/ProfileLayout';
 import courseService from '../../dashboard/features/courses/courseService';
 
+import { payCourse } from '../../dashboard/features/courses/courseSlice';
+
 const Subscriptions = () => {
+
+	const dispatch = useDispatch()
 	const [AutoRenewalState, setAutoRenewalState] = useState(true);
 	const { user } = useSelector(
 		(state) => state.auth
@@ -30,10 +34,18 @@ const Subscriptions = () => {
 
 	const studentId = studentData?.data?.id;
 
+	const { data: paidCourses } = useQuery(
+		['paidCourses', token, studentId],
+		() => courseService.getPaidCourses(token, studentId)
+	);
+	console.log({ PC: paidCourses })
+
 	const { data: bookmarkedCourses, isLoading: bookmarkedCoursesLoading } = useQuery(
 		['paidCourses', token, studentId],
 		() => courseService.getBookmarkedCourses(token, studentId)
 	);
+	console.log({ BC: bookmarkedCourses })
+
 
 	const [visiblePaymentSections, setVisiblePaymentSections] = useState({});
 
@@ -56,14 +68,37 @@ const Subscriptions = () => {
 		}));
 	};
 
+	const formatPhoneNumber = (phoneNumber) => {
+		if (!phoneNumber) return '';
+
+		// Case 1: Phone number starts with 07********
+		if (phoneNumber.startsWith('07')) {
+			return `254${phoneNumber.slice(1)}`; // Convert 07******** to 2547********
+		}
+
+		// Case 2: Phone number starts with 01********
+		if (phoneNumber.startsWith('01')) {
+			return `254${phoneNumber.slice(1)}`; // Convert 01******** to 2541********
+		}
+
+		// Case 3: Phone number starts with +254*********
+		if (phoneNumber.startsWith('+254')) {
+			return phoneNumber.slice(1); // Convert +254********* to 254*********
+		}
+
+		// Default case: return the phone number as is
+		return phoneNumber;
+	};
+
 	const HandleCoursePayment = async (e, courseId) => {
 		e.preventDefault();
-		setPaymentProgress(true)
+		setPaymentProgress(true);
+
 		if (studentId) {
 			const paymentData = {
 				courseId: courseId,
-				mpesaPhone: visiblePaymentSections[courseId]?.phoneNumber || '',
-				studentId: studentId
+				mpesaPhone: formatPhoneNumber(visiblePaymentSections[courseId]?.phoneNumber),
+				studentId: studentId,
 			};
 
 			try {
@@ -72,17 +107,18 @@ const Subscriptions = () => {
 				if (response.success) {
 					toast.success("Course Paid Successfully");
 				} else {
-					toast.error("Payment not successful...");
+					toast.error(response.message);
 				}
 			} catch (error) {
-				// Handle error from the action
+				// Handle error from the action and display a meaningful message
 				console.error("Error occurred during payment:", error);
-				toast.error("An error occurred during payment.");
+				toast.error(`Failed: ${error.message || "An unexpected error occurred during payment."}`);
+			} finally {
+				setPaymentProgress(false);
 			}
-			setPaymentProgress(false)
 		} else {
-			setPaymentProgress(false)
-			toast.error("Failed!! please login");
+			setPaymentProgress(false);
+			toast.error("Failed!! Please login");
 			navigate('/authentication/sign-in');
 		}
 	};
@@ -121,51 +157,87 @@ const Subscriptions = () => {
 									<p className="mb-0 fs-6">Subscription ID: {sub.id}</p>
 								</Col>
 								<Col lg={4} md={3} sm={5} className="mb-2 mb-lg-0">
-									{visiblePaymentSections[sub.id] ? (
+									{visiblePaymentSections[sub.course.id] ? (
 										<>
 											<button
-												style={{ padding: '5px 10px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', width: 'fit-content' }}
-												onClick={() => togglePaymentSection(sub.id)}
+												style={{
+													padding: '5px 10px',
+													backgroundColor: '#007BFF',
+													color: 'white',
+													border: 'none',
+													borderRadius: '10px',
+													cursor: 'pointer',
+													width: 'fit-content',
+												}}
+												onClick={() => togglePaymentSection(sub.course.id)}
 											>
 												See less
 											</button>
-											<form onSubmit={(e) => HandleCoursePayment(e, sub.id)} style={{ marginTop: '20px', width: '200px' }}>
+											<form
+												onSubmit={(e) => HandleCoursePayment(e, sub.course.id)}
+												style={{ marginTop: '20px', width: '200px' }}
+											>
 												<input
 													name="number"
 													type="number"
-													placeholder='Mpesa Number'
-													onChange={(e) => setMpesaPhone(sub.id, e.target.value)}
-													style={{ padding: '5px', borderRadius: '5px', border: '1px solid #ccc', marginBottom: '10px', width: '100%' }}
+													placeholder="Mpesa Number"
+													onChange={(e) => setMpesaPhone(sub.course.id, e.target.value)}
+													style={{
+														padding: '5px',
+														borderRadius: '5px',
+														border: '1px solid #ccc',
+														marginBottom: '10px',
+														width: '100%',
+													}}
 												/>
 												{paymentProgress ? (
 													<div
-														style={{ backgroundColor: '#4CAF50', color: 'white', textDecoration: 'none', padding: '5px 10px', borderRadius: '10px', textAlign: 'center', cursor: 'pointer' }}
-
+														style={{
+															backgroundColor: '#4CAF50',
+															color: 'white',
+															padding: '5px 10px',
+															borderRadius: '10px',
+															textAlign: 'center',
+														}}
 													>
-														Paying ...
+														Paying...
 													</div>
 												) : (
 													<div
 														className="bookmark"
-														style={{ backgroundColor: '#4CAF50', color: 'white', textDecoration: 'none', padding: '5px 10px', borderRadius: '10px', textAlign: 'center', cursor: 'pointer' }}
-														onClick={(e) => HandleCoursePayment(e, sub.id)}
+														style={{
+															backgroundColor: '#4CAF50',
+															color: 'white',
+															padding: '5px 10px',
+															borderRadius: '10px',
+															textAlign: 'center',
+															cursor: 'pointer',
+														}}
+														onClick={(e) => HandleCoursePayment(e, sub.course.id)}
 													>
 														Pay Course
 													</div>
 												)}
-
-
 											</form>
 										</>
 									) : (
 										<button
-											style={{ padding: '5px 10px', backgroundColor: '#007BFF', color: 'white', border: 'none', borderRadius: '10px', cursor: 'pointer', width: '200px' }}
-											onClick={() => togglePaymentSection(sub.id)}
+											style={{
+												padding: '5px 10px',
+												backgroundColor: '#007BFF',
+												color: 'white',
+												border: 'none',
+												borderRadius: '10px',
+												cursor: 'pointer',
+												width: '200px',
+											}}
+											onClick={() => togglePaymentSection(sub.course.id)}
 										>
 											Pay to be certified
 										</button>
 									)}
 								</Col>
+
 							</Row>
 							<Row>
 								<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
@@ -184,7 +256,7 @@ const Subscriptions = () => {
 								</Col>
 								<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
 									<span className="fs-6">Access</span>
-									<h6 className="mb-0">All course content</h6>
+									<h6 className="mb-0">Certificate</h6>
 								</Col>
 							</Row>
 						</div>
