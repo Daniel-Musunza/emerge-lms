@@ -16,81 +16,90 @@ const StudentDashboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
-    const [generalProgress, setGeneralProgress] = useState(null);
 
-    const { data: courses, isLoading: coursesLoading } = useQuery(
-        ['courses'],
-        courseService.getCourses
-    );
+    const [generalProgress, setGeneralProgress] = useState(null);
+    const [courses, setCourses] = useState(null);
+    const [coursesLoading, setCoursesLoading] = useState(true);
+    const [bookmarkedCourses, setBookmarkedCourses] = useState(null);
 
     const { user } = useSelector(state => state.auth);
-
     const token = user?.data?.accessToken;
-
     const studentData = JSON.parse(localStorage.getItem('studentData'));
-
     const studentId = studentData?.data?.id;
 
-    const { data: bookmarkedCourses } = useQuery(
-        ['bookmarkedCourses', token, studentId],
-        () => courseService.getBookmarkedCourses(token, studentId)
-    );
+    // Fetch courses data
+    useEffect(() => {
+        const fetchCourses = async () => {
+            try {
+                const response = await courseService.getCourses();
+                setCourses(response.data.courses);
+            } catch (error) {
+                console.error('Failed to fetch courses:', error);
+            } finally {
+                setCoursesLoading(false);
+            }
+        };
 
-    let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
+        fetchCourses();
+    }, []);
+
+    // Fetch bookmarked courses data
+    useEffect(() => {
+        if (token && studentId) {
+            const fetchBookmarkedCourses = async () => {
+                try {
+                    const response = await courseService.getBookmarkedCourses(token, studentId);
+                    setBookmarkedCourses(response.data);
+                } catch (error) {
+                    console.error('Failed to fetch bookmarked courses:', error);
+                }
+            };
+
+            fetchBookmarkedCourses();
+        }
+    }, [token, studentId]);
+
+    let bookmarkedIDs = bookmarkedCourses?.map(course => course.course.id);
 
     const getProgress = () => {
         if (generalProgress > 80) {
-            return {
-                text: "Excellent, keep going!",
-                value: generalProgress
-            };
+            return { text: "Excellent, keep going!", value: generalProgress };
         } else if (generalProgress < 10) {
-            return {
-                text: "Good start!",
-                value: generalProgress
-            };
+            return { text: "Good start!", value: generalProgress };
         } else if (generalProgress > 50) {
-            return {
-                text: "You're making good progress!",
-                value: generalProgress
-            };
+            return { text: "You're making good progress!", value: generalProgress };
         } else {
-            return {
-                text: "Keep up the effort!",
-                value: generalProgress
-            };
+            return { text: "Keep up the effort!", value: generalProgress };
         }
     };
 
+    // Calculate progress for bookmarked courses
     useEffect(() => {
         if (bookmarkedIDs?.length > 0) {
-            const fetchData = async () => {
-                let totalProgress = 0; // Initialize totalProgress here
-                // const coursePercentages = [];
-                // const queries = bookmarkedIDs.map(async (x) => {
-                //     const courseData = {
-                //         courseId: x,
-                //         studentId
-                //     };
-                //     const { data: courseAnalytics } = await courseService.getCoursePercentage(token, courseData);
+            const fetchProgress = async () => {
+                let totalProgress = 0;
 
-                //     coursePercentages.push(courseAnalytics.courseTotalPercentage);
-                //     // Do something with courseAnalytics here
-                //     return courseAnalytics;
-                // });
-                // const results = await Promise.all(queries);
+                try {
+                    const coursePercentages = await Promise.all(
+                        bookmarkedIDs.map(async (courseId) => {
+                            const courseData = { courseId, studentId };
+                            const { data: courseAnalytics } = await courseService.getCoursePercentage(token, courseData);
+                            return parseFloat(courseAnalytics.courseTotalPercentage);
+                        })
+                    );
 
-                // coursePercentages.forEach(x => {
-                //     const courseP = parseFloat(x);
-                //     totalProgress += courseP; // Accumulate progress here
-                // });
-
-                const avProgress = totalProgress / bookmarkedIDs?.length || 1;
-                setGeneralProgress(avProgress);
+                    totalProgress = coursePercentages.reduce((acc, curr) => acc + curr, 0);
+                    const avProgress = totalProgress / bookmarkedIDs.length;
+                    setGeneralProgress(avProgress);
+                } catch (error) {
+                    console.error('Failed to fetch course progress:', error);
+                }
             };
-            fetchData();
+
+            fetchProgress();
         }
-    }, [studentId, bookmarkedIDs, token]);
+    }, [bookmarkedIDs, studentId, token]);
+
 
     const SignOut = async () => {
         await dispatch(logout());
@@ -187,7 +196,7 @@ const StudentDashboard = () => {
                         <Col lg={4} md={12} sm={12} className="mb-4 mb-lg-0">
                             <StatRightBadge
                                 title="Courses Subscribed"
-                                value={courses?.data?.courses.filter((item) => bookmarkedIDs?.includes(item.id)).length}
+                                value={courses?.filter((item) => bookmarkedIDs?.includes(item.id)).length}
                                 badgeValue="learning"
                                 colorVariant="warning"
                             />
@@ -227,7 +236,7 @@ const StudentDashboard = () => {
                                                             eventKey="subscribed"
                                                             className="mb-sm-3 mb-md-0"
                                                         >
-                                                            Subscribed {courses?.data?.courses.filter((item) => bookmarkedIDs?.includes(item.id)).length}
+                                                            Subscribed {courses?.filter((item) => bookmarkedIDs?.includes(item.id)).length}
                                                         </Nav.Link>
                                                     </Nav.Item>
                                                     <Nav.Item className="ms-0">
@@ -235,7 +244,7 @@ const StudentDashboard = () => {
                                                             eventKey="all"
                                                             className="mb-sm-3 mb-md-0"
                                                         >
-                                                            All Courses {courses?.data?.courses.length}
+                                                            All Courses {courses?.length}
                                                         </Nav.Link>
                                                     </Nav.Item>
 
@@ -250,8 +259,7 @@ const StudentDashboard = () => {
                                                     >
                                                         {/* bookmarked started */}
                                                         <Row>
-                                                            {courses?.data?.courses
-                                                                .map((item, index) => (
+                                                            {courses?.map((item, index) => (
                                                                     <Col lg={3} md={6} sm={12} key={index}>
                                                                         <CourseCard item={item} />
                                                                     </Col>
@@ -267,9 +275,8 @@ const StudentDashboard = () => {
                                                         {/* bookmarked started */}
                                                         {bookmarkedIDs?.length > 0 ? (
                                                             <Row>
-                                                                {courses?.data?.courses
-                                                                    .filter((item) => bookmarkedIDs?.includes(item.id))
-                                                                    .map((item, index) => (
+                                                                {courses?.filter((item) => bookmarkedIDs?.includes(item.id))
+                                                                .map((item, index) => (
                                                                         <Col lg={3} md={6} sm={12} key={index}>
                                                                             <CourseCard item={item} />
                                                                         </Col>

@@ -36,52 +36,67 @@ const CourseCard = ({
 	const GridView = () => {
 		const navigate = useNavigate();
 		const dispatch = useDispatch();
+	
 		const user = JSON.parse(localStorage.getItem('user'));
 		const studentData = JSON.parse(localStorage.getItem('studentData'));
-		const [loading, setLoading] = useState(null);
-
-		let studentId = studentData?.data?.id;
-		let token = user?.data?.accessToken;
-
-		const { data: bookmarkedCourses } = useQuery(
-			['bookmarkedCourses', token, studentId],
-			() => courseService.getBookmarkedCourses(token, studentId)
-		);
 	
-		let bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
+		const [loading, setLoading] = useState(false);
+		const [bookmarkedCourses, setBookmarkedCourses] = useState(null);
+		const [courseAnalytics, setCourseAnalytics] = useState(null);
+	
+		const studentId = studentData?.data?.id;
+		const token = user?.data?.accessToken;
+	
+		let bookmarkedIDs = bookmarkedCourses?.map(course => course.course.id);
+	
+		// Fetch bookmarked courses
+		useEffect(() => {
+			if (token && studentId) {
+				const fetchBookmarkedCourses = async () => {
+					try {
+						const response = await courseService.getBookmarkedCourses(token, studentId);
+						setBookmarkedCourses(response.data);
+					} catch (error) {
+						console.error('Failed to fetch bookmarked courses:', error);
+					}
+				};
+				fetchBookmarkedCourses();
+			}
+		}, [token, studentId]);
+		// Fetch course analytics if conditions are met
+		useEffect(() => {
+			if (token && bookmarkedIDs?.includes(item.id)) {
+				const fetchCourseAnalytics = async () => {
+					try {
+						const response = await courseService.getCourseAnalytics(token, {
+							courseId: item.id,
+							studentId,
+						});
+						setCourseAnalytics(response.data);
+					} catch (error) {
+						console.error('Failed to fetch course analytics:', error);
+					}
+				};
+				fetchCourseAnalytics();
+			}
+		}, [token, studentId, bookmarkedIDs, item.id]);
 	
 		const AddToBookmark = async (e, courseId) => {
 			e.preventDefault();
 			setLoading(true);
-
-			const bookmarkData = {
-				courseId: courseId,
-				studentId: studentId
-			};
-
+	
+			const bookmarkData = { courseId, studentId };
+	
 			try {
 				await dispatch(bookmarkCourse(bookmarkData));
-				toast.success("Course Added to Bookmarks");
+				toast.success('Course Added to Bookmarks');
 			} catch (error) {
-				console.error(error);
-				toast.error("Failed to add course to Bookmarks");
+				console.error('Failed to add course to bookmarks:', error);
+				toast.error('Failed to add course to Bookmarks');
+			} finally {
+				setLoading(false);
 			}
-
-			setLoading(false);
 		};
-
-		const courseData = {
-			courseId: item.id,
-			studentId
-		};
-
-		const { data: courseAnalytics } = useQuery(
-			['courseAnalytics', token, courseData],
-			() => courseService.getCourseAnalytics(token, courseData),
-			{
-				enabled: !!token && bookmarkedIDs?.includes(item.id)
-			}
-		);
 
 		const handleNavigate = (e) => {
 			e.preventDefault();
@@ -89,6 +104,8 @@ const CourseCard = ({
 				navigate(`/marketing/courses/course-resume/${item.content.id}/${item.id}`);
 			}
 		}
+
+
 		return (
 
 			<Card className={`mb-4 card-hover ${extraclass}`}>

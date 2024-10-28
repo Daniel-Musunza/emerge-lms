@@ -51,6 +51,7 @@ const bookmarkCourse = async (token, Data) => {
 	};
 
 	const response = await axios.post(API_URL + 'course-manager/bookmark', Data, config);
+	console.log(response)
 	return response.data;
 };
 
@@ -85,6 +86,7 @@ const getCourseAnalytics = async (token, courseData) => {
 	
 	const response = await axios.get(API_URL + `course-manager/single/${courseData.courseId}/${courseData.studentId}`, config);
 
+console.log(response)
 
 	const managerId = response?.data?.data?.id
 
