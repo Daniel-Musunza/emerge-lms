@@ -16,10 +16,36 @@ import { payCourse } from '../../dashboard/features/courses/courseSlice';
 const Subscriptions = () => {
 
 	const dispatch = useDispatch()
+
 	const [AutoRenewalState, setAutoRenewalState] = useState(true);
 	const { user } = useSelector(
 		(state) => state.auth
 	);
+
+    const [courses, setCourses] = useState(null);
+    const [coursesLoading, setCoursesLoading] = useState(true);
+    const [bookmarkedCourses, setBookmarkedCourses] = useState(null);
+
+	// Fetch courses data
+	useEffect(() => {
+
+		const fetchCourses = async () => {
+
+			try {
+				const response = await courseService.getCourses();
+				setCourses(response.data.courses);
+			} catch (error) {
+				console.error('Failed to fetch courses:', error);
+			} finally {
+				setCoursesLoading(false);
+			}
+
+		};
+
+		fetchCourses();
+
+	}, []);
+
 
 	const token = user?.data?.accessToken;
 
@@ -34,19 +60,24 @@ const Subscriptions = () => {
 
 	const studentId = studentData?.data?.id;
 
-	const { data: paidCourses } = useQuery(
-		['paidCourses', token, studentId],
-		() => courseService.getPaidCourses(token, studentId)
-	);
-	console.log({ PC: paidCourses })
+	// Fetch bookmarked courses data
+	useEffect(() => {
+		if (token && studentId) {
+			const fetchBookmarkedCourses = async () => {
+				try {
+					const response = await courseService.getBookmarkedCourses(token, studentId);
+					setBookmarkedCourses(response.data);
+				} catch (error) {
+					console.error('Failed to fetch bookmarked courses:', error);
+				}
+			};
 
-	const { data: bookmarkedCourses, isLoading: bookmarkedCoursesLoading } = useQuery(
-		['paidCourses', token, studentId],
-		() => courseService.getBookmarkedCourses(token, studentId)
-	);
-	console.log({ BC: bookmarkedCourses })
+			fetchBookmarkedCourses();
+		}
+	}, [token, studentId]);
 
-
+	let bookmarkedIDs = bookmarkedCourses?.map(course => course.course.id);
+	
 	const [visiblePaymentSections, setVisiblePaymentSections] = useState({});
 
 	const [paymentProgress, setPaymentProgress] = useState(false);
@@ -144,21 +175,84 @@ const Subscriptions = () => {
 					</div> */}
 				</Card.Header>
 				<Card.Body>
-					{bookmarkedCourses?.data?.courseManager?.map((sub, index) => (
-						<div className="border-bottom pt-5" key={index}>
-							<Row className="mb-4">
-								<Col lg={8} md={9} sm={7} className="mb-2 mb-lg-0">
-									<span className="d-block">
-										<span className="h4">{sub?.course.name}</span>{' '}
-										<Badge bg="success" className="ms-2">
-											Active
-										</Badge>
-									</span>
-									<p className="mb-0 fs-6">Subscription ID: {sub.id}</p>
-								</Col>
-								<Col lg={4} md={3} sm={5} className="mb-2 mb-lg-0">
-									{visiblePaymentSections[sub.course.id] ? (
-										<>
+					{courses?.filter((item) => bookmarkedIDs?.includes(item.id))
+						.map((sub, index) => (
+							<div className="border-bottom pt-5" key={index}>
+								<Row className="mb-4">
+									<Col lg={8} md={9} sm={7} className="mb-2 mb-lg-0">
+										<span className="d-block">
+											<span className="h4">{sub?.name}</span>{' '}
+											<Badge bg="success" className="ms-2">
+												Active
+											</Badge>
+										</span>
+										<p className="mb-0 fs-6">Subscription ID: {sub.id}</p>
+									</Col>
+									<Col lg={4} md={3} sm={5} className="mb-2 mb-lg-0">
+										{visiblePaymentSections[sub.id] ? (
+											<>
+												<button
+													style={{
+														padding: '5px 10px',
+														backgroundColor: '#007BFF',
+														color: 'white',
+														border: 'none',
+														borderRadius: '10px',
+														cursor: 'pointer',
+														width: 'fit-content',
+													}}
+													onClick={() => togglePaymentSection(sub.id)}
+												>
+													See less
+												</button>
+												<form
+													onSubmit={(e) => HandleCoursePayment(e, sub.id)}
+													style={{ marginTop: '20px', width: '200px' }}
+												>
+													<input
+														name="number"
+														type="number"
+														placeholder="Mpesa Number"
+														onChange={(e) => setMpesaPhone(sub.id, e.target.value)}
+														style={{
+															padding: '5px',
+															borderRadius: '5px',
+															border: '1px solid #ccc',
+															marginBottom: '10px',
+															width: '100%',
+														}}
+													/>
+													{paymentProgress ? (
+														<div
+															style={{
+																backgroundColor: '#4CAF50',
+																color: 'white',
+																padding: '5px 10px',
+																borderRadius: '10px',
+																textAlign: 'center',
+															}}
+														>
+															Paying...
+														</div>
+													) : (
+														<div
+															className="bookmark"
+															style={{
+																backgroundColor: '#4CAF50',
+																color: 'white',
+																padding: '5px 10px',
+																borderRadius: '10px',
+																textAlign: 'center',
+																cursor: 'pointer',
+															}}
+															onClick={(e) => HandleCoursePayment(e, sub.id)}
+														>
+															Pay Course
+														</div>
+													)}
+												</form>
+											</>
+										) : (
 											<button
 												style={{
 													padding: '5px 10px',
@@ -167,100 +261,38 @@ const Subscriptions = () => {
 													border: 'none',
 													borderRadius: '10px',
 													cursor: 'pointer',
-													width: 'fit-content',
+													width: '200px',
 												}}
-												onClick={() => togglePaymentSection(sub.course.id)}
+												onClick={() => togglePaymentSection(sub.id)}
 											>
-												See less
+												Pay to be certified
 											</button>
-											<form
-												onSubmit={(e) => HandleCoursePayment(e, sub.course.id)}
-												style={{ marginTop: '20px', width: '200px' }}
-											>
-												<input
-													name="number"
-													type="number"
-													placeholder="Mpesa Number"
-													onChange={(e) => setMpesaPhone(sub.course.id, e.target.value)}
-													style={{
-														padding: '5px',
-														borderRadius: '5px',
-														border: '1px solid #ccc',
-														marginBottom: '10px',
-														width: '100%',
-													}}
-												/>
-												{paymentProgress ? (
-													<div
-														style={{
-															backgroundColor: '#4CAF50',
-															color: 'white',
-															padding: '5px 10px',
-															borderRadius: '10px',
-															textAlign: 'center',
-														}}
-													>
-														Paying...
-													</div>
-												) : (
-													<div
-														className="bookmark"
-														style={{
-															backgroundColor: '#4CAF50',
-															color: 'white',
-															padding: '5px 10px',
-															borderRadius: '10px',
-															textAlign: 'center',
-															cursor: 'pointer',
-														}}
-														onClick={(e) => HandleCoursePayment(e, sub.course.id)}
-													>
-														Pay Course
-													</div>
-												)}
-											</form>
-										</>
-									) : (
-										<button
-											style={{
-												padding: '5px 10px',
-												backgroundColor: '#007BFF',
-												color: 'white',
-												border: 'none',
-												borderRadius: '10px',
-												cursor: 'pointer',
-												width: '200px',
-											}}
-											onClick={() => togglePaymentSection(sub.course.id)}
-										>
-											Pay to be certified
-										</button>
-									)}
-								</Col>
+										)}
+									</Col>
 
-							</Row>
-							<Row>
-								<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
-									<span className="fs-6">Started On</span>
-									<h6 className="mb-0">
-										{sub.course.updatedAt ?
-											new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(sub.course.updatedAt))
-											:
-											"N/A"
-										}
-									</h6>
-								</Col>
-								<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
-									<span className="fs-6">Price</span>
-									<h6 className="mb-0">{sub.course.price}</h6>
-								</Col>
-								<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
-									<span className="fs-6">Access</span>
-									<h6 className="mb-0">Certificate</h6>
-								</Col>
-							</Row>
-						</div>
-					))}
+								</Row>
+								<Row>
+									<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
+										<span className="fs-6">Started On</span>
+										<h6 className="mb-0">
+											{sub.updatedAt ?
+												new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(new Date(sub.updatedAt))
+												:
+												"N/A"
+											}
+										</h6>
+									</Col>
+									<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
+										<span className="fs-6">Price</span>
+										<h6 className="mb-0">{sub.price}</h6>
+									</Col>
+									<Col lg={4} md={4} sm={6} className="mb-2 mb-lg-0">
+										<span className="fs-6">Access</span>
+										<h6 className="mb-0">Certificate</h6>
+									</Col>
+								</Row>
+							</div>
+						))}
 
 				</Card.Body>
 			</Card>

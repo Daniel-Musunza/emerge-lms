@@ -5,42 +5,57 @@ import { Col, Row, Container, Tab, Nav } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 // import sub components
 import CourseCard from 'components/marketing/pages/courses/CourseCard';
-
-import {
-	fetchCourses
-} from '../../../dashboard/features/courses/courseSlice';
+import courseService from '../../../dashboard/features/courses/courseService';
 
 import Spinner from '../../../Spinner';
 import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
 
 const AllCourses = () => {
-    const tabs = ['Development', 'Design', 'Marketing', 'Business', 'Health'];
+
+	const tabs = ['Development', 'Design', 'Marketing', 'Business', 'Health'];
+
 	let min,
 		max = 0;
 
-
 	const navigate = useNavigate();
+
 	let userStore = localStorage.getItem('user');
+
 	const dispatch = useDispatch();
 
-	const { courses, isLoading, isError, message } = useSelector(
-		(state) => state.courses
-	);
+	const [courses, setCourses] = useState(null);
 
-	const AllCoursesData = courses || [{},{},{},{}];
+	const [isLoading, setCoursesLoading] = useState(true);
 
+	// Fetch courses data
 	useEffect(() => {
 
-		dispatch(fetchCourses());
+		const fetchCourses = async () => {
 
-	}, [dispatch, userStore, navigate]);
+			try {
+				const response = await courseService.getCourses();
+				setCourses(response.data.courses);
+			} catch (error) {
+				console.error('Failed to fetch courses:', error);
+			} finally {
+				setCoursesLoading(false);
+			}
+
+		};
+
+		fetchCourses();
+
+	}, []);
+
+	const AllCoursesData = courses || [{}, {}, {}, {}];
+
 
 	// if (isLoading) {
 	// 	return <Spinner />
 	// }
 	return (
 		<Fragment>
-            <NavbarMegaMenu />
+			<NavbarMegaMenu />
 			<section className="pb-lg-14 pb-8 bg-white">
 				<Container>
 					<Row>
@@ -52,7 +67,7 @@ const AllCourses = () => {
 								</p>
 							</div>
 						</Col>
-						
+
 					</Row>
 					{isLoading && (
 						<Row>
@@ -69,9 +84,9 @@ const AllCourses = () => {
 													className="pb-4 p-4 ps-0 pe-0"
 													key={index}
 												>
-													<h3 style={{textAlign: 'center'}}>Courses Loading ...</h3>
+													<h3 style={{ textAlign: 'center' }}>Courses Loading ...</h3>
 													<Row>
-														{AllCoursesData.map((item, index) => (
+														{AllCoursesData?.map((item, index) => (
 															<Col lg={3} md={6} sm={12} key={index}>
 																<div style={{ width: '100%', height: '400px', border: '1px solid grey', borderRadius: '10px' }}>
 																	{/* Add your content here */}
@@ -103,13 +118,13 @@ const AllCourses = () => {
 												key={index}
 											>
 												<Row>
-													{AllCoursesData?.data?.courses.filter(function (datasource) {
+													{AllCoursesData?.filter(function (datasource) {
 														return datasource;
 													})
 														.map((item, index) => (
 															<Col lg={3} md={6} sm={12} key={index}>
 																<Link to={`/marketing/courses/course-single/${item?.content?.id}`} style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}>
-
+																	
 																	<CourseCard item={item} />
 																</Link>
 															</Col>

@@ -29,7 +29,9 @@ const StudentDashboard = () => {
 
     // Fetch courses data
     useEffect(() => {
+
         const fetchCourses = async () => {
+            
             try {
                 const response = await courseService.getCourses();
                 setCourses(response.data.courses);
@@ -38,9 +40,11 @@ const StudentDashboard = () => {
             } finally {
                 setCoursesLoading(false);
             }
+
         };
 
         fetchCourses();
+
     }, []);
 
     // Fetch bookmarked courses data

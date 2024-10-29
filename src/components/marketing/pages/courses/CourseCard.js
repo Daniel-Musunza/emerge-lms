@@ -63,6 +63,7 @@ const CourseCard = ({
 				fetchBookmarkedCourses();
 			}
 		}, [token, studentId]);
+
 		// Fetch course analytics if conditions are met
 		useEffect(() => {
 			if (token && bookmarkedIDs?.includes(item.id)) {
@@ -104,7 +105,6 @@ const CourseCard = ({
 				navigate(`/marketing/courses/course-resume/${item.content.id}/${item.id}`);
 			}
 		}
-
 
 		return (
 
@@ -169,7 +169,7 @@ const CourseCard = ({
 						</ListGroup>
 						<div className={`lh-1 d-flex align-items-center`}>
 							<div className="description">
-								{item.description.length > 35 ? item.description.slice(0, 35) : item.description}
+								{item.description?.length > 35 ? item.description.slice(0, 35) : item.description}
 							</div>
 
 						</div>
@@ -241,6 +241,7 @@ const CourseCard = ({
 					</Link>
 				</Card.Footer>
 			</Card>
+			
 		);
 	};
 

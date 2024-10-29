@@ -14,8 +14,28 @@ const MostPopularCourses = () => {
 	const tabs = ['Development', 'Design', 'Marketing', 'Business', 'Health'];
 
 	let min, max = 0;
-	const { data: courses, isLoading } = useQuery('courses', courseService.getCourses);
 
+    const [courses, setCourses] = useState(null);
+    const [isLoading, setCoursesLoading] = useState(true);
+    // Fetch courses data
+    useEffect(() => {
+
+        const fetchCourses = async () => {
+            
+            try {
+                const response = await courseService.getCourses();
+                setCourses(response.data.courses);
+            } catch (error) {
+                console.error('Failed to fetch courses:', error);
+            } finally {
+                setCoursesLoading(false);
+            }
+
+        };
+
+        fetchCourses();
+
+    }, []);
 	// if (isLoading) {
 	//     return <Spinner />;
 	// }
@@ -59,7 +79,7 @@ const MostPopularCourses = () => {
 												>
 													<h3 style={{textAlign: 'center'}}>Courses Loading ...</h3>
 													<Row>
-														{AllCoursesData.map((item, index) => (
+														{AllCoursesData?.map((item, index) => (
 															<Col lg={3} md={6} sm={12} key={index}>
 																<div style={{ width: '100%', height: '400px', border: '1px solid grey', borderRadius: '10px' }}>
 																	{/* Add your content here */}
@@ -92,7 +112,7 @@ const MostPopularCourses = () => {
 												key={index}
 											>
 												<Row>
-													{AllCoursesData?.data?.courses.filter(function (datasource) {
+													{AllCoursesData?.filter(function (datasource) {
 														return datasource;
 													})
 														.slice(0, 8)

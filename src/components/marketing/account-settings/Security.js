@@ -30,7 +30,8 @@ const Security = () => {
 	);
 
 	const token = user?.data?.accessToken;
-const studentData = JSON.parse(localStorage.getItem('studentData'));
+
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 
 	const dashboardData = {
@@ -44,7 +45,7 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 	// 	return <Spinner />
 	// }
 	return (
-			<ProfileLayout dashboardData={dashboardData}>
+		<ProfileLayout dashboardData={dashboardData}>
 			<Card className="border-0">
 				<Card.Header>
 					<div className="mb-3 mb-lg-0">
@@ -167,7 +168,7 @@ const studentData = JSON.parse(localStorage.getItem('studentData'));
 					</div>
 				</Card.Body>
 			</Card>
-		
+
 		</ProfileLayout>
 
 	);
