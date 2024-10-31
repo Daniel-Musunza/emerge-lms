@@ -1,4 +1,4 @@
-name: Deploy React App to Server
+name: Deploy Emerge LMS to Server
 
 on:
   push:
@@ -16,10 +16,10 @@ jobs:
     - name: Install Node.js
       uses: actions/setup-node@v3  # Updated to latest version
       with:
-        node-version: '16'
+        node-version: '18'
 
     - name: Cache Node Modules
-      uses: actions/cache@v3  # Updated to latest version
+      uses: actions/cache@v3  # Optional step
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
@@ -34,15 +34,15 @@ jobs:
 
     - name: Upload Files to Server
       uses: easingthemes/ssh-deploy@v2.1.5
-      env:
+      with:
         SSH_PRIVATE_KEY: ${{ secrets.SERVER_KEY }}
-        SSH_USER: ${{ secrets.SERVER_USER }}
-        SSH_HOST: ${{ secrets.SERVER_IP }}
+        REMOTE_USER: ${{ secrets.SERVER_USER }}
+        REMOTE_HOST: ${{ secrets.SERVER_IP }}
         SOURCE: "build/" # React build folder
         TARGET: "/var/www/emergekenya.org" # Destination path on server
 
     - name: Restart Nginx (Optional, requires sudo access)
-      uses: appleboy/ssh-action@v0.1.5  # Specify a specific version instead of master
+      uses: appleboy/ssh-action@v0.1.5
       with:
         host: ${{ secrets.SERVER_IP }}
         username: ${{ secrets.SERVER_USER }}
