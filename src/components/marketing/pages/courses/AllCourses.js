@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, memo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Col, Row, Container, Tab, Nav } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -142,4 +142,4 @@ const AllCourses = () => {
 		</Fragment>
 	);
 };
-export default AllCourses;
+export default memo(AllCourses);

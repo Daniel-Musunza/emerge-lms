@@ -1,5 +1,5 @@
 // import node module libraries
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, memo } from 'react';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { Link, useNavigate, } from 'react-router-dom';
@@ -272,4 +272,4 @@ CourseCard.propTypes = {
 	link: PropTypes.string
 };
 
-export default CourseCard;
+export default memo(CourseCard);

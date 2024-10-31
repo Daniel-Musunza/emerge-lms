@@ -28,14 +28,15 @@ const Quiz = () => {
 	useEffect(() => {
 		const fetchQuiz = async () => {
 			if (token && sectionId) {
-				try {
+				// try {
 					const response = await quizService.getFullQuiz(token, sectionId);
+					console.log(response)
 					setQuiz(response); // Set the fetched quiz data
-				} catch (error) {
-					console.error('Error fetching quiz:', error);
-				} finally {
-					setIsLoading(false); // Set loading to false after the fetch
-				}
+				// } catch (error) {
+				// 	console.error('Error fetching quiz:', error);
+				// } finally {
+				// 	setIsLoading(false); // Set loading to false after the fetch
+				// }
 			} else {
 				setIsLoading(false); // If no token or sectionId, set loading to false
 			}
@@ -44,15 +45,6 @@ const Quiz = () => {
 		fetchQuiz();
 	}, [token, sectionId]); // Dependencies to refetch when token or sectionId changes
 
-	const refetchQuiz = () => {
-		setIsLoading(true); // Set loading state to true before refetching
-		fetchQuiz(); // Call fetchQuiz to refresh data
-	};
-
-	// Use useEffect to refetch quiz when sectionId changes
-	useEffect(() => {
-		refetchQuiz();
-	}, [sectionId, refetchQuiz]);
 
 	const quizId = quiz?.data?.id || "noQuizId"
 
@@ -104,4 +96,4 @@ const Quiz = () => {
 	);
 };
 
-export default Quiz;
+export default React.memo(Quiz);

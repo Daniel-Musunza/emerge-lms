@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useContext, useState } from 'react';
+import React, { Fragment, useEffect, useContext, useState, memo } from 'react';
 import { Col, Row, Nav, Tab, Card, Container, Navbar, useAccordionButton, AccordionContext } from 'react-bootstrap';
 import CourseCard from 'components/marketing/pages/courses/CourseCard';
 import ProfileCover from 'components/marketing/common/headers/ProfileCover';
@@ -11,7 +11,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
 import { logout } from '../../dashboard/features/auth/authSlice';
 
-const StudentDashboard = () => {
+const StudentDashboard = memo(() => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const location = useLocation();
@@ -44,6 +44,11 @@ const StudentDashboard = () => {
 
         fetchCourses();
 
+        const intervalId = setInterval(fetchCourses, 100000 * 100000);
+
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+
     }, []);
 
     // Fetch bookmarked courses data
@@ -59,6 +64,11 @@ const StudentDashboard = () => {
             };
 
             fetchBookmarkedCourses();
+            const intervalId = setInterval(fetchBookmarkedCourses, 100000 * 100000);
+
+            // Clear interval on component unmount
+            return () => clearInterval(intervalId);
+        
         }
     }, [token, studentId]);
 
@@ -77,31 +87,38 @@ const StudentDashboard = () => {
     };
 
     // Calculate progress for bookmarked courses
-    useEffect(() => {
-        if (bookmarkedIDs?.length > 0) {
-            const fetchProgress = async () => {
-                let totalProgress = 0;
+    // useEffect(() => {
+    //     if (bookmarkedIDs?.length > 0) {
+    //         const fetchProgress = async () => {
+    //             let totalProgress = 0;
 
-                try {
-                    const coursePercentages = await Promise.all(
-                        bookmarkedIDs.map(async (courseId) => {
-                            const courseData = { courseId, studentId };
-                            const { data: courseAnalytics } = await courseService.getCoursePercentage(token, courseData);
-                            return parseFloat(courseAnalytics.courseTotalPercentage);
-                        })
-                    );
+    //             try {
+    //                 const coursePercentages = await Promise.all(
+    //                     bookmarkedIDs.map(async (courseId) => {
+    //                         const courseData = { courseId, studentId };
+    //                         const { data: courseAnalytics } = await courseService.getCoursePercentage(token, courseData);
+    //                         return parseFloat(courseAnalytics.courseTotalPercentage);
+    //                     })
+    //                 );
 
-                    totalProgress = coursePercentages.reduce((acc, curr) => acc + curr, 0);
-                    const avProgress = totalProgress / bookmarkedIDs.length;
-                    setGeneralProgress(avProgress);
-                } catch (error) {
-                    console.error('Failed to fetch course progress:', error);
-                }
-            };
+    //                 totalProgress = coursePercentages.reduce((acc, curr) => acc + curr, 0);
+    //                 const avProgress = totalProgress / bookmarkedIDs.length;
+    //                 setGeneralProgress(avProgress);
+    //             } catch (error) {
+    //                 console.error('Failed to fetch course progress:', error);
+    //             }
+              
+            
+    //         };
 
-            fetchProgress();
-        }
-    }, [bookmarkedIDs, studentId, token]);
+    //         fetchProgress();
+
+    //         const intervalId = setInterval(fetchProgress, 100000 * 100000);
+
+    //         // Clear interval on component unmount
+    //         return () => clearInterval(intervalId);
+    //     }
+    // }, [bookmarkedIDs, studentId, token]);
 
 
     const SignOut = async () => {
@@ -313,6 +330,6 @@ const StudentDashboard = () => {
             <FooterWithLinks />
         </Fragment>
     );
-};
+});
 
 export default StudentDashboard;

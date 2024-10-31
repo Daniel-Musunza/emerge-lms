@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, memo } from 'react';
 import { toast } from 'react-toastify';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Col, Row, Container, Tab, Nav, ListGroup, Image, Card } from 'react-bootstrap';
@@ -536,4 +536,4 @@ const CourseSingle = () => {
 	);
 };
 
-export default CourseSingle;
+export default memo(CourseSingle);

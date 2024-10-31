@@ -1,5 +1,5 @@
 // import node module libraries
-import React, { Fragment, useContext, useState, useMemo, useEffect } from 'react';
+import React, { Fragment, useContext, useState, useMemo, useEffect, memo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Row, Col, Container, Nav, Navbar, useAccordionButton, AccordionContext } from 'react-bootstrap';
@@ -13,7 +13,7 @@ import {
 } from 'routes/marketing/StudentDashboardMenu';
 import ProfileCover from 'components/marketing/common/headers/ProfileCover';
 
-const ProfileLayout = (props) => {
+const ProfileLayout = memo((props) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -31,20 +31,20 @@ const ProfileLayout = (props) => {
 	const [openQuizSections, toggleQuizSections] = useState(false);
 	const [openChatSections, toggleChatSections] = useState(false);
 
+	const studentId = studentData?.data?.id;
 	useEffect(() => {
 		const fetchAllData = async () => {
 			if (!token) return;
 
 			setIsLoading(true);
-			// try {
+			try {
 				const [studentResponse, coursesResponse] = await Promise.all([
 					studentAction.getStudentData(token),
 					courseService.getCourses(),
 				]);
 
-
-				console.log(studentResponse)
 				setStudentData(studentResponse);
+
 				setCourses(coursesResponse);
 
 				if (studentResponse) {
@@ -52,11 +52,11 @@ const ProfileLayout = (props) => {
 
 					setBookmarkedCourses(bookmarkedCoursesResponse?.data || []);
 				}
-			// } catch (error) {
-			// 	console.error("Error fetching data:", error);
-			// } finally {
-			// 	setIsLoading(false);
-			// }
+			} catch (error) {
+				console.error("Error fetching data:", error);
+			} finally {
+				setIsLoading(false);
+			}
 		};
 
 		fetchAllData();
@@ -94,8 +94,8 @@ const ProfileLayout = (props) => {
 			const fetchCourseModules = async () => {
 				try {
 					const response = await courseModuleService.getcourseModules(token, courseContentId);
-					console.log(response)
-					if (isMounted) setCourseModules(response?.data || []);
+					
+					if (isMounted) setCourseModules(response?.data?.sections || []);
 				} catch (error) {
 					console.error('Error fetching course modules:', error);
 					// Add a user-friendly error handler here if desired
@@ -125,7 +125,6 @@ const ProfileLayout = (props) => {
 				isMounted = false; // Cleanup to avoid state updates after unmount
 			};
 		}, [token, courseContentId]); // Directly use dependencies instead of queryKey
-
 
 		return (
 			<ul>
@@ -401,5 +400,5 @@ const ProfileLayout = (props) => {
 		</Fragment>
 	);
 
-};
+});
 export default ProfileLayout; 
