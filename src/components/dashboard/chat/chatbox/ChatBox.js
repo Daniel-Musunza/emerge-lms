@@ -2,7 +2,6 @@
 import React, { useContext, useRef, useEffect, useState } from 'react';
 import SimpleBar from 'simplebar-react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useQuery } from 'react-query';
 import moment from 'moment';
 import chatService from '../../features/chat/chatService';
 
@@ -30,23 +29,54 @@ const ChatBox = (props) => {
 	const token = user?.data?.accessToken;
 	const courseId = props.courseId;
 
-	const { data: chat, isLoading: chatLoading } = useQuery(
-		['groupChat', token, courseId],
-		() => chatService.getGroupChat(token, courseId)
-	);
-	
-	const chatId = chat?.data?.id;
+	const [chat, setChat] = useState(null);
+	const [chatLoading, setChatLoading] = useState(true);
+	const [messagesLoading, setMessagesLoading] = useState(true);
 
-	const { data: defaultMessages, isLoading: messagesLoading, refetch: refetchMessages } = useQuery(
-		['groupChatMessages', token, chatId],
-		() => chatService.getChatMessages(token, chatId),
-		{
-			enabled: !!token && !!chatId, // Fetch only if token and chatId are available
-			onSuccess: (data) => {
-				setMessages(data?.data || []);
+	useEffect(() => {
+		const fetchChat = async () => {
+			if (token && courseId) {
+				try {
+					setChatLoading(true);
+					const response = await chatService.getGroupChat(token, courseId);
+					setChat(response);
+				} catch (error) {
+					console.error('Error fetching chat:', error);
+				} finally {
+					setChatLoading(false);
+				}
+			}
+		};
+		fetchChat();
+	}, [token, courseId]);
+
+	useEffect(() => {
+		const fetchMessages = async () => {
+			if (token && chat?.id) {
+				try {
+					setMessagesLoading(true);
+					const response = await chatService.getChatMessages(token, chat.id);
+					setMessages(response || []);
+				} catch (error) {
+					console.error('Error fetching messages:', error);
+				} finally {
+					setMessagesLoading(false);
+				}
+			}
+		};
+		fetchMessages();
+	}, [token, chat?.id]);
+
+	const refetchMessages = async () => {
+		if (token && chat?.id) {
+			try {
+				const response = await chatService.getChatMessages(token, chat.id);
+				setMessages(response || []);
+			} catch (error) {
+				console.error('Error refetching messages:', error);
 			}
 		}
-	);
+	};
 
 	const getDate = (timestamp) => {
 		return moment(timestamp).format('MMMM DD, yyyy');
@@ -78,8 +108,8 @@ const ChatBox = (props) => {
 	}, [chatMessages]);
 
 
-	
-	
+
+
 	return (
 		<div
 			className={`chat-body w-100 vh-100 ${hideChatBox ? 'chat-body-visible' : ''}`}

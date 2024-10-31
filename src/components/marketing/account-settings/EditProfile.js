@@ -2,7 +2,6 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import { Card, Form, Row, Col, Button, Image } from 'react-bootstrap';
-import { isError, useQuery } from 'react-query';
 // import custom components
 import { FormSelect } from 'components/elements/form-select/FormSelect';
 import { FlatPickr } from 'components/elements/flat-pickr/FlatPickr';

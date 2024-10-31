@@ -1,6 +1,5 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
-import { useQuery } from 'react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
@@ -25,11 +24,25 @@ const Assignments = () => {
         link: '/marketing/student/student-edit-profile/'
     };
 
-    const { data: assignments, isLoading } = useQuery(
-        ['assignments', id, token], // Include id and token in the query key
-        () => assignmentService.getCourseAssignments(token, id) // Pass a function that returns the data
-    );
-
+    const [assignments, setAssignments] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+  
+    useEffect(() => {
+      const fetchAssignments = async () => {
+        if (token && id) {
+          try {
+            setIsLoading(true);
+            const response = await assignmentService.getCourseAssignments(token, id);
+            setAssignments(response || []);
+          } catch (error) {
+            console.error('Error fetching assignments:', error);
+          } finally {
+            setIsLoading(false);
+          }
+        }
+      };
+      fetchAssignments();
+    }, [token, id]);
 
     return (
         <ProfileLayout dashboardData={dashboardData}>

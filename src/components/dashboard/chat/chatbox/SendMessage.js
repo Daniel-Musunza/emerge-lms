@@ -1,7 +1,6 @@
 // import node module libraries
 import React, { useState, useContext } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import { useQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import { postMessage } from '../../features/chat/chatSlice';
 import studentAction from 'store/studentAction';
@@ -12,29 +11,64 @@ const SendMessage = (props) => {
 	const dispatch = useDispatch();
 	const [message, setMessage] = useState('');
 	const [sendingMessage, setSendingMessage] = useState(false);
-	const { user } = useSelector(state => state.auth);
+	const [studentData, setStudentData] = useState(null);
+	const [messages, setMessages] = useState([]);
+	const [studentDataLoading, setStudentDataLoading] = useState(true);
+	const [messagesLoading, setMessagesLoading] = useState(true);
+  
+	const { user } = useSelector((state) => state.auth);
 	const token = user?.data?.accessToken;
-
-	const { data: studentData, isLoading: studentDataLoading } = useQuery(
-		['studentData', token],
-		() => studentAction.getStudentData(token),
-		{
-			enabled: !!token, // Only fetch data when token is available
-		}
-	);
-
-	const studentId = studentData?.data?.id;
-
 	const chatId = props?.chatId;
-
-	const { data: messages, refetch: refetchMessages } = useQuery(
-		['groupChatMessages', token, chatId],
-		() => chatService.getChatMessages(token, chatId),
-		{
-			enabled: !!token && !!chatId, // Fetch only if token and chatId are available
+  
+	// Fetch student data when token is available
+	useEffect(() => {
+	  const fetchStudentData = async () => {
+		if (token) {
+		  try {
+			setStudentDataLoading(true);
+			const response = await studentAction.getStudentData(token);
+			setStudentData(response);
+		  } catch (error) {
+			console.error('Error fetching student data:', error);
+		  } finally {
+			setStudentDataLoading(false);
+		  }
 		}
-	);
-
+	  };
+	  fetchStudentData();
+	}, [token]);
+  
+	const studentId = studentData?.id;
+  
+	// Fetch messages when token and chatId are available
+	useEffect(() => {
+	  const fetchMessages = async () => {
+		if (token && chatId) {
+		  try {
+			setMessagesLoading(true);
+			const response = await chatService.getChatMessages(token, chatId);
+			setMessages(response || []);
+		  } catch (error) {
+			console.error('Error fetching messages:', error);
+		  } finally {
+			setMessagesLoading(false);
+		  }
+		}
+	  };
+	  fetchMessages();
+	}, [token, chatId]);
+  
+	const refetchMessages = async () => {
+	  if (token && chatId) {
+		try {
+		  const response = await chatService.getChatMessages(token, chatId);
+		  setMessages(response || []);
+		} catch (error) {
+		  console.error('Error refetching messages:', error);
+		}
+	  }
+	};
+  
 	const handleSubmit = async () => {
 		
 		setSendingMessage(true);

@@ -1,8 +1,5 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
-import { useQuery } from 'react-query';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
 
 import { Card, ListGroup, Row, Col, Form } from 'react-bootstrap';
@@ -28,12 +25,26 @@ const Certifications = () => {
 
 	const studentId = studentData?.data?.id;
 
-	const { data: certificates } = useQuery(
-		['certificates', token],
-		() => courseService.getCertificates(studentId, token)
-	);
-
-	console.log(certificates)
+	const [certificates, setCertificates] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+  
+	useEffect(() => {
+	  const fetchCertificates = async () => {
+		if (token && studentId) {
+		  try {
+			setIsLoading(true);
+			const response = await courseService.getCertificates(studentId, token);
+			setCertificates(response || []);
+		  } catch (error) {
+			console.error('Error fetching certificates:', error);
+		  } finally {
+			setIsLoading(false);
+		  }
+		}
+	  };
+	  fetchCertificates();
+	}, [studentId, token]);
+  
 
 	return (
 		<ProfileLayout dashboardData={dashboardData}>

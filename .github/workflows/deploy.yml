@@ -1,0 +1,43 @@
+name: Deploy React App to Server
+
+on:
+  push:
+    branches:
+      - master  # Deploy on push to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Install Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build React App
+      run: npm run build
+
+    - name: Upload Files to Server
+      uses: easingthemes/ssh-deploy@v2.1.5
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SERVER_KEY }}
+        SSH_USER: ${{ secrets.SERVER_USER }}
+        SSH_HOST: ${{ secrets.SERVER_IP }}
+        SOURCE: "build/" # React build folder
+        TARGET: "/var/www/emergekenya.org" # Destination path on server
+
+    - name: Restart Nginx (Optional, requires sudo access)
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SERVER_IP }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SERVER_KEY }}
+        script: |
+          sudo systemctl restart nginx

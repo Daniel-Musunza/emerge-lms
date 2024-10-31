@@ -1,6 +1,5 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
-import { isError, useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Col, Row, Container, Tab, Nav, ListGroup, Image, Card } from 'react-bootstrap';
@@ -46,42 +45,70 @@ const CourseSingle = () => {
 	let token = user?.data.accessToken;
 
 	const studentData = JSON.parse(localStorage.getItem('studentData'));
-
+	
 	let studentId = studentData?.data?.id;
 
-	let bookmarkedIDs = [];
+	const [bookmarkedIDs, setBookmarkedIDs] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+	const [courseModules, setCourseModules] = useState([]);
+	const [courses, setCourses] = useState([]);
+	const [isLoadingModules, setIsLoadingModules] = useState(true);
+	const [isLoadingCourses, setIsLoadingCourses] = useState(true);
+  
+	
+	useEffect(() => {
+		const fetchCourseModules = async () => {
+			if (token && id) {
+			  try {
+				setIsLoadingModules(true);
+				const response = await courseModuleService.getcourseModules(token, id);
+				setCourseModules(response || []);
+			  } catch (error) {
+				console.error('Error fetching course modules:', error);
+			  } finally {
+				setIsLoadingModules(false);
+			  }
+			}
+		  };
+	  
+		  const fetchCourses = async () => {
+			try {
+			  setIsLoadingCourses(true);
+			  const response = await courseService.getCourses();
+			  console.log(response)
+			  setCourses(response.data.courses || []);
+			} catch (error) {
+			  console.error('Error fetching courses:', error);
+			} finally {
+			  setIsLoadingCourses(false);
+			}
+		  };
+	  
+		const fetchBookmarkedCourses = async () => {
+		try {
+		  const response = await courseService.getBookmarkedCourses(token, studentId);
+		 
+		  const courses = response?.data || [];
+		 
+		  setBookmarkedIDs(courses.map(course => course.course.id));
+		} catch (error) {
+		  console.error('Error fetching bookmarked courses:', error);
+		}
+	  };
+  
+  
+	  const fetchAllData = async () => {
+		if (token && studentId) {
+		  setIsLoading(true);
+		  await Promise.all([  fetchCourseModules(),fetchCourses(), fetchBookmarkedCourses()]);
+		  setIsLoading(false);
+		}
+	  };
+  
+	  fetchAllData();
+	}, [token, studentId, id]);
 
-	let paidIDs = [];
 
-	if (user) {
-		token = user?.data?.accessToken;
-
-
-		const { data: bookmarkedCourses } = useQuery(
-			['bookmarkedCourses', token, studentId],
-			() => courseService.getBookmarkedCourses(token, studentId)
-		);
-
-		bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
-
-		const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
-			['paidCourses', token, studentId],
-			() => courseService.getPaidCourses(token, studentId)
-		);
-
-		paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
-	}
-
-	const { data: courseModules } = useQuery(
-		['courseModules', token, id], // Include id and token in the query key
-		() => courseModuleService.getcourseModules(token, id) // Pass a function that returns the data
-	);
-
-
-	const { data: courses, isLoading } = useQuery(
-		'courses', // The query key
-		courseService.getCourses // Fetch function
-	);
 
 	const { courseContents } = useSelector(
 		(state) => state.courseContents
@@ -92,9 +119,8 @@ const CourseSingle = () => {
 
 	const [YouTubeURL] = useState('JRzWRZahOVU');
 	const AllCoursesData = courses;
-
-	const thisCourse = AllCoursesData?.data?.courses.find((course) => {
-
+	
+	const thisCourse = AllCoursesData?.find((course) => {
 		return course?.id === courseId;
 	});
 
@@ -164,9 +190,9 @@ const CourseSingle = () => {
 	};
 
 
-	if (isLoading) {
-		return <Spinner />
-	}
+	// if (isLoading) {
+	// 	return <Spinner />
+	// }
 
 	return (
 		<Fragment>
@@ -488,7 +514,7 @@ const CourseSingle = () => {
 							</Col>
 						</Row>
 						<Row>
-							{AllCoursesData?.data?.courses.filter(function (datasource) {
+							{AllCoursesData?.filter(function (datasource) {
 								return datasource;
 							})
 								.slice(0, 4)

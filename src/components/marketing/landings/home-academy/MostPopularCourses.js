@@ -1,7 +1,6 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { Col, Row, Container, Tab, Nav } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 // import sub components

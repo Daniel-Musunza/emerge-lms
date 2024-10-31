@@ -1,6 +1,5 @@
 // import node module libraries
 import { Fragment, useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { Link, useNavigate, } from 'react-router-dom';

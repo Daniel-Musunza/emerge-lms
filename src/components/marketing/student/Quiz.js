@@ -1,7 +1,6 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card } from 'react-bootstrap';
@@ -20,18 +19,40 @@ const Quiz = () => {
 	);
 
 	const token = user?.data?.accessToken;
-const studentData = JSON.parse(localStorage.getItem('studentData'));
+	const studentData = JSON.parse(localStorage.getItem('studentData'));
 
 
-    const { data: quiz, isLoading, refetch: refetchQuiz } = useQuery(
-        ['quiz', token, sectionId], // Query key including sectionId
-        () => quizService.getFullQuiz(token, sectionId) // Fetch function including sectionId
-    );
+	const [quiz, setQuiz] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
 
-    // Use useEffect to refetch quiz when sectionId changes
-    useEffect(() => {
-        refetchQuiz();
-    }, [sectionId, refetchQuiz]);
+	useEffect(() => {
+		const fetchQuiz = async () => {
+			if (token && sectionId) {
+				try {
+					const response = await quizService.getFullQuiz(token, sectionId);
+					setQuiz(response); // Set the fetched quiz data
+				} catch (error) {
+					console.error('Error fetching quiz:', error);
+				} finally {
+					setIsLoading(false); // Set loading to false after the fetch
+				}
+			} else {
+				setIsLoading(false); // If no token or sectionId, set loading to false
+			}
+		};
+
+		fetchQuiz();
+	}, [token, sectionId]); // Dependencies to refetch when token or sectionId changes
+
+	const refetchQuiz = () => {
+		setIsLoading(true); // Set loading state to true before refetching
+		fetchQuiz(); // Call fetchQuiz to refresh data
+	};
+
+	// Use useEffect to refetch quiz when sectionId changes
+	useEffect(() => {
+		refetchQuiz();
+	}, [sectionId, refetchQuiz]);
 
 	const quizId = quiz?.data?.id || "noQuizId"
 

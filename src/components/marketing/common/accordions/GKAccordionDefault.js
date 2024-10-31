@@ -1,6 +1,5 @@
 // import node module libraries
 import React, { useContext, Fragment, useState, useEffect } from 'react';
-import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
@@ -76,18 +75,29 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 		studentId
 	}
 
-	const { data: courseAnalytics } = useQuery(
-		['courseAnalytics', token, courseData],
-		() => courseService.getCourseAnalytics(token, courseData),
-		{
-			enabled: token ? true : false// Set enabled to true only if item.id is in paidIDs and token is truthy
+	const [courseAnalytics, setCourseAnalytics] = useState(null);
+	const [isLoading, setIsLoading] = useState(true);
+  
+	useEffect(() => {
+	  const fetchCourseAnalytics = async () => {
+		if (token && courseData) {
+		  try {
+			setIsLoading(true);
+			const response = await courseService.getCourseAnalytics(token, courseData);
+			setCourseAnalytics(response);
+		  } catch (error) {
+			console.error('Error fetching course analytics:', error);
+		  } finally {
+			setIsLoading(false);
+		  }
 		}
-	);
+	  };
+  
+	  fetchCourseAnalytics();
+	}, [token, courseData]);
 
 
 	const sectionProgress = courseAnalytics?.data?.progress || [];
-
-	const [isLoading, setLoading] = useState(null);
 
 	// Check if section progress is less than 80%
 	const handleModuleSelect = async (id, e) => {

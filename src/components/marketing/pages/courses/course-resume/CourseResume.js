@@ -1,7 +1,6 @@
 
 import React, { useState, useEffect, Fragment, useMemo } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux'
 import { Col, Row, Container, Card, Dropdown } from 'react-bootstrap';
@@ -48,13 +47,25 @@ export const CourseResume = () => {
 
 	const studentId = studentData?.data?.id;
 
-	const { data: bookmarkedCourses } = useQuery(
-		['bookmarkedCourses', token, studentId],
-		() => courseService.getBookmarkedCourses(token, studentId),
-		{
-			enabled: !!token && !!studentId, // Ensure query only runs when token and studentId are defined
+	const [bookmarkedCourses, setBookmarkedCourses] = useState([]);
+
+	useEffect(() => {
+	  const fetchBookmarkedCourses = async () => {
+		if (token && studentId) {
+		  try {
+			setIsLoading(true);
+			const response = await courseService.getBookmarkedCourses(token, studentId);
+			setBookmarkedCourses(response || []);
+		  } catch (error) {
+			console.error('Error fetching bookmarked courses:', error);
+		  } finally {
+			setIsLoading(false);
+		  }
 		}
-	);
+	  };
+  
+	  fetchBookmarkedCourses();
+	}, [token, studentId]);
 
 	const bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
 
@@ -70,11 +81,26 @@ export const CourseResume = () => {
 
 	const queryKey = useMemo(() => ['courseModules', token, id], [token, id]);
 
-	// Use useQuery hook
-	const { data: courseModules, isLoading } = useQuery(
-		queryKey,
-		() => courseModuleService.getcourseModules(token, id)
-	);
+	const [courseModules, setCourseModules] = useState([]);
+	const [isLoading, setIsLoading] = useState(true);
+  
+	useEffect(() => {
+	  const fetchCourseModules = async () => {
+		if (token && id) {
+		  try {
+			setIsLoading(true);
+			const response = await courseModuleService.getcourseModules(token, id);
+			setCourseModules(response || []);
+		  } catch (error) {
+			console.error('Error fetching course modules:', error);
+		  } finally {
+			setIsLoading(false);
+		  }
+		}
+	  };
+  
+	  fetchCourseModules();
+	}, [token, id]);
 
 	const { courseContents } = useSelector(
 		(state) => state.courseContents

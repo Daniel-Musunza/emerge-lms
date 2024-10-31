@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useContext, useState } from 'react';
-import { useQuery } from 'react-query';
 import { Col, Row, Nav, Tab, Card, Container, Navbar, useAccordionButton, AccordionContext } from 'react-bootstrap';
 import CourseCard from 'components/marketing/pages/courses/CourseCard';
 import ProfileCover from 'components/marketing/common/headers/ProfileCover';

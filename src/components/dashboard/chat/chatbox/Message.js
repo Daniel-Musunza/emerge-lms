@@ -2,7 +2,6 @@
 import React, { Fragment, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { Dropdown } from 'react-bootstrap';
-import { useQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 // import custom components
 
@@ -21,13 +20,13 @@ const Message = (props) => {
 
 	const token = user?.data?.accessToken;
 	
-	const { data: studentData, isLoading: studentDataLoading } = useQuery(
-		['studentData', token],
-		() => studentAction.getStudentData(token),
-		{
-			enabled: !!token, // Only fetch data when token is available
-		}
-	);
+	// const { data: studentData, isLoading: studentDataLoading } = useQuery(
+	// 	['studentData', token],
+	// 	() => studentAction.getStudentData(token),
+	// 	{
+	// 		enabled: !!token, // Only fetch data when token is available
+	// 	}
+	// );
 
 	const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 		<Link

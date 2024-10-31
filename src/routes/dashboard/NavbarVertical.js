@@ -1,7 +1,6 @@
 // import node module libraries
 import React, { Fragment, useContext, useState, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { useSelector, useDispatch } from 'react-redux';
 import {
 	Row, Col, Container, Nav, Navbar, useAccordionButton, AccordionContext, ListGroup,
@@ -34,149 +33,171 @@ import GiftBox from 'assets/images/background/giftbox.png';
 const NavbarVertical = (props) => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const location = useLocation();
-	const dashboardData = props.dashboardData;
-
 	const { user } = useSelector(state => state.auth);
-
 	const token = user?.data?.accessToken;
 
-	const { data: studentData, isLoading: studentDataLoading } = useQuery(
-		['studentData', token],
-		() => studentAction.getStudentData(token),
-		{
-			enabled: !!token, // Only fetch data when token is available
-		}
-	);
-
-	let studentId = studentData?.data?.id;
-
+	const [studentData, setStudentData] = useState(null);
+	const [courses, setCourses] = useState(null);
+	const [paidCourses, setPaidCourses] = useState(null);
 	const [openAssignmentSections, toggleAssignments] = useState(false);
 	const [openQuizSections, toggleQuizSections] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
-	const { data: courses, isLoading: coursesLoading } = useQuery(
-		['courses'],
-		courseService.getCourses
-	);
+	const studentId = studentData?.data?.id;
 
-	const { data: paidCourses, isLoading: paidCoursesLoading } = useQuery(
-		['paidCourses', token, studentId],
-		() => courseService.getPaidCourses(token, studentId)
-	);
+	useEffect(() => {
+		const fetchData = async () => {
+			setIsLoading(true);
 
+			// Fetch student data
+			if (token) {
+				try {
+					const studentResponse = await studentAction.getStudentData(token);
+					setStudentData(studentResponse);
+				} catch (error) {
+					console.error('Error fetching student data:', error);
+				}
+			}
+
+			// Fetch courses
+			try {
+				const coursesResponse = await courseService.getCourses();
+				setCourses(coursesResponse);
+			} catch (error) {
+				console.error('Error fetching courses:', error);
+			}
+
+			// Fetch paid courses
+			if (token && studentId) {
+				try {
+					const paidCoursesResponse = await courseService.getPaidCourses(token, studentId);
+					setPaidCourses(paidCoursesResponse);
+				} catch (error) {
+					console.error('Error fetching paid courses:', error);
+				}
+			}
+
+			setIsLoading(false);
+		};
+
+		fetchData();
+	}, [token, studentId]);
+
+	if (isLoading) return <p>Loading...</p>;
 
 	let paidIDs = paidCourses?.data?.courseManager?.map(course => course.course.id);
 
-
-	const SignOut = async() => {
+	const SignOut = async () => {
 		await dispatch(logout());
 		navigate('/');
 	};
 
 	const DisplayModules = () => {
-		toggleQuizSections((prev) => !prev); // Use !== instead of ==
+		toggleQuizSections(prev => !prev);
 	};
 
 	const DisplayAssignments = () => {
-		toggleAssignments((prev) => !prev); // Use !== instead of ==
+		toggleAssignments(prev => !prev);
 	};
 
 	const CourseModules = ({ courseId, courseContentId, studentId }) => {
-		const queryKey = useMemo(() => ['courseModules', courseContentId], [courseContentId]);
-		const { data: courseModules } = useQuery(
-			queryKey,
-			() => courseModuleService.getcourseModules(courseContentId)
-		);
+		const [courseModules, setCourseModules] = useState(null);
+		const [courseAnalytics, setCourseAnalytics] = useState(null);
 
-		const courseData = {
-			courseId,
-			studentId
-		}
+		const fetchCourseData = async () => {
+			try {
+				const modulesResponse = await courseModuleService.getcourseModules(courseContentId);
+				setCourseModules(modulesResponse);
 
-		const { data: courseAnalytics } = useQuery(
-			['courseAnalytics', token, courseData],
-			() => courseService.getCourseAnalytics(token, courseData)
-		);
+				const courseData = { courseId, studentId };
+				const analyticsResponse = await courseService.getCourseAnalytics(token, courseData);
+				setCourseAnalytics(analyticsResponse);
+			} catch (error) {
+				console.error('Error fetching course data:', error);
+			}
+		};
+
+		useEffect(() => {
+			fetchCourseData();
+		}, [courseContentId, studentId]);
 
 		const sectionProgress = courseAnalytics?.data?.progress || [];
+
+		const [eventKey, setEventKey] = useState('');
+		const { activeEventKey } = useContext(AccordionContext);
+
+		const decoratedOnClick = useAccordionButton(
+			eventKey,
+			() => callback && callback(eventKey)
+		);
+
+		const isCurrentEventKey = activeEventKey === eventKey;
+
+		const CustomToggle = ({ children, eventKey, icon }) => {
+			const { activeEventKey } = useContext(AccordionContext);
+			const decoratedOnClick = useAccordionButton(eventKey, () =>
+				console.log('Event Key : ' + eventKey)
+			);
+			const isCurrentEventKey = activeEventKey === eventKey;
+			return (
+				<li className="nav-item">
+					<Link
+						className="nav-link "
+						onClick={decoratedOnClick}
+						to="#!"
+						data-bs-toggle="collapse"
+						data-bs-target="#navDashboard"
+						aria-expanded={isCurrentEventKey ? true : false}
+						aria-controls="navDashboard"
+					>
+						{icon ? <i className={`nav-icon fe fe-${icon} me-2`}></i> : ''}{' '}
+						{children}
+					</Link>
+				</li>
+			);
+		};
+
+		const generateLink = (item) => {
+			return (
+				<Link
+					className={`nav-link ${location.pathname === item.link ? 'active' : ''
+						}`}
+					to={item.link}
+					onClick={(e) =>
+						isMobile ? props.onClick(!props.showMenu) : props.showMenu
+					}
+				>
+					{item.name}
+					{''}
+					{item.badge ? (
+						<Badge
+							className="ms-1"
+							bg={item.badgecolor ? item.badgecolor : 'primary'}
+						>
+							{item.badge}
+						</Badge>
+					) : (
+						''
+					)}
+				</Link>
+			);
+		};
+
+		const isMobile = useMediaQuery({ maxWidth: 767 });
+
 		return (
 			<ul>
-				{courseModules?.data?.sections.map((y, index) => (
-					// <>
-					// 	{sectionProgress.some(x => x.section.id === y.id && x.sectionPercentage > 80) ? (
-					// 		<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
-					// 	) : (
-					// 		<span style={{ border: 'none', borderRadius: '5px', opacity: 0.5 }}> {y.title}</span>
-					// 	)}
-					// </>
-					<li><Link to={`/marketing/student/quiz/${y.id}`} key={index} style={{ textDecoration: 'none' }}> {y.title}</Link></li>
+				{courseModules?.data?.sections.map((section, index) => (
+					<li key={index}>
+						<Link to={`/marketing/student/quiz/${section.id}`} style={{ textDecoration: 'none' }}>
+							{section.title}
+						</Link>
+					</li>
 				))}
 			</ul>
 		);
 	};
 
-
-	const [eventKey, setEventKey] = useState('');
-	const { activeEventKey } = useContext(AccordionContext);
-
-	const decoratedOnClick = useAccordionButton(
-		eventKey,
-		() => callback && callback(eventKey)
-	);
-
-	const isCurrentEventKey = activeEventKey === eventKey;
-
-	const CustomToggle = ({ children, eventKey, icon }) => {
-		const { activeEventKey } = useContext(AccordionContext);
-		const decoratedOnClick = useAccordionButton(eventKey, () =>
-			console.log('Event Key : ' + eventKey)
-		);
-		const isCurrentEventKey = activeEventKey === eventKey;
-		return (
-			<li className="nav-item">
-				<Link
-					className="nav-link "
-					onClick={decoratedOnClick}
-					to="#!"
-					data-bs-toggle="collapse"
-					data-bs-target="#navDashboard"
-					aria-expanded={isCurrentEventKey ? true : false}
-					aria-controls="navDashboard"
-				>
-					{icon ? <i className={`nav-icon fe fe-${icon} me-2`}></i> : ''}{' '}
-					{children}
-				</Link>
-			</li>
-		);
-	};
-
-	const generateLink = (item) => {
-		return (
-			<Link
-				className={`nav-link ${location.pathname === item.link ? 'active' : ''
-					}`}
-				to={item.link}
-				onClick={(e) =>
-					isMobile ? props.onClick(!props.showMenu) : props.showMenu
-				}
-			>
-				{item.name}
-				{''}
-				{item.badge ? (
-					<Badge
-						className="ms-1"
-						bg={item.badgecolor ? item.badgecolor : 'primary'}
-					>
-						{item.badge}
-					</Badge>
-				) : (
-					''
-				)}
-			</Link>
-		);
-	};
-
-	const isMobile = useMediaQuery({ maxWidth: 767 });
 
 	return (
 		<div style={{ backgroundColor: '#fff', width: '100%' }}>

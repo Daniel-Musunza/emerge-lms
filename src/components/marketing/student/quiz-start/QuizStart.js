@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useQuery } from 'react-query';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
 import { Card, Button } from 'react-bootstrap';
@@ -26,18 +25,53 @@ const QuizStart = () => {
     const [calculatingResults, setCalculatingResults] = useState(null);
     const { user } = useSelector((state) => state.auth);
     const token = user?.data?.accessToken;
-    const { data: studentData } = useQuery(['studentData', token], () =>
-        studentAction.getStudentData(token)
-    );
-    const quizData = { sectionId, quizId };
+    const [studentData, setStudentData] = useState(null);
+    const [quiz, setQuiz] = useState(null);
+    const [quizData, setQuizData] = useState(null);
+    const [allQuestions, setAllQuestions] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
-    const { data: quiz } = useQuery(['quiz', token], () =>
-        quizService.getQuiz(token, quizData)
-    );
+    useEffect(() => {
+        const fetchData = async () => {
+            setIsLoading(true); // Set loading state to true
 
-    const { data: QuizData, isLoading } = useQuery(['Allquestions', token], () =>
-        quizService.getAllQuestions(token, quizId)
-    );
+            // Fetch student data
+            try {
+                if (token) {
+                    const studentResponse = await studentAction.getStudentData(token);
+                    setStudentData(studentResponse);
+                }
+            } catch (error) {
+                console.error('Error fetching student data:', error);
+            }
+
+            // Fetch quiz data
+            const quizDataPayload = { sectionId, quizId };
+            try {
+                if (token) {
+                    const quizResponse = await quizService.getQuiz(token, quizDataPayload);
+                    setQuiz(quizResponse);
+                }
+            } catch (error) {
+                console.error('Error fetching quiz data:', error);
+            }
+
+            // Fetch all questions
+            try {
+                if (token && quizId) {
+                    const questionsResponse = await quizService.getAllQuestions(token, quizId);
+                    setAllQuestions(questionsResponse);
+                }
+            } catch (error) {
+                console.error('Error fetching all questions:', error);
+            }
+
+            setIsLoading(false); // Set loading to false after all fetches
+        };
+
+        fetchData();
+    }, [token, sectionId, quizId]); // Dependencies to refetch when they change
+
     const [currentPage, setCurrentPage] = useState(1);
     const [recordsPerPage] = useState(1);
     const indexOfLastRecord = currentPage * recordsPerPage;

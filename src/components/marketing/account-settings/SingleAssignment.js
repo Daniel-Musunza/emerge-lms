@@ -1,6 +1,5 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
-import { useQuery } from 'react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux'
@@ -30,25 +29,48 @@ const SingleAssignment = () => {
         link: '/marketing/student/student-edit-profile/'
     };
 
-    const { data: assignment } = useQuery(
-        ['assignment', id, token], // Include id and token in the query key
-        () => assignmentService.getAssignment(token, id) // Pass a function that returns the data
-    );
-
-    const { data: group } = useQuery(
-        ['group', id, token],
-        () => {
-            if (assignment?.data?.type === 'group') {
-                return assignmentService.getGroup(token, id);
-            }
-            return Promise.resolve(null);
-        },
-        {
-            enabled: assignment?.data?.type === 'group', // Only enable the query if the type is 'group'
-            staleTime: Infinity, // Optional: to prevent refetching if data is unlikely to change
-            cacheTime: Infinity, // Optional: to keep the data cached
+    const [assignment, setAssignment] = useState(null);
+    const [group, setGroup] = useState(null);
+    const [isLoadingAssignment, setIsLoadingAssignment] = useState(true);
+    const [isLoadingGroup, setIsLoadingGroup] = useState(true);
+  
+    // Fetch the assignment data
+    useEffect(() => {
+      const fetchAssignment = async () => {
+        if (token && id) {
+          try {
+            setIsLoadingAssignment(true);
+            const response = await assignmentService.getAssignment(token, id);
+            setAssignment(response);
+          } catch (error) {
+            console.error('Error fetching assignment:', error);
+          } finally {
+            setIsLoadingAssignment(false);
+          }
         }
-    );
+      };
+      fetchAssignment();
+    }, [token, id]);
+  
+    // Fetch the group data if the assignment type is 'group'
+    useEffect(() => {
+      const fetchGroup = async () => {
+        if (token && id && assignment?.type === 'group') {
+          try {
+            setIsLoadingGroup(true);
+            const response = await assignmentService.getGroup(token, id);
+            setGroup(response);
+          } catch (error) {
+            console.error('Error fetching group:', error);
+          } finally {
+            setIsLoadingGroup(false);
+          }
+        } else {
+          setGroup(null); // Reset group if not of type 'group'
+        }
+      };
+      fetchGroup();
+    }, [token, id, assignment]);
 
     console.log(group);
 

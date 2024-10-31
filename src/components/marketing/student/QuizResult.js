@@ -1,6 +1,5 @@
 // import node module libraries
 import React, { useState, useEffect, Fragment } from 'react';
-import { useQuery } from 'react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';

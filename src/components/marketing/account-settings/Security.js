@@ -10,7 +10,6 @@ import {
 	Button
 } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useQuery } from 'react-query';
 
 // import custom components
 import PasswordStrengthMeter from 'components/elements/passwordstrength/PasswordStrengthMeter';
