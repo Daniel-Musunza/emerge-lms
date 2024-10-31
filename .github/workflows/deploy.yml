@@ -38,14 +38,18 @@ jobs:
         host: ${{ secrets.REMOTE_HOST }}
         username: ${{ secrets.REMOTE_USER }}
         password: ${{ secrets.SERVER_PASSWORD }}
+        port: 22
         source: "build/" # React build folder
-        target: "/var/www/emergekenya.org" # Destination path on server
+        target: '/home/aaaplatforms/daruur-lms/daruur-lms-frontend'
 
-    - name: Restart Nginx in Docker
-      uses: appleboy/ssh-action@v0.1.5
-      with:
-        host: ${{ secrets.REMOTE_HOST }}
-        username: ${{ secrets.REMOTE_USER }}
-        password: ${{ secrets.SERVER_PASSWORD }}
-        script: |
-          docker exec nginx-server nginx -s reload
+    # - name: Restart Nginx in Docker
+    #   uses: appleboy/ssh-action@v0.1.5
+    #   with:
+    #     host: ${{ secrets.REMOTE_HOST }}
+    #     username: ${{ secrets.REMOTE_USER }}
+    #     password: ${{ secrets.SERVER_PASSWORD }}
+    #     script: |
+    #     docker exec nginx-server nginx -s reload
+    #     script: |
+    #     sh
+    #     pm2 ls
