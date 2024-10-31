@@ -76,19 +76,19 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 	}
 
 	const [courseAnalytics, setCourseAnalytics] = useState(null);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setLoading] = useState(true);
   
 	useEffect(() => {
 	  const fetchCourseAnalytics = async () => {
 		if (token && courseData) {
 		  try {
-			setIsLoading(true);
+			
 			const response = await courseService.getCourseAnalytics(token, courseData);
 			setCourseAnalytics(response);
 		  } catch (error) {
 			console.error('Error fetching course analytics:', error);
 		  } finally {
-			setIsLoading(false);
+			
 		  }
 		}
 	  };

@@ -389,7 +389,7 @@ const CourseSingle = () => {
 									</div>
 
 									<div className="d-grid">
-										{bookmarkedIDs?.includes(thisCourse.id) ? (
+										{bookmarkedIDs?.includes(thisCourse?.id) ? (
 											<>
 												<Link to="#" className="btn mb-2 ">
 													Course Started

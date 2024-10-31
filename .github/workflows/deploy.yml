@@ -33,7 +33,7 @@ jobs:
       run: npm run build
 
     - name: Upload Files to Server
-      uses: easingthemes/ssh-deploy@v2.1.5
+      uses: appleboy/scp-action@v0.1.0
       with:
         password: ${{ secrets.SERVER_PASSWORD }}
         REMOTE_USER: ${{ secrets.REMOTE_USER }}

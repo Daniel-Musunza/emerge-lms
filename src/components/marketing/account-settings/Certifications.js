@@ -34,6 +34,7 @@ const Certifications = () => {
 		  try {
 			setIsLoading(true);
 			const response = await courseService.getCertificates(studentId, token);
+			console.log(response)
 			setCertificates(response || []);
 		  } catch (error) {
 			console.error('Error fetching certificates:', error);
@@ -60,7 +61,7 @@ const Certifications = () => {
 
 				<Card.Body>
 					{/* List group */}
-					{certificates?.data.length > 0 ? (
+					{certificates?.data?.length > 0 ? (
 						<ListGroup variant="flush" className="mb-4">
 							{certificates?.data.map((c, index) => (
 								<ListGroup.Item key={index} className="px-0 pt-0 pb-4">
