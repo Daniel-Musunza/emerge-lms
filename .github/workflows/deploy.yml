@@ -35,11 +35,11 @@ jobs:
     - name: Upload Files to Server
       uses: appleboy/scp-action@v0.1.0
       with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.REMOTE_USER }}
         password: ${{ secrets.SERVER_PASSWORD }}
-        REMOTE_USER: ${{ secrets.REMOTE_USER }}
-        REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-        SOURCE: "build/" # React build folder
-        TARGET: "/var/www/emergekenya.org" # Destination path on server
+        source: "build/" # React build folder
+        target: "/var/www/emergekenya.org" # Destination path on server
 
     - name: Restart Nginx in Docker
       uses: appleboy/ssh-action@v0.1.5
