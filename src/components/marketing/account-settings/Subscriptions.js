@@ -75,6 +75,8 @@ const Subscriptions = () => {
 		}
 	}, [token, studentId]);
 
+	console.log(courses)
+
 	let bookmarkedIDs = bookmarkedCourses?.map(course => course.course.id);
 	
 	const [visiblePaymentSections, setVisiblePaymentSections] = useState({});
