@@ -22,8 +22,8 @@ import courseService from '../../../dashboard/features/courses/courseService';
 // import utility file
 import { numberWithCommas } from 'helper/utils';
 import { useDispatch, useSelector } from 'react-redux';
-
-const CourseCard = ({
+import { useCourseContext } from '../../../courseContext';
+const CourseCard = memo(({
 	item,
 	free,
 	viewby,
@@ -35,52 +35,23 @@ const CourseCard = ({
 	const GridView = () => {
 		const navigate = useNavigate();
 		const dispatch = useDispatch();
+		const {
+			generalProgress,
+			courses,
+			coursesLoading,
+			bookmarkedCourses,
+			getProgress,
+			signOut,
+			studentData,
+			bookmarkedIDs
+		} = useCourseContext();
 	
 		const user = JSON.parse(localStorage.getItem('user'));
-		const studentData = JSON.parse(localStorage.getItem('studentData'));
 	
 		const [loading, setLoading] = useState(false);
-		const [bookmarkedCourses, setBookmarkedCourses] = useState(null);
-		const [courseAnalytics, setCourseAnalytics] = useState(null);
 	
 		const studentId = studentData?.data?.id;
-		const token = user?.data?.accessToken;
-	
-		let bookmarkedIDs = bookmarkedCourses?.map(course => course.course.id);
-	
-		// Fetch bookmarked courses
-		useEffect(() => {
-			if (token && studentId) {
-				const fetchBookmarkedCourses = async () => {
-					try {
-						const response = await courseService.getBookmarkedCourses(token, studentId);
-						setBookmarkedCourses(response.data);
-					} catch (error) {
-						console.error('Failed to fetch bookmarked courses:', error);
-					}
-				};
-				fetchBookmarkedCourses();
-			}
-		}, [token, studentId]);
-
-		// Fetch course analytics if conditions are met
-		useEffect(() => {
-			if (token && bookmarkedIDs?.includes(item.id)) {
-				const fetchCourseAnalytics = async () => {
-					try {
-						const response = await courseService.getCourseAnalytics(token, {
-							courseId: item.id,
-							studentId,
-						});
-						setCourseAnalytics(response.data);
-					} catch (error) {
-						console.error('Failed to fetch course analytics:', error);
-					}
-				};
-				fetchCourseAnalytics();
-			}
-		}, [token, studentId, bookmarkedIDs, item.id]);
-	
+		
 		const AddToBookmark = async (e, courseId) => {
 			e.preventDefault();
 			setLoading(true);
@@ -228,7 +199,7 @@ const CourseCard = ({
 
 						<ProgressBar
 							variant="success"
-							now={courseAnalytics?.data?.coursePercentage}
+							now={item?.analytics?.data?.coursePercentage}
 							className="mt-3"
 							style={{ height: '5px' }}
 						/>
@@ -251,7 +222,7 @@ const CourseCard = ({
 			<GridView />
 		</Fragment>
 	);
-};
+});
 
 // Specifies the default values for props
 CourseCard.defaultProps = {

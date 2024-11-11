@@ -70,34 +70,34 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 		(state) => state.courseContents
 	);
 
-	const courseData = {
-		courseId,
-		studentId
-	}
+	// const courseData = {
+	// 	courseId,
+	// 	studentId
+	// }
 
-	const [courseAnalytics, setCourseAnalytics] = useState(null);
+	// const [courseAnalytics, setCourseAnalytics] = useState(null);
 	const [isLoading, setLoading] = useState(true);
   
-	useEffect(() => {
-	  const fetchCourseAnalytics = async () => {
-		if (token && courseData) {
-		  try {
+	// useEffect(() => {
+	//   const fetchCourseAnalytics = async () => {
+	// 	if (token && courseData) {
+	// 	  try {
 			
-			const response = await courseService.getCourseAnalytics(token, courseData);
-			setCourseAnalytics(response);
-		  } catch (error) {
-			console.error('Error fetching course analytics:', error);
-		  } finally {
+	// 		const response = await courseService.getCourseAnalytics(token, courseData);
+	// 		setCourseAnalytics(response);
+	// 	  } catch (error) {
+	// 		console.error('Error fetching course analytics:', error);
+	// 	  } finally {
 			
-		  }
-		}
-	  };
+	// 	  }
+	// 	}
+	//   };
   
-	  fetchCourseAnalytics();
-	}, [token, courseData]);
+	//   fetchCourseAnalytics();
+	// }, [token, courseData]);
 
 
-	const sectionProgress = courseAnalytics?.data?.progress || [];
+	// const sectionProgress = courseAnalytics?.data?.progress || [];
 
 	// Check if section progress is less than 80%
 	const handleModuleSelect = async (id, e) => {
@@ -173,7 +173,7 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 									</Accordion>
 								)}
 
-								{sectionProgress.some(x=> x.section?.id === item.id && x.sectionPercentage > 80) ? (
+								{/* {sectionProgress.some(x=> x.section?.id === item.id && x.sectionPercentage > 80) ? (
 									<>
 
 										<Link to={`/marketing/student/quiz/${item.id}`}>
@@ -192,12 +192,12 @@ const GKAccordionDefault = ({ accordionItems, itemClass, selectContent, selected
 										<span style={{ textDecoration: 'none', color: 'inherit' }}>Attempt Quiz</span>
 									</button>
 
-								)}
+								)} */}
 
-{/* 
+
 								<Link to={`/marketing/student/quiz/${item.id}`}>
 									<button key={index} style={{ border: 'none', borderRadius: '5px', textDecoration: 'none', color: 'inherit', backgroundColor: '754FFE' }}>Attempt Quiz</button>
-								</Link> */}
+								</Link>
 
 							</ListGroup.Item>
 

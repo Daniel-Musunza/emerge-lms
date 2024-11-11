@@ -30,11 +30,22 @@ import courseModuleService from '../../../../dashboard/features/courseModules/co
 import Spinner from '../../../../Spinner';
 import NavbarMegaMenu from 'layouts/marketing/navbars/mega-menu/NavbarMegaMenu';
 import FooterWithLinks from 'layouts/marketing/footers/FooterWithLinks';
+import { useCourseContext } from '../../../../courseContext';
 
 const CourseSingle = () => {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 
+	const {
+		generalProgress,
+		courses,
+		coursesLoading,
+		bookmarkedCourses,
+		getProgress,
+		signOut,
+		studentData,
+		bookmarkedIDs
+	} = useCourseContext();
 
 	const [loading, setLoading] = useState(null);
 	let { id, courseId } = useParams();
@@ -44,16 +55,11 @@ const CourseSingle = () => {
 
 	let token = user?.data.accessToken;
 
-	const studentData = JSON.parse(localStorage.getItem('studentData'));
-	
 	let studentId = studentData?.data?.id;
 
-	const [bookmarkedIDs, setBookmarkedIDs] = useState([]);
-	const [isLoading, setIsLoading] = useState(true);
+	const isLoading = coursesLoading;
 	const [courseModules, setCourseModules] = useState([]);
-	const [courses, setCourses] = useState([]);
 	const [isLoadingModules, setIsLoadingModules] = useState(true);
-	const [isLoadingCourses, setIsLoadingCourses] = useState(true);
   
 	
 	useEffect(() => {
@@ -70,42 +76,7 @@ const CourseSingle = () => {
 			  }
 			}
 		  };
-	  
-		  const fetchCourses = async () => {
-			try {
-			  setIsLoadingCourses(true);
-			  const response = await courseService.getCourses();
-			  console.log(response)
-			  setCourses(response.data.courses || []);
-			} catch (error) {
-			  console.error('Error fetching courses:', error);
-			} finally {
-			  setIsLoadingCourses(false);
-			}
-		  };
-	  
-		const fetchBookmarkedCourses = async () => {
-		try {
-		  const response = await courseService.getBookmarkedCourses(token, studentId);
-		 
-		  const courses = response?.data || [];
-		 
-		  setBookmarkedIDs(courses.map(course => course.course.id));
-		} catch (error) {
-		  console.error('Error fetching bookmarked courses:', error);
-		}
-	  };
-  
-  
-	  const fetchAllData = async () => {
-		if (token && studentId) {
-		  setIsLoading(true);
-		  await Promise.all([  fetchCourseModules(),fetchCourses(), fetchBookmarkedCourses()]);
-		  setIsLoading(false);
-		}
-	  };
-  
-	  fetchAllData();
+		  fetchCourseModules()
 	}, [token, studentId, id]);
 
 
@@ -115,7 +86,6 @@ const CourseSingle = () => {
 	);
 
 	const [isOpen, setOpen] = useState(false);
-	const [paymentSection, togglePaymentSection] = useState(false);
 
 	const [YouTubeURL] = useState('JRzWRZahOVU');
 	const AllCoursesData = courses;

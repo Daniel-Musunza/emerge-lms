@@ -23,7 +23,9 @@ const postProgress = async ( token, Data) => {
 			Authorization: `Bearer ${token}`
 		}
 	};
-	const response = await axios.post(`${baseUrl}course-manager/track/progress`, Data, config);
+	// const response = await axios.post(`${baseUrl}course-manager/track/progress`, Data, config);
+	const response = await axios.post(`${baseUrl}course-manager/track/progress/student/${Data.studentId}/course/${courseId}`, config);
+
 	return response.data;
 };
 

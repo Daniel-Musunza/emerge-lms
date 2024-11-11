@@ -23,7 +23,7 @@ import studentAction from 'store/studentAction';
 
 import Spinner from '../../../../Spinner';
 import PDFViewer from './PDFViewer';
-
+import { useCourseContext } from '../../../../courseContext';
 // import data
 // import { CourseIndex } from 'data/marketing/CourseIndexData';
 
@@ -35,39 +35,22 @@ import PDFViewer from './PDFViewer';
 
 export const CourseResume = () => {
 	const navigate = useNavigate();
-	const dispatch = useDispatch();
 	const { id, courseId } = useParams();
 	const { user } = useSelector(
 		(state) => state.auth
 	);
-
+	const {
+		generalProgress,
+		courses,
+		coursesLoading,
+		bookmarkedCourses,
+		getProgress,
+		signOut,
+		studentData,
+		bookmarkedIDs
+	} = useCourseContext();
 	const token = user?.data.accessToken;
 
-	const studentData = JSON.parse(localStorage.getItem('studentData'));
-
-	const studentId = studentData?.data?.id;
-
-	const [bookmarkedCourses, setBookmarkedCourses] = useState([]);
-
-	useEffect(() => {
-	  const fetchBookmarkedCourses = async () => {
-		if (token && studentId) {
-		  try {
-			setIsLoading(true);
-			const response = await courseService.getBookmarkedCourses(token, studentId);
-			setBookmarkedCourses(response || []);
-		  } catch (error) {
-			console.error('Error fetching bookmarked courses:', error);
-		  } finally {
-			setIsLoading(false);
-		  }
-		}
-	  };
-  
-	  fetchBookmarkedCourses();
-	}, [token, studentId]);
-
-	const bookmarkedIDs = bookmarkedCourses?.data?.courseManager?.map(course => course.course.id);
 
 	useEffect(() => {
 		if (!user) {
